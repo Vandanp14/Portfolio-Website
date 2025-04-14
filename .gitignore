@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+# Bolt and tooling caches
+.bolt/
+.clj-kondo/
+.lsp/
