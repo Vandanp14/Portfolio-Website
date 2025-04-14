@@ -131,7 +131,7 @@ function App() {
               <p className="text-2xl text-gray-300">Computer Science Student & Tech Enthusiast</p>
               <div className="mt-6">
                 <a
-                  href="https://drive.google.com/uc?export=download&id=YOUR_FILE_ID"
+                  href="https://drive.google.com/file/d/1-Sab0lsasfROzx3RJg4rqFAtotY1u8dP/view?usp=sharing"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:opacity-90 text-white font-semibold py-3 px-6 rounded-lg transition-all"
