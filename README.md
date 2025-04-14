@@ -46,5 +46,3 @@ I’m a Computer Science student at SUNY Oswego, passionate about frontend devel
 ⸻
 
 
-
-Want me to insert this into your project as `README.md`?
