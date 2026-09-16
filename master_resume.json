@@ -1,0 +1,621 @@
+{
+  "basics": {
+    "name": "Vandan Patel",
+    "email": "patelvandan024@gmail.com",
+    "phone": null,
+    "url": "https://vandanpatel.me",
+    "summary": "Computer science student and software engineer with internship experience building production applications, operational dashboards, data pipelines, and distributed services. Hands-on across React, Python, SQL, Elixir and Phoenix LiveView, PostgreSQL, RabbitMQ, Docker, and REST APIs, with additional systems-programming and artificial-intelligence projects. Experienced collaborating with technical and nontechnical stakeholders in Agile teams.",
+    "location": {
+      "city": "Oswego",
+      "region": "New York",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "Vandanp14",
+        "url": "https://github.com/Vandanp14"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "vpatel1410",
+        "url": "https://www.linkedin.com/in/vpatel1410"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Fanatics",
+      "position": "Software Engineering Intern",
+      "url": null,
+      "startDate": "2026-06",
+      "endDate": "Present",
+      "summary": "Built Product Builder's first-ever API and the first AI-assistant integration with non-GitHub data on the company's internal developer platform, working on a distributed product-configuration application supporting global manufacturing operations.",
+      "highlights": [
+        "Architected an end-to-end AI Copilot system connecting Slack through an internal message router to an Elixir runtime on AWS Bedrock AgentCore and a Phoenix backend API, enabling plain-English querying of trading-card specifications",
+        "Built Product Builder's first-ever API — 5 read-only REST tool endpoints with dynamic OpenAPI 3.0 specification generation, enabling automated Model Context Protocol (MCP) tool discovery — establishing the proof-of-concept for agentic AI across internal systems",
+        "Shipped 3 features to production in an 8-week internship, with the first pull request merged within 2 weeks of starting",
+        "Delivered ~4,000 lines of production code across two stacked pull requests",
+        "Guaranteed zero database mutation risk with a compile-time read-only repository restricted to Ecto read operations, failing any write attempt at compilation",
+        "Recovered 36.5% of historically under-reported card data with a server-side SQL dual-identifier engine unifying legacy ULIDs, modern UUIDs, and roster entities without client complexity",
+        "Hand-rolled an AWS Signature V4 authentication engine in pure Elixir, executing signed IAM calls to AWS Bedrock and CloudWatch services over IMDSv2 without heavy SDK dependencies",
+        "Enforced a fail-closed multi-tier security pipeline combining feature flags, constant-time request verification, default-deny data visibility, and whitelisted JSON serialization",
+        "Authored a 13-step enterprise MCP transition roadmap and 4-chapter handoff package migrating direct HTTP tool calls to AWS Bedrock Gateway MCP targets over private VPC endpoints",
+        "Achieved 86 passing tool tests with zero failures across two full regression sweeps of ~2,900 tests each",
+        "Validated the API at scale on staging, serving 82,000+ records with a 37 ms worst-case query time and no tuning required",
+        "Audited 38 recurring maintenance issues — duplicate records, stuck locks, and orphaned data — and documented them into repeatable processes",
+        "Authored the 90-day intern-to-full-time conversion plan with measurable commitments across three phases: quick wins, foundations, and compounding",
+        "Developed product-configuration workflows with Elixir, Phoenix LiveView, and RabbitMQ-based asynchronous event processing in production"
+      ]
+    },
+    {
+      "name": "SUNY Oswego Facilities Services",
+      "position": "Software Developer Intern",
+      "url": null,
+      "startDate": "2024-04",
+      "endDate": "2026-04",
+      "summary": "Develops operational software and dashboards supporting university facilities staff and management.",
+      "highlights": [
+        "Built and maintained React and Tailwind dashboards that visualize real-time operational KPIs for facilities staff and management",
+        "Replaced manual reporting processes with an interactive dashboard, reducing report-generation time",
+        "Integrated REST APIs to provide real-time data synchronization across the application",
+        "Designed reusable React components and responsive, accessibility-focused interfaces",
+        "Collaborated directly with field staff to gather feedback and translate operational requirements into application features",
+        "Produced IEEE-compliant software requirements documentation and contributed to software design and architecture",
+        "Implemented and maintained Drupal 10 pages for a mission-critical facilities-services system",
+        "Delivered application work in biweekly Agile cycles using Jira, Git, and CI/CD practices"
+      ]
+    },
+    {
+      "name": "SUNY Oswego Institutional Research and Assessment",
+      "position": "Data Analyst Intern",
+      "url": null,
+      "startDate": "2025-08",
+      "endDate": "2025-12",
+      "summary": "Built institutional reporting and analysis workflows focused on student retention, GPA, course performance, and student-success outcomes.",
+      "highlights": [
+        "Built Tableau dashboards and evaluation tools that helped university leadership identify student-performance trends and areas requiring intervention",
+        "Developed Python and SQL pipelines to automate data extraction, consolidation, cleaning, and validation",
+        "Designed SQL-based ETL workflows and optimized queries, reducing manual data-processing and reporting time by 40%",
+        "Used SPSS to analyze student-success measures and identify predictors of first-year retention",
+        "Standardized data definitions across institutional studies and disparate systems to establish a reliable ground truth",
+        "Documented workflows and data definitions to support consistent departmental reporting",
+        "Organized retention and course-performance information using data-architecture principles",
+        "Helped leadership interpret retention metrics, GPA patterns, course performance, and institutional outcomes"
+      ]
+    },
+    {
+      "name": "SUNY Oswego Major Projects Office",
+      "position": "Project Analyst",
+      "url": null,
+      "startDate": "2023-11",
+      "endDate": "2024-04",
+      "summary": "Supported planning, reporting, quality assurance, and cross-team coordination for concurrent university projects.",
+      "highlights": [
+        "Implemented Jira-based Gantt tracking for more than 40 deliverables across five project teams",
+        "Created Excel dashboards to organize schedules, deliverables, quality checks, and project status",
+        "Improved quality-assurance workflows and reduced data errors by 30%",
+        "Streamlined project reporting and accelerated decision cycles by 20%",
+        "Coordinated project managers, engineers, analysts, and other stakeholders while maintaining schedule accuracy"
+      ]
+    },
+    {
+      "name": "SUNY Oswego Help Desk",
+      "position": "Help Desk Attendant",
+      "url": null,
+      "startDate": "2023-02",
+      "endDate": "2023-05",
+      "summary": "Provided Tier-1 and Tier-2 technical support for university hardware, software, account, and network issues.",
+      "highlights": [
+        "Resolved more than 100 Tier-1 and Tier-2 support issues involving hardware, software, user accounts, and network systems",
+        "Diagnosed recurring application, device, software, and network problems",
+        "Created internal troubleshooting guides that standardized support workflows and reduced repetitive inquiries",
+        "Collaborated with system administrators to identify recurring technical issues and improve escalation protocols",
+        "Partnered with technical staff and system architects to analyze application issues and improve service reliability"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "State University of New York at Oswego",
+      "url": "https://www.oswego.edu",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": null,
+      "endDate": "2026-12",
+      "score": null,
+      "courses": [
+        "Data Structures and Algorithms",
+        "Operating Systems",
+        "Software Engineering",
+        "Systems Programming",
+        "Networking",
+        "Programming Languages",
+        "Database Systems",
+        "Artificial Intelligence",
+        "Object-Oriented Programming using Java and C++",
+        "Functional Programming using Clojure and Scala"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Languages",
+      "level": null,
+      "keywords": [
+        "Python",
+        "Java",
+        "C++",
+        "JavaScript",
+        "SQL",
+        "Bash",
+        "Scala",
+        "Clojure",
+        "Elixir",
+        "Go",
+        "C",
+        "Answer Set Programming",
+        "HTML",
+        "CSS"
+      ]
+    },
+    {
+      "name": "Frontend and Full-Stack Development",
+      "level": null,
+      "keywords": [
+        "React",
+        "Tailwind CSS",
+        "Flask",
+        "Phoenix LiveView",
+        "Spring Boot",
+        "Google Apps Script",
+        "Drupal 10",
+        "Responsive web development",
+        "Component-based frontend development",
+        "Accessibility-compliant interface development"
+      ]
+    },
+    {
+      "name": "Databases and Data Technologies",
+      "level": null,
+      "keywords": [
+        "MySQL",
+        "PostgreSQL",
+        "Google Sheets API",
+        "Tableau",
+        "SPSS",
+        "Scikit-learn",
+        "Data cleaning",
+        "Data consolidation",
+        "Data validation",
+        "Data architecture",
+        "ETL pipeline development",
+        "Query optimization",
+        "Institutional data analysis",
+        "Tableau-ready dataset preparation"
+      ]
+    },
+    {
+      "name": "AI and Machine Learning",
+      "level": null,
+      "keywords": [
+        "LLM integration",
+        "Gemini API",
+        "OpenAI API",
+        "Prompt engineering",
+        "Generative AI application development",
+        "Context-aware AI interfaces",
+        "Symbolic artificial intelligence",
+        "Automated reasoning",
+        "Responsible AI principles",
+        "GitHub Copilot",
+        "AI-assisted development"
+      ]
+    },
+    {
+      "name": "Backend, Infrastructure, and Distributed Systems",
+      "level": null,
+      "keywords": [
+        "REST APIs",
+        "Microservices",
+        "Distributed systems",
+        "RabbitMQ",
+        "Asynchronous event processing",
+        "Cloud design patterns",
+        "AWS",
+        "Docker",
+        "CI/CD pipelines",
+        "TCP sockets",
+        "POSIX APIs",
+        "HTTP protocol implementation",
+        "Thread pools",
+        "Concurrent request processing",
+        "Multithreading",
+        "Mutexes",
+        "Condition variables",
+        "Thread-safe task queues",
+        "RAII resource management",
+        "Telemetry and observability",
+        "Fault-tolerant systems",
+        "Error handling",
+        "Backend caching",
+        "Real-time data synchronization",
+        "High-availability application design"
+      ]
+    },
+    {
+      "name": "Programming and Software Engineering",
+      "level": null,
+      "keywords": [
+        "Object-Oriented Programming",
+        "Object-Oriented Design",
+        "Functional programming",
+        "Immutable data structures",
+        "Recursive algorithms",
+        "Recursive-descent parsing",
+        "Abstract syntax trees",
+        "Regex parsing",
+        "Pattern matching",
+        "Backtracking algorithms",
+        "Automated testing",
+        "Unit testing",
+        "Data Structures and Algorithms",
+        "Agile",
+        "Scrum",
+        "Software development lifecycle",
+        "Requirements engineering",
+        "IEEE-style technical specifications",
+        "Software architecture",
+        "Modular application design",
+        "Clean code",
+        "Code reviews",
+        "Version control",
+        "Continuous integration",
+        "Continuous deployment"
+      ]
+    },
+    {
+      "name": "Tools",
+      "level": null,
+      "keywords": [
+        "Git",
+        "GitHub",
+        "Jira",
+        "Docker",
+        "AWS",
+        "Selenium",
+        "BeautifulSoup",
+        "Mutt",
+        "Clingo",
+        "Tableau",
+        "SPSS",
+        "MySQL",
+        "PostgreSQL",
+        "RabbitMQ",
+        "GitHub Copilot",
+        "Linux",
+        "Bash",
+        "Raspberry Pi"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Full-Stack Transit Tracker",
+      "startDate": "2025",
+      "endDate": null,
+      "description": "Full-stack transit-tracking application that integrates live Centro transit data for the SUNY Oswego community.",
+      "highlights": [
+        "Developed RESTful Flask APIs for live transit information with MySQL storage and caching",
+        "Designed a modular, responsive React frontend with reusable components and accessibility-focused interfaces",
+        "Led a four-person Agile team, managed sprints with Jira and Git, and conducted code reviews",
+        "Optimized frontend load times and backend database interactions",
+        "Deployed the application on a university-hosted Raspberry Pi server using CI/CD practices"
+      ],
+      "url": "http://pi.cs.oswego.edu:5001/",
+      "technologies": [
+        "React",
+        "Flask",
+        "MySQL",
+        "JavaScript",
+        "REST APIs",
+        "CI/CD"
+      ]
+    },
+    {
+      "name": "TA Grading Automation System",
+      "startDate": "2025",
+      "endDate": null,
+      "description": "Automated grading and reporting pipeline for high-volume course assessments.",
+      "highlights": [
+        "Reduced a manual grading workflow from approximately three hours to 15 minutes for assessments covering more than 60 students",
+        "Built modular object-oriented Python scripts with regex parsing for student submissions and grading data",
+        "Generated HTML grade reports and automated email distribution with Bash and Mutt",
+        "Improved the scalability, repeatability, and maintainability of the grading workflow"
+      ],
+      "url": "https://github.com/Vandanp14/05-python-project-Vandanp14",
+      "technologies": [
+        "Python",
+        "Regex",
+        "HTML",
+        "Bash",
+        "Mutt"
+      ]
+    },
+    {
+      "name": "Multi-Threaded HTTP Web Server",
+      "startDate": "2025",
+      "endDate": null,
+      "description": "Multi-threaded HTTP server built from scratch in C++17 using POSIX networking APIs.",
+      "highlights": [
+        "Created a four-thread worker pool, thread-safe task queue, mutexes, and condition variables for concurrent request handling",
+        "Decoupled connection acceptance from request processing to improve responsiveness",
+        "Parsed HTTP GET requests, served static HTML files, and returned 200 and 404 status responses",
+        "Implemented robust socket lifecycle management, RAII resource management, safe file I/O, and clean shutdown"
+      ],
+      "url": null,
+      "technologies": [
+        "C++17",
+        "POSIX",
+        "TCP sockets",
+        "Concurrency"
+      ]
+    },
+    {
+      "name": "Job-Listing Aggregator",
+      "startDate": "2024",
+      "endDate": null,
+      "description": "Automated job-listing aggregator that collects, filters, structures, and exports postings for downstream analysis.",
+      "highlights": [
+        "Used headless Selenium and BeautifulSoup to collect more than 250 structured job listings per day",
+        "Developed a multithreaded, parallelized collection pipeline that reduced runtime by 60%",
+        "Added keyword filters and a structured SQL schema for downstream analytics",
+        "Produced Tableau-ready datasets and automated repetitive job-search tasks"
+      ],
+      "url": "https://github.com/Vandanp14/Freeport-Job-Scraper",
+      "technologies": [
+        "Python",
+        "Selenium",
+        "BeautifulSoup",
+        "SQL"
+      ]
+    },
+    {
+      "name": "Event RSVP Tracker",
+      "startDate": "2025",
+      "endDate": null,
+      "description": "Full-stack RSVP-management application with a React interface and spreadsheet-backed data synchronization.",
+      "highlights": [
+        "Built a React interface supporting more than 500 RSVP submissions",
+        "Integrated Google Apps Script and the Google Sheets API for real-time synchronization",
+        "Added client-side validation and error handling, reducing manual corrections by 40%",
+        "Implemented backend caching to maintain responsive performance during peak traffic"
+      ],
+      "url": null,
+      "technologies": [
+        "React",
+        "Google Apps Script",
+        "Google Sheets API"
+      ]
+    },
+    {
+      "name": "Generative AI Collaboration Agent",
+      "startDate": "2024",
+      "endDate": null,
+      "description": "Generative AI collaboration and productivity application built during the 24-hour LakerHacks hackathon.",
+      "highlights": [
+        "Integrated the Gemini API to analyze team inputs and generate structured project milestones",
+        "Designed a context-aware copilot interface that provides planning suggestions for nontechnical users",
+        "Defined requirements and collaborated across a team to build and deploy a minimum viable product within 24 hours",
+        "Ranked in the Top 10 among 30 hackathon teams"
+      ],
+      "url": null,
+      "technologies": [
+        "Python",
+        "React",
+        "Gemini API"
+      ]
+    },
+    {
+      "name": "Propositional Logic Inference Engine",
+      "startDate": "2025",
+      "endDate": null,
+      "description": "Forward-chaining inference engine for automated reasoning over structured logical facts and rules.",
+      "highlights": [
+        "Implemented recursive rule evaluation and fact propagation with immutable data structures",
+        "Developed optimized lookup mechanisms for rule propagation",
+        "Validated inference behavior with more than 100 unit tests and edge cases"
+      ],
+      "url": null,
+      "technologies": [
+        "Clojure",
+        "Functional programming",
+        "Recursive algorithms"
+      ]
+    },
+    {
+      "name": "Pattern Matcher Compiler",
+      "startDate": "2025",
+      "endDate": null,
+      "description": "Recursive-descent parser that compiles regular-expression syntax into abstract syntax trees.",
+      "highlights": [
+        "Used Scala pattern matching for structured text processing with regex grouping, repetition, and optionality",
+        "Implemented parsing, backtracking, and error-handling logic",
+        "Optimized backtracking behavior and improved runtime stability by 25%",
+        "Built a modular architecture that can support additional regex operations"
+      ],
+      "url": null,
+      "technologies": [
+        "Scala",
+        "Regex parsing",
+        "Abstract syntax trees"
+      ]
+    },
+    {
+      "name": "Turing Machine Simulator",
+      "startDate": "2025",
+      "endDate": null,
+      "description": "Low-level emulator and interactive execution visualizer for deterministic Turing-machine computation.",
+      "highlights": [
+        "Engineered a custom doubly linked list to simulate movement across an infinite tape",
+        "Implemented deterministic transition logic and real-time visualization of computational state changes",
+        "Refactored core modules to improve runtime and memory performance by 20%"
+      ],
+      "url": null,
+      "technologies": [
+        "C",
+        "Dynamic data structures",
+        "Memory management"
+      ]
+    },
+    {
+      "name": "Light-Up Puzzle Solver",
+      "startDate": "2025",
+      "endDate": null,
+      "description": "Declarative solver for the Light-Up logic puzzle using Answer Set Programming.",
+      "highlights": [
+        "Modeled puzzle rules, spatial logic, and constraint dependencies in Clingo",
+        "Implemented declarative search logic to compute valid light configurations",
+        "Applied heuristic optimizations that reduced computation time by 30%"
+      ],
+      "url": null,
+      "technologies": [
+        "Answer Set Programming",
+        "Clingo",
+        "Automated reasoning"
+      ]
+    },
+    {
+      "name": "Portfolio Website",
+      "startDate": null,
+      "endDate": null,
+      "description": "Personal website presenting technical projects, professional experience, skills, and contact information.",
+      "highlights": [
+        "Designed, developed, and deployed the portfolio at vandanpatel.me"
+      ],
+      "url": "https://vandanpatel.me",
+      "technologies": [
+        "Web development"
+      ]
+    },
+  {
+    "name": "MFP Coach — AI-Powered Fitness Analytics PWA",
+      "startDate": "2026",
+      "endDate": null,
+      "description": "Local-first fitness coaching PWA that ingests Apple Watch, nutrition, sleep, and workout data to generate AI-powered daily recommendations.",
+      "highlights": [
+        "Built a full-stack fitness coaching PWA with React, TypeScript, and FastAPI, exposing 44 API routes across 20 relational tables for nutrition, sleep, activity, body-composition, and workout tracking",
+        "Replaced paid health-tracking subscriptions ($100+/year value) by piping personal Apple Watch data through iOS Shortcuts into a self-hosted analytics pipeline, avoiding reliance on services like Google Health AI",
+        "Engineered an idempotent health-data pipeline integrating iOS Shortcuts, Apple Health, MyFitnessPal, and Strong exports, normalizing 24 metrics via SHA-256 deduplication and timestamp-based merging",
+        "Developed deterministic analytics for readiness scoring, adaptive TDEE, macro targets, weight forecasting, estimated 1RM, and progressive-overload detection",
+        "Integrated Gemini 2.5 Flash via domain-scoped prompts, parallel generation, and per-day caching to produce personalized coaching insights",
+        "Built an 82-test Pytest suite covering auth, import idempotency, analytics correctness, and AI caching; verified all tests pass and TypeScript build succeeds"
+      ],
+    "url": "https://mfp-coach-app-production.up.railway.app/",
+      "technologies": [
+        "React",
+        "TypeScript",
+        "FastAPI",
+        "SQLAlchemy",
+        "PostgreSQL",
+        "Gemini API",
+        "Docker"
+      ]
+    },
+    {
+      "name": "Transit Ledger — Full-Stack Personal Finance Platform",
+      "startDate": "2026",
+      "endDate": null,
+      "description": "Full-stack personal finance PWA built to track transactions, budgets, recurring bills, group expenses, and cash-flow during a summer internship in NYC.",
+      "highlights": [
+        "Built and deployed a responsive personal-finance PWA using Next.js 16, React 19, Prisma, and PostgreSQL, supporting unified transaction management, budgets, recurring bills, reports, and internship expense tracking across an 11-model relational schema",
+        "Replaced paid personal-finance subscription apps by building a custom expense tracker for a summer 2026 NYC internship, covering rent, commute, and daily spending",
+        "Engineered a transaction-safe ledger with atomic balance reconciliation, soft deletion, rule-based categorization, monthly budget overrides, multi-parameter filtering, CSV import/export, and deterministic cash-flow and safe-to-spend calculations",
+        "Developed an exact group-expense engine supporting equal, custom, and percentage splits, using cent-level remainder allocation and partial-settlement tracking to prevent rounding discrepancies",
+        "Integrated Gemini structured-output parsing to convert natural-language dictation into batches of up to 20 verified expenses, with schema validation, category allowlisting, and atomic database writes",
+        "Improved reliability and security through HMAC-signed HTTP-only sessions, timing-safe password validation, login rate limiting, and 102 passing automated tests"
+      ],
+      "url": null,
+      "technologies": [
+        "TypeScript",
+        "Next.js",
+        "React",
+        "PostgreSQL",
+        "Prisma",
+        "Tailwind CSS",
+        "Gemini API",
+        "Railway"
+      ]
+    },
+    {
+      "name": "MINT Game Hub — Educational Trading-Card Game Platform",
+      "startDate": "2026",
+      "endDate": null,
+      "description": "Independent educational trading-card gaming platform with 5 interactive games, built for an intern team without dedicated engineering support and demoed to company executives.",
+      "highlights": [
+        "Developed a responsive educational gaming platform featuring 5 fully playable games—2048, Hangman, Crossword, Memory Matching, and Higher/Lower—using Next.js App Router, React, TypeScript, and Tailwind CSS",
+        "Built independently for an intern team with no dedicated tech support; demoed to company executives and adopted for the hobby immersion program",
+        "Engineered reusable game algorithms for 2048 tile merging, greedy 8–12-word crossword generation, Fisher–Yates card shuffling, immutable Hangman scoring, and a no-repeat 12-question higher/lower tour; verified with 122 passing unit tests",
+        "Implemented deterministic daily challenges using seeded pseudorandom generation, including resumable 2048 RNG state and a 96-term vocabulary rotation serving 3 unique terms daily without repetition for 32 days",
+        "Delivered progressively enhanced 3D experiences using Three.js and React Three Fiber with lazy-loaded WebGL islands, adaptive resolution, SVG fallbacks, context-loss recovery, and reduced-motion support"
+      ],
+      "url": "https://gamehub-eight-topaz.vercel.app/",
+      "technologies": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Tailwind CSS",
+        "Three.js",
+        "React Three Fiber",
+        "GSAP"
+      ]
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "SUNY Oswego Residence Life",
+      "position": "Resident Assistant",
+      "url": null,
+      "startDate": "2024-01",
+      "endDate": null,
+      "summary": "Mentors residents and supports an inclusive residential community through programming, guidance, and crisis response.",
+      "highlights": [
+        "Mentored and supported 32 residents",
+        "Organized wellness, academic, social, and community-development programs",
+        "Hosted six community events with average attendance above 70%",
+        "Supported residents through conflict mediation, academic guidance, crisis response, and community-building initiatives",
+        "Recognized as Residence Life Staff Member of the Year in 2024"
+      ]
+    },
+    {
+      "organization": "National Society of Black Engineers",
+      "position": "Member",
+      "url": null,
+      "startDate": null,
+      "endDate": null,
+      "summary": "Participates in professional development, networking, and career-readiness activities.",
+      "highlights": [
+        "Participated in recruiter panels, professional workshops, networking events, and career-readiness activities",
+        "Engaged with technical panels and discussions involving software engineering, scalable backend architecture, and artificial-intelligence applications"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Residence Life Staff Member of the Year",
+      "date": "2024",
+      "awarder": "SUNY Oswego Residence Life",
+      "summary": "Recognized for excellence in student support."
+    },
+    {
+      "title": "LakerHacks Finalist",
+      "date": "2024",
+      "awarder": "LakerHacks",
+      "summary": "Ranked in the Top 10 among 30 teams."
+    }
+  ],
+  "certificates": [],
+  "languages": [],
+  "interests": []
+}
+

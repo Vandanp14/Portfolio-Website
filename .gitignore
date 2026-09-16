@@ -27,3 +27,9 @@ dist-ssr
 .bolt/
 .clj-kondo/
 .lsp/
+# Tooling scratch
+.playwright-mcp/
+.cursor/
+
+# Raw source images — optimized derivatives are committed in src/assets/
+/assets/
