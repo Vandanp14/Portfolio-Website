@@ -84,7 +84,6 @@ export const featuredProjects: Project[] = [
       { value: '82', label: 'Passing tests' },
     ],
     stack: ['React', 'TypeScript', 'FastAPI', 'PostgreSQL', 'Gemini API', 'Docker'],
-    liveUrl: 'https://mfp-coach-app-production.up.railway.app/',
     shots: [
       { src: mfpDesktop, kind: 'wide', alt: 'MFP Coach desktop dashboard showing the day’s protein target and metric tiles', caption: 'Today — one directive, then the numbers behind it' },
       { src: mfp2, kind: 'phone', alt: 'MFP Coach mobile home screen with a protein target card', caption: 'One action per day' },

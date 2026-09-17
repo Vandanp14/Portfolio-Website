@@ -511,7 +511,6 @@
         "Integrated Gemini 2.5 Flash via domain-scoped prompts, parallel generation, and per-day caching to produce personalized coaching insights",
         "Built an 82-test Pytest suite covering auth, import idempotency, analytics correctness, and AI caching; verified all tests pass and TypeScript build succeeds"
       ],
-    "url": "https://mfp-coach-app-production.up.railway.app/",
       "technologies": [
         "React",
         "TypeScript",
