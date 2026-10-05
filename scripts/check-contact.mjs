@@ -1,9 +1,20 @@
 // Non-delivery smoke test: never sends a valid message or consumes the rate limit.
-import { loadEnv } from 'vite';
+import { readFile } from 'node:fs/promises';
 
-const env = loadEnv('production', process.cwd(), 'VITE_CONTACT_');
 const siteUrl = process.env.CONTACT_SITE_URL || 'https://vandanpatel.me';
-const endpointOverride = process.argv[2] || process.env.VITE_CONTACT_ENDPOINT || env.VITE_CONTACT_ENDPOINT;
+async function localEndpoint() {
+  if (process.env.VITE_CONTACT_ENDPOINT) return process.env.VITE_CONTACT_ENDPOINT;
+  for (const file of ['.env.local', '.env.production', '.env']) {
+    try {
+      const source = await readFile(file, 'utf8');
+      const match = source.match(/^\s*VITE_CONTACT_ENDPOINT\s*=\s*(.*?)\s*$/m);
+      if (match) return match[1].replace(/^(?:"(.*)"|'(.*)')$/, (_, doubleQuoted, singleQuoted) => doubleQuoted ?? singleQuoted);
+    } catch {
+      // An env file is optional when checking the live site bundle.
+    }
+  }
+  return undefined;
+}
 const timeoutMs = 15000; // Match the form's deadline.
 
 async function findLiveEndpoint() {
@@ -65,7 +76,7 @@ async function probe(endpoint, method) {
 }
 
 try {
-  const endpoint = endpointOverride || await findLiveEndpoint();
+  const endpoint = process.argv[2] || await localEndpoint() || await findLiveEndpoint();
   const url = new URL(endpoint);
   if (url.protocol !== 'https:' || url.hostname !== 'script.google.com' || !/^\/macros\/s\/[^/]+\/exec$/.test(url.pathname)) {
     throw new Error('Expected a Google Apps Script HTTPS /macros/s/<deployment-id>/exec URL.');

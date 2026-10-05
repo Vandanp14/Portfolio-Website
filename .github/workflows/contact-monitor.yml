@@ -14,17 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
       - name: Check live contact form
         id: health
         continue-on-error: true
         env:
           CONTACT_SITE_URL: https://vandanpatel.me
-        run: npm run check:contact
+        run: node scripts/check-contact.mjs
       - name: Open or update outage issue
         if: steps.health.outcome == 'failure'
         uses: actions/github-script@v7

@@ -73,9 +73,9 @@ delivery after a timeout because the first request may already have sent email.
 
 ### If it happens again
 
-1. From the repository root, run `npm run check:contact`. Requires Node 22+ and
-   installed npm dependencies. It reads the production-mode Vite environment
-   (including `.env.local`); to check a specific deployed URL use
+1. From the repository root, run `npm run check:contact`. Requires Node 22+;
+   the checker itself has no package dependencies. It reads `.env.local`,
+   `.env.production`, or `.env`; to check a specific deployed URL use
    `npm run check:contact -- 'https://script.google.com/macros/s/DEPLOYMENT_ID/exec'`.
    Confirm this matches the endpoint in the live frontend's build.
 2. Check management access and deployed version:

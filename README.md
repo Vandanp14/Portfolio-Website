@@ -70,6 +70,7 @@ redeployment, Google authorization, and verification steps. This is an on-demand
 check locally. GitHub Actions also runs it against the published site every 15
 minutes. It opens and tags an issue after two failed attempts, then comments and
 closes the issue after a successful check. Watch the repository's Issues and enable
-GitHub issue notifications to receive those alerts. A passing check verifies the
+GitHub issue notifications to receive those alerts. The monitor has no npm
+install step. A passing check verifies the
 backend response and mail permission/quota; it cannot prove a real message reached
 the inbox without sending a test email.
