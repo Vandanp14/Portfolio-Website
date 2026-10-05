@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "check:contact": "node scripts/check-contact.mjs",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",

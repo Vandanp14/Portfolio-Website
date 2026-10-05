@@ -1,0 +1,55 @@
+name: Contact form monitor
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Check live contact form
+        id: health
+        continue-on-error: true
+        env:
+          CONTACT_SITE_URL: https://vandanpatel.me
+        run: npm run check:contact
+      - name: Open or update outage issue
+        if: steps.health.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'Contact form monitor: outage';
+            const { owner, repo } = context.repo;
+            const result = await github.rest.issues.listForRepo({ owner, repo, state: 'open', per_page: 100 });
+            const incident = result.data.find(issue => !issue.pull_request && issue.title === title);
+            const run = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+            const body = `@Vandanp14 The scheduled contact form check failed twice. The live site or Apps Script backend may be unavailable.\n\nCheck details and logs: ${run}\n\nRecovery steps: [apps-script/README.md](https://github.com/${owner}/${repo}/blob/main/apps-script/README.md#recovery-and-verification).`;
+            if (!incident) {
+              await github.rest.issues.create({ owner, repo, title, body });
+            }
+      - name: Close outage issue on recovery
+        if: steps.health.outcome == 'success'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'Contact form monitor: outage';
+            const { owner, repo } = context.repo;
+            const result = await github.rest.issues.listForRepo({ owner, repo, state: 'open', per_page: 100 });
+            const incident = result.data.find(issue => !issue.pull_request && issue.title === title);
+            if (incident) {
+              const run = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+              await github.rest.issues.createComment({ owner, repo, issue_number: incident.number, body: `@Vandanp14 The contact form check is passing again. The monitor confirmed mail authorization/quota and the POST endpoint response. This does not verify inbox delivery. [Successful run](${run}).` });
+              await github.rest.issues.update({ owner, repo, issue_number: incident.number, state: 'closed' });
+            }

@@ -8,8 +8,6 @@ export type ContactPayload = {
   message: string;
   /** Honeypot — must stay empty for a real human. */
   company: string;
-  /** Client timestamp, used to reject sub-2s submissions. */
-  startedAt: number;
 };
 
 export type ContactResult = { ok: true } | { ok: false; error: string };

@@ -56,8 +56,6 @@ function validate(values: FormState): FieldErrors {
 
 export function Contact() {
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
-  const [company, setCompany] = useState(''); // honeypot
-  const [startedAt, setStartedAt] = useState(() => Date.now());
   const [errors, setErrors] = useState<FieldErrors>({});
   const [status, setStatus] = useState<SubmitStatus>('idle');
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -77,8 +75,6 @@ export function Contact() {
 
   function handleReset() {
     setForm(EMPTY_FORM);
-    setCompany('');
-    setStartedAt(Date.now());
     setErrors({});
     setSubmitError(null);
     setStatus('idle');
@@ -91,15 +87,6 @@ export function Contact() {
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
 
-    // Anti-spam: a filled honeypot or a sub-2s submission is almost
-    // certainly a bot. Drop it silently and show success anyway, so
-    // nothing is ever sent and the bot learns nothing.
-    const looksLikeBot = company.trim() !== '' || Date.now() - startedAt < 2000;
-    if (looksLikeBot) {
-      setStatus('success');
-      return;
-    }
-
     setStatus('sending');
     setSubmitError(null);
 
@@ -108,8 +95,7 @@ export function Contact() {
       email: form.email.trim(),
       subject: form.subject.trim(),
       message: form.message.trim(),
-      company,
-      startedAt,
+      company: '',
     });
 
     if (result.ok) {
@@ -218,20 +204,6 @@ export function Contact() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} noValidate>
-                {/* Honeypot — hidden from sighted and screen-reader users,
-                    and unreachable by keyboard. A bot that fills this in
-                    is dropped silently in handleSubmit. */}
-                <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px' }}>
-                  <input
-                    type="text"
-                    name="company"
-                    tabIndex={-1}
-                    autoComplete="off"
-                    value={company}
-                    onChange={(event) => setCompany(event.target.value)}
-                  />
-                </div>
-
                 <div className="flex flex-col gap-5">
                   <div>
                     <label htmlFor="contact-name" className="label text-[var(--text-2)]">

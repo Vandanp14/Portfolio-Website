@@ -21,9 +21,25 @@ var CONFIG = {
   maxFieldLength: 5000,
 };
 
-/** Health check — opening the deployment URL in a browser hits this. */
+/** Readiness check. Exercises mail authorization without sending an email. */
 function doGet() {
-  return json({ ok: true, service: 'contact', status: 'up' });
+  try {
+    verifyContactSetup();
+    return json({ ok: true, service: 'contact', status: 'up', mailReady: true });
+  } catch (err) {
+    console.error(err);
+    return json({ ok: false, service: 'contact', status: 'unavailable', mailReady: false });
+  }
+}
+
+/** Run in the editor as the owner to grant consent and verify mail readiness. */
+function verifyContactSetup() {
+  if (MailApp.getRemainingDailyQuota() < 1) {
+    throw new Error('Mail quota exhausted. Wait for Google to replenish the daily quota.');
+  }
+  // Also verify access to the properties used by delivery; do not modify them.
+  PropertiesService.getScriptProperties().getProperty('RECIPIENT');
+  return { ok: true };
 }
 
 function doPost(e) {
