@@ -289,6 +289,14 @@ img { display: block; max-width: 100%; }
   from { opacity: 0; transform: translate3d(0, 4px, 0); }
 }
 
+/* Résumé viewer: indeterminate progress while the server assembles the PDF. */
+.resume-indeterminate { animation: resume-indeterminate 1.2s var(--ease-in-out) infinite; }
+
+@keyframes resume-indeterminate {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(300%); }
+}
+
 /* Long-form post body — inherits band variables, never hardcodes colour. */
 .post-body {
   font-size: 18px;
@@ -381,6 +389,6 @@ img { display: block; max-width: 100%; }
     scroll-behavior: auto !important;
   }
   .reveal { opacity: 1; transform: none; }
-  .skeleton { animation: none; }
+  .skeleton, .resume-indeterminate { animation: none; }
   .preview-word, .preview-in { animation: none; opacity: 1; filter: none; transform: none; }
 }

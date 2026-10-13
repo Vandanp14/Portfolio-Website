@@ -16,6 +16,8 @@ import { isHome, usePath } from './lib/router';
 
 // Code-split: the blog (and DOMPurify) only load when someone visits /blog.
 const Blog = lazy(() => import('./pages/Blog'));
+// pdf.js is large — it only loads on /resume.
+const Resume = lazy(() => import('./pages/Resume'));
 
 function SkipLink({ href }: { href: string }) {
   return (
@@ -63,15 +65,20 @@ export default function App() {
   if (isHome(path)) return <Home />;
 
   const blog = path.match(/^\/blog\/?(?:([^/]+)\/?)?$/);
+  const resume = /^\/resume\/?$/.test(path);
 
   return (
     <>
       <SkipLink href="#content" />
-      <Nav active={null} page={blog ? 'blog' : null} />
+      <Nav active={null} page={blog ? 'blog' : resume ? 'resume' : null} />
       <main id="content">
         {blog ? (
           <Suspense fallback={<div className="band band-paper min-h-[100svh]" />}>
             <Blog postId={blog[1] ?? null} />
+          </Suspense>
+        ) : resume ? (
+          <Suspense fallback={<div className="band band-mist min-h-[100svh]" />}>
+            <Resume />
           </Suspense>
         ) : (
           <NotFound />

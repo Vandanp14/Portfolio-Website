@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowUpRight, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { navSections, RESUME_URL, type SectionId } from '../content/portfolio';
 import { goToSection } from '../lib/router';
 import { Link } from './Link';
@@ -20,7 +20,7 @@ const navVars = {
   '--nav-accent': '#1F6FEB',
 } as React.CSSProperties;
 
-export function Nav({ active, page = null }: { active: SectionId | null; page?: 'blog' | null }) {
+export function Nav({ active, page = null }: { active: SectionId | null; page?: 'blog' | 'resume' | null }) {
   const [open, setOpen] = useState(false);
   const [lifted, setLifted] = useState(false);
 
@@ -44,6 +44,7 @@ export function Nav({ active, page = null }: { active: SectionId | null; page?: 
   };
 
   const onBlog = page === 'blog';
+  const onResume = page === 'resume';
 
   const solid = lifted || open;
 
@@ -104,15 +105,17 @@ export function Nav({ active, page = null }: { active: SectionId | null; page?: 
               />
             )}
           </Link>
-          <a
-            href={RESUME_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ml-2 inline-flex items-center gap-1 rounded-[8px] border border-[var(--nav-line)] px-3.5 py-2 text-[14px] font-medium text-[var(--nav-text)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:bg-[rgba(11,13,18,0.05)]"
+          <Link
+            to={RESUME_URL}
+            aria-current={onResume ? 'page' : undefined}
+            className={`ml-2 inline-flex items-center gap-1 rounded-[8px] border px-3.5 py-2 text-[14px] font-medium transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] ${
+              onResume
+                ? 'border-[var(--nav-accent)] text-[var(--nav-accent)]'
+                : 'border-[var(--nav-line)] text-[var(--nav-text)] hover:bg-[rgba(11,13,18,0.05)]'
+            }`}
           >
             Résumé
-            <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-          </a>
+          </Link>
         </nav>
 
         <button
@@ -156,15 +159,18 @@ export function Nav({ active, page = null }: { active: SectionId | null; page?: 
             {onBlog && <span className="h-1.5 w-1.5 rounded-full bg-[var(--nav-accent)]" aria-hidden="true" />}
             Blog
           </Link>
-          <a
-            href={RESUME_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-2 flex h-12 items-center gap-1.5 rounded-[10px] border border-[var(--nav-line)] px-3 text-[16px] font-medium text-[var(--nav-text)]"
+          <Link
+            to={RESUME_URL}
+            onClick={() => setOpen(false)}
+            aria-current={onResume ? 'page' : undefined}
+            className={`mt-2 flex h-12 items-center gap-1.5 rounded-[10px] border px-3 text-[16px] font-medium ${
+              onResume
+                ? 'border-[var(--nav-accent)] text-[var(--nav-accent)]'
+                : 'border-[var(--nav-line)] text-[var(--nav-text)]'
+            }`}
           >
             Résumé
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-          </a>
+          </Link>
         </div>
       )}
     </header>

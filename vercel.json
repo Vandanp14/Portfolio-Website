@@ -1,6 +1,20 @@
 {
   "rewrites": [
-    { "source": "/blog", "destination": "/index.html" },
-    { "source": "/blog/:path*", "destination": "/index.html" }
+    {
+      "source": "/blog",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/resume",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/resume.pdf",
+      "destination": "/api/resume"
+    }
   ]
 }

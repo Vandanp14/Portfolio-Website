@@ -1,6 +1,7 @@
-import { ArrowDown, ArrowUpRight, Github, Linkedin } from 'lucide-react';
+import { ArrowDown, FileText, Github, Linkedin } from 'lucide-react';
 import { profile, RESUME_URL, stats } from '../content/portfolio';
 import { scrollToSection } from '../hooks/useScrollSpy';
+import { navigate } from '../lib/router';
 import { ButtonGhost, ButtonPrimary, Shell } from './primitives';
 
 export function Hero() {
@@ -41,9 +42,9 @@ export function Hero() {
             See the work
             <ArrowDown className="h-4 w-4" aria-hidden="true" />
           </ButtonPrimary>
-          <ButtonGhost href={RESUME_URL} external>
+          <ButtonGhost onClick={() => navigate(RESUME_URL)}>
             Résumé
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            <FileText className="h-4 w-4" aria-hidden="true" />
           </ButtonGhost>
           <div className="ml-1 flex items-center gap-1">
             <IconLink href={profile.github} label="GitHub">

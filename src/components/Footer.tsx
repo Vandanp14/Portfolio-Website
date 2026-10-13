@@ -1,4 +1,3 @@
-import { ArrowUpRight } from 'lucide-react';
 import { profile, RESUME_URL } from '../content/portfolio';
 import { goToSection } from '../lib/router';
 import { Link } from './Link';
@@ -38,18 +37,12 @@ export function Footer() {
             >
               Blog
             </Link>
-            <a
-              href={RESUME_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group label inline-flex items-center gap-1 text-[var(--text-2)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:text-[var(--accent)]"
+            <Link
+              to={RESUME_URL}
+              className="label text-[var(--text-2)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:text-[var(--accent)]"
             >
               Résumé
-              <ArrowUpRight
-                className="h-3.5 w-3.5 transition-transform duration-[var(--t-fast)] ease-[var(--ease-out-expo)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                aria-hidden="true"
-              />
-            </a>
+            </Link>
           </nav>
         </div>
 

@@ -12,8 +12,9 @@ import ledger3 from '../assets/projects/ledger-3.jpg';
 import ledger4 from '../assets/projects/ledger-4.jpg';
 import ledger5 from '../assets/projects/ledger-5.jpg';
 
-export const RESUME_URL =
-  'https://drive.google.com/file/d/1XZIbed6pfAnyLFdAvmiSdF7pIH8kbQ9J/view?usp=sharing';
+// In-app viewer; the PDF itself is always the newest file in the résumé
+// Drive folder (see api/resume.ts), so this never needs updating.
+export const RESUME_URL = '/resume';
 
 export const profile = {
   name: 'Vandan Patel',
