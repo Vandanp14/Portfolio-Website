@@ -8,3 +8,11 @@ export function track(name: string, params?: Record<string, unknown>) {
   const gtag = (window as unknown as { gtag?: Gtag }).gtag;
   if (typeof gtag === 'function') gtag('event', name, params);
 }
+
+export function trackPageView() {
+  track('page_view', {
+    page_location: window.location.href,
+    page_path: window.location.pathname,
+    page_title: document.title,
+  });
+}

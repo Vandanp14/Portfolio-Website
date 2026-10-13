@@ -27,8 +27,7 @@
     />
     <!-- Google Analytics (GA4). Production domain only, so local dev and
          Vercel preview deployments don't pollute the numbers. Client-side
-         route changes use history.pushState, which GA4's enhanced
-         measurement records as page views on its own. -->
+         route changes are reported by usePageViews in src/App.tsx. -->
     <script>
       if (/(^|\.)vandanpatel\.me$/.test(location.hostname)) {
         window.dataLayer = window.dataLayer || [];

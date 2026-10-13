@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { About } from './components/About';
 import { Contact } from './components/Contact';
 import { Experience } from './components/Experience';
@@ -12,6 +12,7 @@ import { Work } from './components/Work';
 import type { SectionId } from './content/portfolio';
 import { useRevealObserver } from './hooks/useReveal';
 import { scrollToSection, useScrollSpy } from './hooks/useScrollSpy';
+import { trackPageView } from './lib/analytics';
 import { isHome, usePath } from './lib/router';
 
 // Code-split: the blog (and DOMPurify) only load when someone visits /blog.
@@ -28,6 +29,24 @@ function SkipLink({ href }: { href: string }) {
       Skip to content
     </a>
   );
+}
+
+/**
+ * GA4's own config call reports the first page; every client-side route
+ * change after that is reported here (the property's history-based
+ * enhanced measurement is off, and must stay off to avoid double counts).
+ */
+function usePageViews(path: string) {
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    // Short delay so lazy pages have mounted and set document.title.
+    const timer = setTimeout(trackPageView, 400);
+    return () => clearTimeout(timer);
+  }, [path]);
 }
 
 function Home() {
@@ -61,6 +80,7 @@ function Home() {
 
 export default function App() {
   const path = usePath();
+  usePageViews(path);
 
   if (isHome(path)) return <Home />;
 
