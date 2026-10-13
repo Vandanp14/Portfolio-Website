@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ArrowUpRight, Menu, X } from 'lucide-react';
 import { navSections, RESUME_URL, type SectionId } from '../content/portfolio';
-import { scrollToSection } from '../hooks/useScrollSpy';
+import { goToSection } from '../lib/router';
+import { Link } from './Link';
 
 /*
  * Nav is the one exception to the band system's no-hardcoded-colour rule.
@@ -19,7 +20,7 @@ const navVars = {
   '--nav-accent': '#1F6FEB',
 } as React.CSSProperties;
 
-export function Nav({ active }: { active: SectionId }) {
+export function Nav({ active, page = null }: { active: SectionId | null; page?: 'blog' | null }) {
   const [open, setOpen] = useState(false);
   const [lifted, setLifted] = useState(false);
 
@@ -39,8 +40,10 @@ export function Nav({ active }: { active: SectionId }) {
 
   const go = (id: SectionId) => {
     setOpen(false);
-    scrollToSection(id);
+    goToSection(id);
   };
+
+  const onBlog = page === 'blog';
 
   const solid = lifted || open;
 
@@ -86,6 +89,21 @@ export function Nav({ active }: { active: SectionId }) {
               </button>
             );
           })}
+          <Link
+            to="/blog"
+            aria-current={onBlog ? 'page' : undefined}
+            className={`relative rounded-[8px] px-3 py-2 text-[14px] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] ${
+              onBlog ? 'text-[var(--nav-accent)]' : 'text-[var(--nav-text-dim)] hover:text-[var(--nav-text)]'
+            }`}
+          >
+            Blog
+            {onBlog && (
+              <span
+                className="absolute inset-x-3 -bottom-[2px] h-[2px] rounded-full bg-[var(--nav-accent)]"
+                aria-hidden="true"
+              />
+            )}
+          </Link>
           <a
             href={RESUME_URL}
             target="_blank"
@@ -127,6 +145,17 @@ export function Nav({ active }: { active: SectionId }) {
               </button>
             );
           })}
+          <Link
+            to="/blog"
+            onClick={() => setOpen(false)}
+            aria-current={onBlog ? 'page' : undefined}
+            className={`flex h-12 w-full items-center gap-2 rounded-[10px] px-3 text-left text-[16px] ${
+              onBlog ? 'text-[var(--nav-accent)]' : 'text-[var(--nav-text-dim)]'
+            }`}
+          >
+            {onBlog && <span className="h-1.5 w-1.5 rounded-full bg-[var(--nav-accent)]" aria-hidden="true" />}
+            Blog
+          </Link>
           <a
             href={RESUME_URL}
             target="_blank"

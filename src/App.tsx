@@ -1,3 +1,4 @@
+import { lazy, Suspense, useEffect } from 'react';
 import { About } from './components/About';
 import { Contact } from './components/Contact';
 import { Experience } from './components/Experience';
@@ -5,23 +6,42 @@ import { FanaticsBanner } from './components/FanaticsBanner';
 import { Footer } from './components/Footer';
 import { Hero } from './components/Hero';
 import { Nav } from './components/Nav';
+import { NotFound } from './components/NotFound';
 import { OtherWork } from './components/OtherWork';
 import { Work } from './components/Work';
+import type { SectionId } from './content/portfolio';
 import { useRevealObserver } from './hooks/useReveal';
-import { useScrollSpy } from './hooks/useScrollSpy';
+import { scrollToSection, useScrollSpy } from './hooks/useScrollSpy';
+import { isHome, usePath } from './lib/router';
 
-export default function App() {
+// Code-split: the blog (and DOMPurify) only load when someone visits /blog.
+const Blog = lazy(() => import('./pages/Blog'));
+
+function SkipLink({ href }: { href: string }) {
+  return (
+    <a
+      href={href}
+      className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-[var(--r-md)] focus:bg-[#1F6FEB] focus:px-4 focus:py-2 focus:text-[#FFFFFF]"
+    >
+      Skip to content
+    </a>
+  );
+}
+
+function Home() {
   const active = useScrollSpy();
   useRevealObserver();
 
+  // Arriving from another page via `/#work` etc: the section didn't exist at
+  // page load, so the browser's own anchor jump never happened.
+  useEffect(() => {
+    const id = window.location.hash.slice(1);
+    if (id) requestAnimationFrame(() => scrollToSection(id as SectionId));
+  }, []);
+
   return (
     <>
-      <a
-        href="#work"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-[var(--r-md)] focus:bg-[#1F6FEB] focus:px-4 focus:py-2 focus:text-[#FFFFFF]"
-      >
-        Skip to content
-      </a>
+      <SkipLink href="#work" />
       <Nav active={active} />
       <main>
         <Hero />
@@ -31,6 +51,31 @@ export default function App() {
         <Experience />
         <About />
         <Contact />
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+export default function App() {
+  const path = usePath();
+
+  if (isHome(path)) return <Home />;
+
+  const blog = path.match(/^\/blog\/?(?:([^/]+)\/?)?$/);
+
+  return (
+    <>
+      <SkipLink href="#content" />
+      <Nav active={null} page={blog ? 'blog' : null} />
+      <main id="content">
+        {blog ? (
+          <Suspense fallback={<div className="band band-paper min-h-[100svh]" />}>
+            <Blog postId={blog[1] ?? null} />
+          </Suspense>
+        ) : (
+          <NotFound />
+        )}
       </main>
       <Footer />
     </>

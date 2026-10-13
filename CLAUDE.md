@@ -19,13 +19,14 @@ There are no tests.
 
 ## Architecture
 
-The entire site lives in two files — there is no components/ directory despite what the README suggests:
+- **`src/App.tsx`** — tiny router switch (`src/lib/router.ts`, History API, no react-router): `/` renders the one-page portfolio (`Home`); `/blog` and `/blog/:id` lazy-load `src/pages/Blog.tsx` (code-split, with DOMPurify); anything else renders `NotFound`.
+- **`src/content/portfolio.ts`** — all portfolio content (jobs, projects, profile, `RESUME_URL`, `navSections`). Edit content here, not in JSX. Section ids must match `navSections` for scroll-spy (`data-nav-section`).
+- **`src/components/*`** — one component per section plus `Nav`, `Footer`, `primitives.tsx` (`Shell`, `SectionHeading`, buttons) and `Link.tsx` (client-side nav link). Section links use `goToSection()` so they work from blog pages (routes to `/#id`).
+- **`src/index.css`** — band system: `.band-paper` / `.band-mist` / `.band-slate` each redeclare the same CSS variables (`--bg`, `--text`, `--accent`, …); components never hardcode colours. Also `.reveal` scroll reveals, blog `.post-body` prose, `.skeleton`, and preview animations (`.preview-word`, `.preview-in`). Fonts: Geist, Geist Mono, Instrument Serif (`.font-editorial`).
 
-- **`src/App.tsx`** (~700 lines) — the whole application. Structure, top to bottom:
-  - Content data as module-level constants (`contactCards`, `coursework`, `experience`, etc.). To update portfolio content (jobs, skills, projects, contact info), edit these arrays — not the JSX.
-  - Small helper components (`LinkedInHoverPreview`, `FanaticsHoverBadge`).
-  - `App` component: scroll-spy nav (tracks active section on scroll), a custom animated cursor implemented with `requestAnimationFrame` + mouse event listeners, and one `<section>` per nav entry (`about`, `education`, `experience`, `skills`, `projects`). Section ids must match the `navigationSections` array for scroll-spy and nav links to work.
+### External services (Google Apps Script)
+- **Contact form** — `src/lib/contact.ts` POSTs to `VITE_CONTACT_ENDPOINT` (source in `apps-script/`).
+- **Blog** — `src/lib/blog.ts` GETs a separate public Apps Script deployment (`VITE_BLOG_ENDPOINT`, hardcoded default): `?api=posts` → `{title, description, posts:[{id,title,date}]}`, `?api=post&id=` → `{post:{…, html}}`. Posts are written in Google Docs. The index has no excerpts, so the blog list fetches each post in the background to build previews (and caches them, so opening a post is instant). Post HTML is sanitized with DOMPurify before rendering.
+- `vercel.json` rewrites `/blog/*` to `index.html` for deep links.
 
-- **`src/index.css`** — Tailwind directives plus all custom styling: light "liquid glass" theme via CSS variables on `:root`, layered radial-gradient page background, ambient orbs, and the custom cursor classes (`.cursor-orb`, `.cursor-core`). Fonts: Manrope for body, Sora for headings (`.display-font`).
-
-The resume is not stored in the repo — it's linked as a public Google Drive URL in `App.tsx` (the "View Resume" button), so it can be updated without redeploying.
+The resume is not stored in the repo — it's a public Google Drive URL (`RESUME_URL`), so it can be updated without redeploying.

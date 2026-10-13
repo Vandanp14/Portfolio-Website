@@ -1,6 +1,7 @@
 import { ArrowUpRight } from 'lucide-react';
 import { profile, RESUME_URL } from '../content/portfolio';
-import { scrollToSection } from '../hooks/useScrollSpy';
+import { goToSection } from '../lib/router';
+import { Link } from './Link';
 import { Shell } from './primitives';
 
 const footerNavLinks: { id: 'work' | 'experience' | 'about' | 'contact'; label: string }[] = [
@@ -25,12 +26,18 @@ export function Footer() {
               <button
                 key={link.id}
                 type="button"
-                onClick={() => scrollToSection(link.id)}
+                onClick={() => goToSection(link.id)}
                 className="label text-[var(--text-2)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:text-[var(--accent)]"
               >
                 {link.label}
               </button>
             ))}
+            <Link
+              to="/blog"
+              className="label text-[var(--text-2)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:text-[var(--accent)]"
+            >
+              Blog
+            </Link>
             <a
               href={RESUME_URL}
               target="_blank"
