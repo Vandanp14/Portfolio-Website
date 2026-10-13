@@ -25,6 +25,22 @@
       href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"
       rel="stylesheet"
     />
+    <!-- Google Analytics (GA4). Production domain only, so local dev and
+         Vercel preview deployments don't pollute the numbers. Client-side
+         route changes use history.pushState, which GA4's enhanced
+         measurement records as page views on its own. -->
+    <script>
+      if (/(^|\.)vandanpatel\.me$/.test(location.hostname)) {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { dataLayer.push(arguments); };
+        gtag('js', new Date());
+        gtag('config', 'G-4J59D7CV40');
+        var ga = document.createElement('script');
+        ga.async = true;
+        ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-4J59D7CV40';
+        document.head.appendChild(ga);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

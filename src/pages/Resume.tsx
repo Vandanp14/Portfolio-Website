@@ -4,6 +4,7 @@ import type { PDFDocumentLoadingTask, PDFDocumentProxy, PDFPageProxy } from 'pdf
 import workerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Shell } from '../components/primitives';
+import { track } from '../lib/analytics';
 import { formatUpdated, loadResume, pdfUrl, RESUME_FILENAME, type ResumeFile } from '../lib/resume';
 
 // Legacy build: the modern one leans on very recent JS features that older
@@ -231,6 +232,13 @@ function Viewer({ file, pages }: { file: ResumeFile; pages: PDFPageProxy[] }) {
           <a
             href={blobUrl ?? pdfUrl(file.meta.version, true)}
             download={RESUME_FILENAME}
+            onClick={() =>
+              track('file_download', {
+                file_name: RESUME_FILENAME,
+                file_extension: 'pdf',
+                resume_version: file.meta.updatedAt,
+              })
+            }
             className="inline-flex h-10 items-center gap-2 rounded-[var(--r-md)] bg-[var(--accent)] px-4 text-[14px] font-semibold text-[var(--on-accent)] transition-[transform,background-color] duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:-translate-y-px hover:bg-[var(--accent-hover)] active:translate-y-0 active:scale-[0.985]"
           >
             <Download className="h-4 w-4" aria-hidden="true" />
