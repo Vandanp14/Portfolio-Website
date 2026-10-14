@@ -1,28 +1,30 @@
-import { useEffect, useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { navSections, RESUME_URL, type SectionId } from '../content/portfolio';
 import { goToSection } from '../lib/router';
 import { Link } from './Link';
+import { MenuOverlay } from './MenuOverlay';
+import { Scramble } from './motion/Scramble';
+import { Wordmark } from './Wordmark';
 
 /*
  * Nav is the one exception to the band system's no-hardcoded-colour rule.
- * It's `fixed` and floats above all four bands (cobalt, ink, citron, chalk)
- * at once as the page scrolls beneath it, so unlike an in-flow section it
- * has no single band to inherit variables from. It declares its own small,
- * fixed light palette once, as custom properties on the header's style prop, and
- * every className below reads those — never the band `--bg`/`--text`/etc.
+ * It floats, inset, above every band as the page scrolls beneath it, so it
+ * has no single band to inherit from. It declares one small light palette as
+ * custom properties on the header and every className below reads those.
  */
 const navVars = {
-  '--nav-fill': '#ffffff',
-  '--nav-text': '#0B0D12',
-  '--nav-text-dim': 'rgba(11, 13, 18, 0.58)',
-  '--nav-line': 'rgba(11, 13, 18, 0.12)',
-  '--nav-accent': '#1F6FEB',
-} as React.CSSProperties;
+  '--nav-fill': 'rgba(246, 246, 246, 0.78)',
+  '--nav-text': '#1E2124',
+  '--nav-text-dim': 'rgba(30, 33, 36, 0.55)',
+  '--nav-line': 'rgba(30, 33, 36, 0.9)',
+} as CSSProperties;
+
+const crumbs = { blog: 'Blog', resume: 'Résumé' } as const;
 
 export function Nav({ active, page = null }: { active: SectionId | null; page?: 'blog' | 'resume' | null }) {
   const [open, setOpen] = useState(false);
   const [lifted, setLifted] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setLifted(window.scrollY > 24);
@@ -38,141 +40,95 @@ export function Nav({ active, page = null }: { active: SectionId | null; page?: 
     };
   }, [open]);
 
-  const go = (id: SectionId) => {
+  const close = () => {
     setOpen(false);
-    goToSection(id);
+    requestAnimationFrame(() => menuButton.current?.focus());
   };
 
-  const onBlog = page === 'blog';
-  const onResume = page === 'resume';
-
-  const solid = lifted || open;
+  const sectionLabel = navSections.find((item) => item.id === active)?.label;
+  const crumb = page ? crumbs[page] : sectionLabel;
 
   return (
-    <header
-      style={navVars}
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-[var(--t-base)] ease-[var(--ease-standard)] ${
-        solid
-          ? 'border-b border-[var(--nav-line)] bg-[var(--nav-fill)]/90 backdrop-blur-xl'
-          : 'border-b border-transparent'
-      }`}
-    >
-      <div className="mx-auto flex h-16 max-w-[var(--content)] items-center justify-between px-[var(--gutter)]">
-        <button
-          onClick={() => go('top')}
-          className="flex items-center gap-2.5 text-[15px] font-semibold tracking-[-0.02em] text-[var(--nav-text)]"
+    <>
+      <header
+        style={navVars}
+        className="fixed inset-x-2 top-2 z-50 text-[var(--nav-text)] sm:inset-x-[10px] sm:top-[10px]"
+      >
+        <div
+          className={`flex h-16 items-center justify-between gap-4 px-3 transition-[background-color,box-shadow,backdrop-filter] duration-[var(--t-medium)] ease-[var(--ease-out-expo)] sm:px-5 ${
+            lifted
+              ? 'bg-[var(--nav-fill)] shadow-[0_8px_30px_-18px_rgba(30,33,36,0.35)] backdrop-blur-xl'
+              : 'bg-transparent'
+          }`}
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-[var(--nav-accent)]" aria-hidden="true" />
-          Vandan Patel
-        </button>
-
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Sections">
-          {navSections.map((item) => {
-            const isActive = active === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => go(item.id)}
-                aria-current={isActive ? 'true' : undefined}
-                className={`relative rounded-[8px] px-3 py-2 text-[14px] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] ${
-                  isActive
-                    ? 'text-[var(--nav-accent)]'
-                    : 'text-[var(--nav-text-dim)] hover:text-[var(--nav-text)]'
-                }`}
-              >
-                {item.label}
-                {isActive && (
-                  <span
-                    className="absolute inset-x-3 -bottom-[2px] h-[2px] rounded-full bg-[var(--nav-accent)]"
-                    aria-hidden="true"
-                  />
-                )}
-              </button>
-            );
-          })}
-          <Link
-            to="/blog"
-            aria-current={onBlog ? 'page' : undefined}
-            className={`relative rounded-[8px] px-3 py-2 text-[14px] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] ${
-              onBlog ? 'text-[var(--nav-accent)]' : 'text-[var(--nav-text-dim)] hover:text-[var(--nav-text)]'
-            }`}
-          >
-            Blog
-            {onBlog && (
-              <span
-                className="absolute inset-x-3 -bottom-[2px] h-[2px] rounded-full bg-[var(--nav-accent)]"
-                aria-hidden="true"
-              />
+          <div className="flex min-w-0 items-center gap-3">
+            <button type="button" onClick={() => goToSection('top')} aria-label="Vandan Patel — back to top">
+              <Wordmark />
+            </button>
+            {crumb && (
+              <span className="hidden items-center gap-3 text-[19px] leading-none tracking-[-0.03em] text-[var(--nav-text-dim)] sm:flex">
+                <span aria-hidden="true">/</span>
+                <Scramble key={crumb} text={crumb} duration={600} />
+              </span>
             )}
-          </Link>
-          <Link
-            to={RESUME_URL}
-            aria-current={onResume ? 'page' : undefined}
-            className={`ml-2 inline-flex items-center gap-1 rounded-[8px] border px-3.5 py-2 text-[14px] font-medium transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] ${
-              onResume
-                ? 'border-[var(--nav-accent)] text-[var(--nav-accent)]'
-                : 'border-[var(--nav-line)] text-[var(--nav-text)] hover:bg-[rgba(11,13,18,0.05)]'
-            }`}
-          >
-            Résumé
-          </Link>
-        </nav>
+          </div>
 
-        <button
-          className="-mr-2 flex h-11 w-11 items-center justify-center text-[var(--nav-text)] md:hidden"
-          onClick={() => setOpen((value) => !value)}
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          aria-expanded={open}
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
-      </div>
+          <nav className="hidden items-center gap-7 lg:flex" aria-label="Sections">
+            {navSections.map((item) => {
+              const isActive = active === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => goToSection(item.id)}
+                  aria-current={isActive ? 'true' : undefined}
+                  className={`text-[16px] tracking-[-0.01em] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] ${
+                    isActive ? 'text-[var(--nav-text)]' : 'text-[var(--nav-text-dim)] hover:text-[var(--nav-text)]'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+            <Link
+              to="/blog"
+              aria-current={page === 'blog' ? 'page' : undefined}
+              className={`text-[16px] tracking-[-0.01em] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] ${
+                page === 'blog' ? 'text-[var(--nav-text)]' : 'text-[var(--nav-text-dim)] hover:text-[var(--nav-text)]'
+              }`}
+            >
+              Blog
+            </Link>
+          </nav>
 
-      {open && (
-        <div className="border-t border-[var(--nav-line)] bg-[var(--nav-fill)] px-[var(--gutter)] pb-6 pt-2 md:hidden">
-          {navSections.map((item) => {
-            const isActive = active === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => go(item.id)}
-                aria-current={isActive ? 'true' : undefined}
-                className={`flex h-12 w-full items-center gap-2 rounded-[10px] px-3 text-left text-[16px] ${
-                  isActive ? 'text-[var(--nav-accent)]' : 'text-[var(--nav-text-dim)]'
-                }`}
-              >
-                {isActive && (
-                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--nav-accent)]" aria-hidden="true" />
-                )}
-                {item.label}
-              </button>
-            );
-          })}
-          <Link
-            to="/blog"
-            onClick={() => setOpen(false)}
-            aria-current={onBlog ? 'page' : undefined}
-            className={`flex h-12 w-full items-center gap-2 rounded-[10px] px-3 text-left text-[16px] ${
-              onBlog ? 'text-[var(--nav-accent)]' : 'text-[var(--nav-text-dim)]'
-            }`}
-          >
-            {onBlog && <span className="h-1.5 w-1.5 rounded-full bg-[var(--nav-accent)]" aria-hidden="true" />}
-            Blog
-          </Link>
-          <Link
-            to={RESUME_URL}
-            onClick={() => setOpen(false)}
-            aria-current={onResume ? 'page' : undefined}
-            className={`mt-2 flex h-12 items-center gap-1.5 rounded-[10px] border px-3 text-[16px] font-medium ${
-              onResume
-                ? 'border-[var(--nav-accent)] text-[var(--nav-accent)]'
-                : 'border-[var(--nav-line)] text-[var(--nav-text)]'
-            }`}
-          >
-            Résumé
-          </Link>
+          <div className="flex flex-none items-center gap-3 sm:gap-[30px]">
+            <Link
+              to={RESUME_URL}
+              aria-current={page === 'resume' ? 'page' : undefined}
+              className="hidden h-10 w-[170px] items-center justify-center border border-[var(--nav-line)] text-[16px] tracking-[-0.01em] transition-colors duration-[var(--t-base)] ease-[var(--ease-out-expo)] hover:bg-[var(--nav-text)] hover:text-white sm:inline-flex"
+            >
+              Résumé
+            </Link>
+            <button
+              ref={menuButton}
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-label="Open menu"
+              aria-expanded={open}
+              aria-controls="site-menu"
+              className="flex h-10 w-10 items-center justify-center border border-[var(--nav-line)] transition-colors duration-[var(--t-base)] ease-[var(--ease-out-expo)] hover:bg-[var(--nav-text)] hover:text-white"
+            >
+              <span className="burger" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </span>
+            </button>
+          </div>
         </div>
-      )}
-    </header>
+      </header>
+
+      {open && <MenuOverlay onClose={close} active={active} page={page} />}
+    </>
   );
 }

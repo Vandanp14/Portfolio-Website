@@ -1,4 +1,6 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
+import { Rule } from './motion/Rule';
+import { SplitLines } from './motion/SplitLines';
 
 export function Shell({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
@@ -8,38 +10,50 @@ export function Shell({ children, className = '' }: { children: ReactNode; class
   );
 }
 
+/** 11px uppercase label — the small voice that sits above every large one. */
+export function Eyebrow({ children, className = '' }: { children: ReactNode; className?: string }) {
+  return <p className={`t-eyebrow text-[var(--text-3)] ${className}`}>{children}</p>;
+}
+
+/**
+ * Section opener: a strong hairline draws across, the eyebrow and mono index
+ * sit on it, and the title rises word by word.
+ */
 export function SectionHeading({
   index,
   kicker,
   title,
   lede,
-  editorial = false,
   id,
 }: {
   index: string;
   kicker: string;
   title: string;
   lede?: string;
+  /** @deprecated kept for older call sites; the display voice is uniform now. */
   editorial?: boolean;
   id?: string;
 }) {
   return (
-    <header className="reveal">
-      <div className="flex items-center gap-3">
-        <span className="label text-[var(--accent)]">{index}</span>
-        <span className="h-px w-8 bg-[var(--line-strong)]" aria-hidden="true" />
-        <span className="label text-[var(--text-3)]">{kicker}</span>
+    <header>
+      <Rule strong />
+      <div className="mt-4 flex items-baseline justify-between gap-6">
+        <Eyebrow>{kicker}</Eyebrow>
+        <span className="t-index text-[var(--text-3)]">/{index}</span>
       </div>
-      <h2
+      <SplitLines
+        as="h2"
         id={id}
-        className={`mt-5 max-w-[19ch] text-[clamp(2.25rem,5.2vw,3.9rem)] text-[var(--text)] ${
-          editorial ? 'font-editorial' : 'font-display'
-        }`}
-      >
-        {title}
-      </h2>
+        text={title}
+        className="t-title mt-8 block max-w-[20ch] text-[var(--text)]"
+      />
       {lede && (
-        <p className="mt-5 max-w-[58ch] text-[17px] leading-[1.65] text-[var(--text-2)]">{lede}</p>
+        <p
+          className="reveal mt-6 max-w-[56ch] text-[18px] leading-[1.45] text-[var(--text-2)]"
+          style={{ '--reveal-delay': '160ms' } as CSSProperties}
+        >
+          {lede}
+        </p>
       )}
     </header>
   );
@@ -47,12 +61,16 @@ export function SectionHeading({
 
 export function Tag({ children }: { children: ReactNode }) {
   return (
-    <span className="mono rounded-[6px] border border-[var(--line)] bg-[var(--surface-2)] px-2 py-1 text-[11px] text-[var(--text-2)]">
+    <span className="mono inline-flex items-center border border-[var(--line)] px-2 py-[3px] text-[11px] uppercase tracking-[0.04em] text-[var(--text-2)]">
       {children}
     </span>
   );
 }
 
+const boxBase =
+  'inline-flex min-h-[44px] items-center justify-center gap-3 border px-6 text-[16px] tracking-[-0.01em] transition-[background-color,color,border-color] duration-[var(--t-base)] ease-[var(--ease-out-expo)] disabled:cursor-not-allowed disabled:opacity-50';
+
+/** Solid ink box; inverts on hover. */
 export function ButtonPrimary({
   children,
   onClick,
@@ -71,13 +89,14 @@ export function ButtonPrimary({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`inline-flex items-center justify-center gap-2 rounded-[var(--r-md)] bg-[var(--accent)] px-6 py-3 text-[15px] font-semibold text-[var(--on-accent)] transition-[transform,background-color,opacity] duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:-translate-y-px hover:bg-[var(--accent-hover)] active:translate-y-0 active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 ${className}`}
+      className={`${boxBase} border-[var(--text)] bg-[var(--text)] text-[var(--bg)] hover:bg-transparent hover:text-[var(--text)] disabled:hover:bg-[var(--text)] disabled:hover:text-[var(--bg)] ${className}`}
     >
       {children}
     </button>
   );
 }
 
+/** Outlined box — the site's default call to action. Fills with ink on hover. */
 export function ButtonGhost({
   children,
   href,
@@ -91,7 +110,7 @@ export function ButtonGhost({
   external?: boolean;
   className?: string;
 }) {
-  const classes = `inline-flex items-center justify-center gap-2 rounded-[var(--r-md)] border border-[var(--line-strong)] px-6 py-3 text-[15px] font-medium text-[var(--text)] transition-[transform,border-color,background-color] duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:-translate-y-px hover:border-[var(--text-3)] hover:bg-[var(--surface-2)] active:translate-y-0 active:scale-[0.985] ${className}`;
+  const classes = `${boxBase} border-[var(--line-strong)] text-[var(--text)] hover:bg-[var(--text)] hover:text-[var(--bg)] ${className}`;
 
   if (href) {
     return (

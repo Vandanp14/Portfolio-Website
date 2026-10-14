@@ -4,62 +4,64 @@
 
 /* ---------------------------------------------------------------------------
    Band system
-   A plain light interface: cool neutral grounds, near-black ink, one blue
-   accent with cyan reserved for rare emphasis. Sections alternate between
-   paper (white) and mist (light grey) so they separate by tone, not by
-   colour fields. Slate is used only twice — the photo banner and the footer —
-   as anchors at the top and bottom of the page.
+   An editorial, type-led interface: white paper and pale-grey mist for most
+   of the page, a near-black slate for full-bleed feature panels, the menu
+   and the footer. Ink is never pure black; the one accent is a violet used
+   sparingly, mostly on slate.
 
    Each band class re-declares the SAME variable names, so every component is
    written once and inherits whatever band it sits inside. Components must
    never hardcode a colour.
 
    Contrast (WCAG AA, body text):
-     ink on paper    18.9:1     muted on paper   6.6:1
-     blue on paper    5.1:1     ink on mist     17.9:1
-     chalk on slate  16.4:1     cyan on slate    9.2:1
+     ink on paper    16.1:1     muted on paper   5.3:1
+     violet on paper  6.4:1     ink on mist     13.9:1
+     chalk on slate  14.6:1     violet on slate  5.9:1
 --------------------------------------------------------------------------- */
 
 :root {
   /* Raw palette — referenced only by the band classes below. */
   --c-paper: #ffffff;
-  --c-mist: #f4f6f9;
-  --c-mist-deep: #e9edf3;
-  --c-slate: #0e1522;
-  --c-slate-deep: #080d16;
-  --c-ink: #0b0d12;
-  --c-blue: #1f6feb;
-  --c-blue-deep: #1a5fd0;
-  --c-cyan: #06b6d4;
-  --c-cyan-bright: #38bdf8;
+  --c-mist: #eeeeee;
+  --c-card: #f8f8f8;
+  --c-ink: #1e2124;
+  --c-slate: #1e2124;
+  --c-slate-2: #2b2e33;
+  --c-slate-3: #34383e;
+  --c-chalk: #f4f4f2;
+  --c-violet: #5b45e0;
+  --c-violet-bright: #9f8fff;
   --c-signal: #d1442f;
 
-  /* Geometry */
-  --content: 1240px;
-  --gutter: clamp(20px, 5vw, 56px);
-  --section: clamp(84px, 11vw, 148px);
-  --r-sm: 6px;
-  --r-md: 10px;
-  --r-lg: 16px;
-  --r-xl: 24px;
+  /* Geometry — full-bleed with a thin gutter, sharp corners. */
+  --content: 1440px;
+  --gutter: clamp(16px, 2.1vw, 30px);
+  --section: clamp(96px, 11vw, 168px);
+  --nav-h: 96px;
+  --r-sm: 2px;
+  --r-md: 2px;
+  --r-lg: 4px;
+  --r-xl: 6px;
 
-  /* Motion — motion-craft tokens, verbatim */
+  /* Motion */
   --t-micro: 120ms;
   --t-instant: 100ms;
   --t-fast: 180ms;
   --t-base: 250ms;
   --t-medium: 450ms;
-  --t-slow: 600ms;
-  --t-story: 800ms;
+  --t-slow: 700ms;
+  --t-story: 1000ms;
+  --t-epic: 1400ms;
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-luxe: cubic-bezier(0.2, 1, 0.2, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-wipe: cubic-bezier(0.77, 0, 0.18, 1);
   --d-hover: 4px;
   --d-rise: 16px;
-  --d-reveal: 24px;
+  --d-reveal: 20px;
 }
 
 /* --- Bands ---------------------------------------------------------------- */
@@ -73,56 +75,56 @@
   color-scheme: light;
   --bg: var(--c-paper);
   --bg-alt: var(--c-mist);
-  --surface: var(--c-mist);
-  --surface-2: var(--c-mist-deep);
-  --line: rgba(11, 13, 18, 0.1);
-  --line-strong: rgba(11, 13, 18, 0.2);
+  --surface: var(--c-card);
+  --surface-2: var(--c-mist);
+  --line: rgba(30, 33, 36, 0.14);
+  --line-strong: rgba(30, 33, 36, 0.9);
   --text: var(--c-ink);
-  --text-2: #565d6d;
-  --text-3: #6e7583;
-  --accent: var(--c-blue);
-  --accent-hover: var(--c-blue-deep);
-  --accent-soft: rgba(31, 111, 235, 0.09);
+  --text-2: #4c5056;
+  --text-3: #6b6e73;
+  --accent: var(--c-violet);
+  --accent-hover: #4834c4;
+  --accent-soft: rgba(91, 69, 224, 0.08);
   --on-accent: #ffffff;
   --signal: var(--c-signal);
-  --shadow: 0 1px 2px rgba(11, 13, 18, 0.04), 0 18px 44px -26px rgba(11, 13, 18, 0.22);
-  --shadow-sm: 0 1px 2px rgba(11, 13, 18, 0.04), 0 8px 20px -16px rgba(11, 13, 18, 0.18);
+  --shadow: 0 1px 2px rgba(30, 33, 36, 0.04), 0 18px 44px -26px rgba(30, 33, 36, 0.22);
+  --shadow-sm: 0 1px 2px rgba(30, 33, 36, 0.04), 0 8px 20px -16px rgba(30, 33, 36, 0.18);
 }
 
 .band-mist {
   color-scheme: light;
   --bg: var(--c-mist);
-  --bg-alt: var(--c-mist-deep);
+  --bg-alt: #e4e4e4;
   --surface: var(--c-paper);
-  --surface-2: #ffffff;
-  --line: rgba(11, 13, 18, 0.11);
-  --line-strong: rgba(11, 13, 18, 0.22);
+  --surface-2: var(--c-card);
+  --line: rgba(30, 33, 36, 0.16);
+  --line-strong: rgba(30, 33, 36, 0.9);
   --text: var(--c-ink);
-  --text-2: #545b6b;
-  --text-3: #6c7381;
-  --accent: var(--c-blue);
-  --accent-hover: var(--c-blue-deep);
-  --accent-soft: rgba(31, 111, 235, 0.08);
+  --text-2: #464a50;
+  --text-3: #63666b;
+  --accent: var(--c-violet);
+  --accent-hover: #4834c4;
+  --accent-soft: rgba(91, 69, 224, 0.08);
   --on-accent: #ffffff;
   --signal: var(--c-signal);
-  --shadow: 0 1px 2px rgba(11, 13, 18, 0.04), 0 18px 44px -26px rgba(11, 13, 18, 0.2);
-  --shadow-sm: 0 1px 2px rgba(11, 13, 18, 0.03), 0 8px 20px -16px rgba(11, 13, 18, 0.16);
+  --shadow: 0 1px 2px rgba(30, 33, 36, 0.04), 0 18px 44px -26px rgba(30, 33, 36, 0.2);
+  --shadow-sm: 0 1px 2px rgba(30, 33, 36, 0.03), 0 8px 20px -16px rgba(30, 33, 36, 0.16);
 }
 
 .band-slate {
   color-scheme: dark;
   --bg: var(--c-slate);
-  --bg-alt: var(--c-slate-deep);
-  --surface: rgba(244, 246, 250, 0.06);
-  --surface-2: rgba(244, 246, 250, 0.1);
-  --line: rgba(244, 246, 250, 0.14);
-  --line-strong: rgba(244, 246, 250, 0.3);
-  --text: #f4f6fa;
-  --text-2: #a3acbe;
-  --text-3: #808a9d;
-  --accent: var(--c-cyan-bright);
-  --accent-hover: #7dd3fc;
-  --accent-soft: rgba(56, 189, 248, 0.16);
+  --bg-alt: #17191c;
+  --surface: var(--c-slate-2);
+  --surface-2: var(--c-slate-3);
+  --line: rgba(244, 244, 242, 0.16);
+  --line-strong: rgba(244, 244, 242, 0.85);
+  --text: var(--c-chalk);
+  --text-2: #b9b9b9;
+  --text-3: #8d9096;
+  --accent: var(--c-violet-bright);
+  --accent-hover: #bdb2ff;
+  --accent-soft: rgba(159, 143, 255, 0.14);
   --on-accent: var(--c-slate);
   --signal: #f0714f;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 20px 48px -24px rgba(0, 0, 0, 0.7);
@@ -145,7 +147,8 @@ body {
   background: var(--c-paper);
   color: var(--c-ink);
   font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  font-size: 16px;
+  font-size: 18px;
+  line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -154,61 +157,275 @@ h1, h2, h3, h4, h5, p, figure, blockquote { margin: 0; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: none; padding: 0; }
 img { display: block; max-width: 100%; }
-::selection { background: rgba(31, 111, 235, 0.18); color: var(--c-ink); }
+::selection { background: var(--c-ink); color: var(--c-paper); }
+.band-slate ::selection { background: var(--c-chalk); color: var(--c-slate); }
 
 :focus-visible {
-  outline: 2px solid var(--accent, var(--c-blue));
+  outline: 2px solid var(--accent, var(--c-violet));
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: 0;
 }
 
-/* Type roles */
-.font-display {
+/* --- Type roles ------------------------------------------------------------
+   Everything is regular weight. Hierarchy comes from size and tracking, not
+   from bold: giant tight display type, 50px section titles, 10–11px uppercase
+   eyebrows, mono only for indices and metadata.
+--------------------------------------------------------------------------- */
+
+.font-display,
+.t-display {
   font-family: 'Geist', -apple-system, system-ui, sans-serif;
-  font-weight: 620;
-  letter-spacing: -0.035em;
-  line-height: 0.98;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
 }
 
+/* Kept as an alias so pages written for the old serif role inherit the new
+   display voice without edits. */
 .font-editorial {
-  font-family: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+  font-family: 'Geist', -apple-system, system-ui, sans-serif;
   font-weight: 400;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.035em;
   line-height: 1.02;
 }
 
-.mono {
-  font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-  font-variant-numeric: tabular-nums;
+.t-title {
+  font-family: 'Geist', -apple-system, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(2.125rem, 3.6vw, 3.125rem);
+  letter-spacing: -0.035em;
+  line-height: 1.04;
 }
 
+.t-eyebrow,
 .label {
-  font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  font-family: 'Geist', -apple-system, system-ui, sans-serif;
   font-size: 11px;
-  letter-spacing: 0.14em;
+  font-weight: 450;
+  letter-spacing: 0.06em;
+  line-height: 1.45;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
 
-.num { font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+.mono,
+.t-index {
+  font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.t-index {
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+.num { font-variant-numeric: tabular-nums; letter-spacing: -0.04em; }
 
 /* ---------------------------------------------------------------------------
-   Reveal — fires once, 600ms, quint-out
+   Reveal engine — see src/lib/reveal.ts. One observer adds `.is-in` once per
+   element; a MutationObserver picks up nodes that mount later, so anything
+   carrying `.reveal` or `[data-reveal]` animates wherever it appears.
 --------------------------------------------------------------------------- */
 
+/* Default: fade up 20px. */
 .reveal {
   opacity: 0;
   transform: translate3d(0, var(--d-reveal), 0);
   transition:
     opacity var(--t-slow) var(--ease-out),
-    transform var(--t-slow) var(--ease-out);
+    transform var(--t-slow) var(--ease-out-expo);
   transition-delay: var(--reveal-delay, 0ms);
 }
+.reveal.is-in { opacity: 1; transform: none; }
 
-.reveal.is-in {
-  opacity: 1;
+/* Lines — each word (`.sl-w`, from <SplitLines>) is clipped from the bottom
+   and rises into place, staggered by --i. */
+[data-reveal='lines'] .sl-w {
+  display: inline-block;
+  clip-path: inset(-0.25em -0.1em 100% -0.1em);
+  transform: translate3d(0, 0.42em, 0);
+  transition:
+    clip-path var(--t-story) var(--ease-out-expo),
+    transform var(--t-story) var(--ease-out-expo);
+  transition-delay: calc(var(--reveal-delay, 0ms) + var(--i, 0) * 55ms);
+  will-change: clip-path, transform;
+}
+[data-reveal='lines'].is-in .sl-w {
+  clip-path: inset(-0.25em -0.1em -0.25em -0.1em);
   transform: none;
 }
+
+/* Clip — the block unrolls from top to bottom (heroReveal). */
+[data-reveal='clip'] {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--t-story) var(--ease-wipe);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal='clip'].is-in { clip-path: inset(0 0 0 0); }
+
+/* Wipe — left-to-right uncover. */
+[data-reveal='wipe'] {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path var(--t-story) var(--ease-wipe);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal='wipe'].is-in { clip-path: inset(0 0 0 0); }
+
+/* Cover — a band-coloured shutter lifts off an image while it settles from
+   a slight zoom. Put it on the image's wrapper. */
+[data-reveal='cover'] {
+  position: relative;
+  overflow: hidden;
+}
+[data-reveal='cover']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  transform-origin: top;
+  transition: transform var(--t-epic) var(--ease-wipe);
+  transition-delay: var(--reveal-delay, 0ms);
+  pointer-events: none;
+}
+[data-reveal='cover'].is-in::after { transform: scaleY(0); }
+[data-reveal='cover'] > img,
+[data-reveal='cover'] > picture {
+  transform: scale(1.08);
+  transition: transform 1800ms var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal='cover'].is-in > img,
+[data-reveal='cover'].is-in > picture { transform: none; }
+
+/* Rule — a hairline draws left to right. */
+[data-reveal='rule'] {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-epic) var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal='rule'].is-in { transform: none; }
+
+/* Fade — opacity only, for things that must not move. */
+[data-reveal='fade'] {
+  opacity: 0;
+  transition: opacity var(--t-story) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal='fade'].is-in { opacity: 1; }
+
+/* ---------------------------------------------------------------------------
+   Mount animations — for content that swaps in place (tabs, menus). These
+   run on mount, no observer needed. Stagger with --i.
+--------------------------------------------------------------------------- */
+
+.anim-rise {
+  animation: anim-rise var(--t-slow) var(--ease-out-expo) both;
+  animation-delay: calc(var(--anim-delay, 0ms) + var(--i, 0) * 45ms);
+}
+@keyframes anim-rise {
+  from { opacity: 0; transform: translate3d(0, 20px, 0); }
+}
+
+.anim-clip {
+  animation: anim-clip var(--t-story) var(--ease-wipe) both;
+  animation-delay: calc(var(--anim-delay, 0ms) + var(--i, 0) * 45ms);
+}
+@keyframes anim-clip {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+.anim-fade {
+  animation: anim-fade var(--t-medium) var(--ease-out) both;
+  animation-delay: calc(var(--anim-delay, 0ms) + var(--i, 0) * 45ms);
+}
+@keyframes anim-fade {
+  from { opacity: 0; }
+}
+
+/* Flicker — a short strobe that settles on. Use once, on one accent word. */
+.anim-flicker { animation: anim-flicker 1.4s steps(1, end) both; animation-delay: var(--anim-delay, 0ms); }
+@keyframes anim-flicker {
+  0% { opacity: 0; }
+  14% { opacity: 1; }
+  18% { opacity: 0.1; }
+  26% { opacity: 1; }
+  34% { opacity: 0.1; }
+  40% { opacity: 1; }
+  62% { opacity: 0.2; }
+  66%, 100% { opacity: 1; }
+}
+
+/* Glitch — horizontal jitter, for hover on an arrow or index. */
+.hover-glitch:hover .glitch-target,
+.glitch-target.is-glitching { animation: anim-glitch 420ms steps(1, end); }
+@keyframes anim-glitch {
+  0% { transform: none; }
+  20% { transform: translate3d(-6px, 0, 0); }
+  40% { transform: translate3d(4px, 0, 0); }
+  60% { transform: translate3d(-2px, 0, 0); }
+  80% { transform: translate3d(1px, 0, 0); }
+  100% { transform: none; }
+}
+
+/* Progress sweep — a pill track with a light knob crossing it forever. */
+.progress-sweep {
+  position: relative;
+  overflow: hidden;
+}
+.progress-sweep::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, var(--accent-soft) 40%, var(--accent) 100%);
+  opacity: 0.55;
+  animation: progress-sweep 2.8s var(--ease-in-out) infinite;
+}
+@keyframes progress-sweep {
+  from { transform: translateX(-110%); }
+  to { transform: translateX(240%); }
+}
+
+/* Marquee — the track holds two copies; it slides half its own width. */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Arrow nudge on hover — for ↗ / → glyphs inside links. */
+.arrow-nudge { display: inline-block; transition: transform var(--t-base) var(--ease-out-expo); }
+a:hover .arrow-nudge,
+button:hover .arrow-nudge { transform: translate3d(3px, -3px, 0); }
+a:hover .arrow-nudge-x,
+button:hover .arrow-nudge-x { transform: translate3d(6px, 0, 0); }
+
+/* Underline that draws on hover — Palantir's link treatment. */
+.link-draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--t-medium) var(--ease-out-expo);
+}
+.link-draw:hover { background-size: 0 1px; background-position: 100% 100%; }
+
+.link-draw-in {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--t-medium) var(--ease-out-expo);
+}
+.link-draw-in:hover,
+.link-draw-in:focus-visible { background-size: 100% 1px; }
 
 /* ---------------------------------------------------------------------------
    Pieces
@@ -221,37 +438,64 @@ img { display: block; max-width: 100%; }
 .rail::-webkit-scrollbar { display: none; }
 
 .device {
-  border-radius: 28px;
-  border: 1px solid var(--line-strong);
+  border-radius: 26px;
+  border: 1px solid var(--line);
   background: var(--bg-alt);
-  padding: 6px;
+  padding: 5px;
 }
-.device img { border-radius: 22px; }
+.device img { border-radius: 21px; }
 
 .screen {
   border-radius: var(--r-lg);
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line);
   background: var(--bg-alt);
   overflow: hidden;
 }
 
 .field {
   width: 100%;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--r-md);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
   color: var(--text);
-  padding: 12px 14px;
-  font-size: 15px;
-  transition:
-    border-color var(--t-fast) var(--ease-out-expo),
-    background-color var(--t-fast) var(--ease-out-expo);
+  padding: 14px 0;
+  font-size: 18px;
+  transition: border-color var(--t-fast) var(--ease-out-expo);
 }
 .field::placeholder { color: var(--text-3); }
-.field:hover { border-color: var(--line-strong); }
-.field:focus { outline: none; border-color: var(--accent); background: var(--surface-2); }
+.field:hover { border-color: var(--text-3); }
+.field:focus { outline: none; border-color: var(--text); }
 .field[aria-invalid='true'] { border-color: var(--signal); }
 
+/* Hamburger → ✕ */
+.burger { position: relative; width: 18px; height: 12px; }
+.burger span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transition:
+    transform var(--t-medium) var(--ease-out-expo),
+    opacity var(--t-fast) var(--ease-out),
+    top var(--t-medium) var(--ease-out-expo);
+}
+.burger span:nth-child(1) { top: 0; }
+.burger span:nth-child(2) { top: 5.5px; }
+.burger span:nth-child(3) { top: 11px; }
+.burger.is-open span:nth-child(1) { top: 5.5px; transform: rotate(45deg); }
+.burger.is-open span:nth-child(2) { opacity: 0; }
+.burger.is-open span:nth-child(3) { top: 5.5px; transform: rotate(-45deg); }
+
+/* Menu overlay */
+.menu-overlay {
+  animation: menu-in var(--t-medium) var(--ease-out-expo) both;
+}
+@keyframes menu-in {
+  from { opacity: 0; }
+}
+.menu-overlay .anim-rise { --anim-delay: 120ms; }
 
 /* ---------------------------------------------------------------------------
    Blog
@@ -269,24 +513,24 @@ img { display: block; max-width: 100%; }
   to { background-position: -100% 0; }
 }
 
-/* Preview excerpt: each word rises out of a blur, staggered via --word-delay. */
+/* Preview excerpt: each word rises out of a clip, staggered via --word-delay. */
 .preview-word {
   display: inline-block;
   opacity: 0;
-  filter: blur(6px);
+  clip-path: inset(-0.2em -0.1em 100% -0.1em);
   transform: translate3d(0, 0.35em, 0);
-  animation: preview-word var(--t-medium) var(--ease-out-expo) forwards;
+  animation: preview-word var(--t-slow) var(--ease-out-expo) forwards;
   animation-delay: var(--word-delay, 0ms);
 }
 
 @keyframes preview-word {
-  to { opacity: 1; filter: blur(0); transform: none; }
+  to { opacity: 1; clip-path: inset(-0.2em -0.1em -0.2em -0.1em); transform: none; }
 }
 
 .preview-in { animation: preview-in var(--t-medium) var(--ease-out-expo) both; }
 
 @keyframes preview-in {
-  from { opacity: 0; transform: translate3d(0, 4px, 0); }
+  from { opacity: 0; transform: translate3d(0, 6px, 0); }
 }
 
 /* Résumé viewer: indeterminate progress while the server assembles the PDF. */
@@ -299,43 +543,44 @@ img { display: block; max-width: 100%; }
 
 /* Long-form post body — inherits band variables, never hardcodes colour. */
 .post-body {
-  font-size: 18px;
-  line-height: 1.75;
+  font-size: 19px;
+  line-height: 1.65;
   color: var(--text);
   overflow-wrap: anywhere;
 }
-.post-body > * + * { margin-top: 1.25em; }
+.post-body > * + * { margin-top: 1.2em; }
 .post-body > p:first-child em:only-child {
   display: block;
-  font-family: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
-  font-size: 1.35em;
-  line-height: 1.45;
+  font-style: normal;
+  font-size: 1.4em;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
   color: var(--text-2);
 }
 .post-body h2,
 .post-body h3,
 .post-body h4 {
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.25;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
   margin-top: 2.2em;
 }
-.post-body h2 { font-size: 1.6em; }
-.post-body h3 { font-size: 1.3em; }
-.post-body h4 { font-size: 1.1em; }
+.post-body h2 { font-size: 1.9em; }
+.post-body h3 { font-size: 1.45em; }
+.post-body h4 { font-size: 1.15em; }
 .post-body h2 + *,
 .post-body h3 + *,
 .post-body h4 + * { margin-top: 0.75em; }
 .post-body strong { font-weight: 600; }
 .post-body a {
-  color: var(--accent);
+  color: var(--text);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
-  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
-  transition: text-decoration-color var(--t-fast) var(--ease-out-expo);
+  text-decoration-color: var(--text-3);
+  transition: text-decoration-color var(--t-fast) var(--ease-out-expo), color var(--t-fast) var(--ease-out-expo);
 }
-.post-body a:hover { text-decoration-color: var(--accent); }
+.post-body a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 .post-body ul,
 .post-body ol { padding-left: 1.4em; }
 .post-body ul { list-style: disc; }
@@ -343,35 +588,35 @@ img { display: block; max-width: 100%; }
 .post-body li + li { margin-top: 0.5em; }
 .post-body li::marker { color: var(--text-3); }
 .post-body blockquote {
-  border-left: 2px solid var(--accent);
+  border-left: 1px solid var(--text);
   padding-left: 1.25em;
+  font-size: 1.15em;
+  letter-spacing: -0.015em;
   color: var(--text-2);
 }
 .post-body img {
   margin-inline: auto;
   height: auto;
-  border-radius: var(--r-lg);
-  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
 }
 .post-body hr { border: 0; height: 1px; background: var(--line); margin-block: 2.5em; }
 .post-body code {
   font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-  font-size: 0.85em;
-  background: var(--surface);
-  border: 1px solid var(--line);
+  font-size: 0.82em;
+  background: var(--surface-2);
   border-radius: var(--r-sm);
   padding: 0.1em 0.35em;
 }
 .post-body pre {
   overflow-x: auto;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--r-md);
-  padding: 1em 1.2em;
-  font-size: 0.85em;
+  background: var(--c-slate);
+  color: var(--c-chalk);
+  border-radius: var(--r-sm);
+  padding: 1.1em 1.3em;
+  font-size: 0.82em;
   line-height: 1.6;
 }
-.post-body pre code { background: none; border: 0; padding: 0; font-size: inherit; }
+.post-body pre code { background: none; border: 0; padding: 0; font-size: inherit; color: inherit; }
 .post-body table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
 .post-body th,
 .post-body td { border-bottom: 1px solid var(--line); padding: 0.6em 0.5em; text-align: left; }
@@ -380,15 +625,27 @@ img { display: block; max-width: 100%; }
   .post-body { font-size: 17px; }
 }
 
+/* ---------------------------------------------------------------------------
+   Reduced motion — every effect resolves to its final state instantly.
+--------------------------------------------------------------------------- */
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
     scroll-behavior: auto !important;
   }
   .reveal { opacity: 1; transform: none; }
+  [data-reveal] { opacity: 1 !important; clip-path: none !important; transform: none !important; }
+  [data-reveal] .sl-w { clip-path: none !important; transform: none !important; }
+  [data-reveal='cover']::after { display: none; }
+  [data-reveal='cover'] > img { transform: none !important; }
+  .marquee-track { animation: none; flex-wrap: wrap; width: auto; }
+  .marquee-dup { display: none; }
+  .progress-sweep::before { animation: none; }
   .skeleton, .resume-indeterminate { animation: none; }
-  .preview-word, .preview-in { animation: none; opacity: 1; filter: none; transform: none; }
+  .preview-word, .preview-in { animation: none; opacity: 1; clip-path: none; transform: none; }
 }

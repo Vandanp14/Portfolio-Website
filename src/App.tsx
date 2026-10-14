@@ -24,7 +24,7 @@ function SkipLink({ href }: { href: string }) {
   return (
     <a
       href={href}
-      className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-[var(--r-md)] focus:bg-[#1F6FEB] focus:px-4 focus:py-2 focus:text-[#FFFFFF]"
+      className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-[#1E2124] focus:px-4 focus:py-2 focus:text-[#FFFFFF]"
     >
       Skip to content
     </a>
