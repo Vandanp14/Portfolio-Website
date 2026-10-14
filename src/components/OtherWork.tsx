@@ -1,64 +1,80 @@
-import { ArrowUpRight } from 'lucide-react';
+import type { CSSProperties } from 'react';
 import { otherProjects } from '../content/portfolio';
-import { Shell } from './primitives';
+import type { SmallProject } from '../content/portfolio';
+import { SplitLines } from './motion/SplitLines';
+import { Eyebrow, Shell } from './primitives';
 
 export function OtherWork() {
   return (
-    <div className="band band-mist pb-[var(--section)]">
+    <section aria-labelledby="other-work-title" className="band band-mist py-[var(--section)]">
       <Shell>
-        <div className="reveal flex items-baseline justify-between border-t border-[var(--line)] pt-10">
-          <span className="label text-[var(--text-3)]">Also built</span>
-          <span className="label text-[var(--text-3)]">{otherProjects.length} projects</span>
+        <div className="flex items-baseline justify-between gap-6">
+          <Eyebrow>Also built</Eyebrow>
+          <span className="t-index num text-[var(--text-3)]">
+            {String(otherProjects.length).padStart(2, '0')} projects
+          </span>
         </div>
+        <SplitLines
+          as="h2"
+          id="other-work-title"
+          text="Coursework, hackathons, and tools I needed."
+          className="t-title mt-8 block max-w-[20ch] text-[var(--text)]"
+        />
 
-        <ul className="mt-6 divide-y divide-[var(--line)] border-y border-[var(--line)]">
-          {otherProjects.map((project, i) => {
-            const reveal = i < 6;
-            return (
-              <li
-                key={project.id}
-                className={`group grid gap-x-8 gap-y-3 py-6 transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] md:grid-cols-[140px_1fr] md:items-start md:py-7 ${
-                  reveal ? 'reveal' : ''
-                } ${project.url ? 'hover:bg-[var(--surface)]' : ''}`}
-                style={reveal ? ({ '--reveal-delay': `${i * 70}ms` } as React.CSSProperties) : undefined}
-              >
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 md:flex-col md:items-start">
-                  <span className="label text-[var(--text-3)]">{project.year}</span>
-                  <div className="flex flex-wrap gap-x-2 gap-y-1">
-                    {project.stack.map((tech) => (
-                      <span key={tech} className="mono text-[11px] text-[var(--text-3)]">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  {project.url ? (
-                    <a
-                      href={project.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-[18px] font-medium text-[var(--text)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] group-hover:text-[var(--accent)]"
-                    >
-                      {project.title}
-                      <ArrowUpRight
-                        className="h-4 w-4 text-[var(--text-3)] transition-transform duration-[var(--t-fast)] ease-[var(--ease-out-expo)] group-hover:-translate-y-[2px] group-hover:translate-x-[2px]"
-                        aria-hidden="true"
-                      />
-                    </a>
-                  ) : (
-                    <span className="text-[18px] font-medium text-[var(--text)]">{project.title}</span>
-                  )}
-                  <p className="mt-2 max-w-[66ch] text-[15px] leading-[1.65] text-[var(--text-2)]">
-                    {project.blurb}
-                  </p>
-                </div>
-              </li>
-            );
-          })}
+        <ul className="mt-[clamp(48px,6vw,80px)] grid gap-2.5 md:grid-cols-2 xl:grid-cols-3">
+          {otherProjects.map((project, i) => (
+            <li
+              key={project.id}
+              className="reveal flex"
+              style={{ '--reveal-delay': `${(i % 3) * 90}ms` } as CSSProperties}
+            >
+              <Card project={project} />
+            </li>
+          ))}
         </ul>
       </Shell>
-    </div>
+    </section>
   );
+}
+
+function Card({ project }: { project: SmallProject }) {
+  const body = (
+    <>
+      <div className="flex items-center justify-between gap-4">
+        <span className="t-index num text-[var(--text-3)]">{project.year}</span>
+        {project.url ? (
+          <span aria-hidden="true" className="arrow-nudge text-[20px] leading-none text-[var(--text)]">
+            ↗
+          </span>
+        ) : (
+          <span aria-hidden="true" className="block h-2 w-2 bg-[var(--line-strong)]" />
+        )}
+      </div>
+
+      <h3 className="mt-10 text-[clamp(1.625rem,2.3vw,2.125rem)] leading-[1.06] tracking-[-0.035em] text-[var(--text)]">
+        {project.title}
+        {project.url && <span className="sr-only"> (opens in a new tab)</span>}
+      </h3>
+      <p className="mt-4 text-[16px] leading-[1.5] text-[var(--text-2)]">{project.blurb}</p>
+      <p className="mono mt-auto pt-8 text-[12px] uppercase tracking-[0.02em] text-[var(--text-3)]">
+        {project.stack.join(' / ')}
+      </p>
+    </>
+  );
+
+  const base = 'flex w-full flex-col bg-[var(--surface)] p-6 md:p-[30px]';
+
+  if (project.url) {
+    return (
+      <a
+        href={project.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`${base} transition-colors duration-[var(--t-base)] ease-[var(--ease-out-expo)] hover:bg-[var(--surface-2)]`}
+      >
+        {body}
+      </a>
+    );
+  }
+  return <article className={base}>{body}</article>;
 }

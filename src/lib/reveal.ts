@@ -7,6 +7,11 @@
 
 const SELECTOR = '.reveal:not(.is-in), [data-reveal]:not(.is-in)';
 
+// Chrome intersects a target with its OWN clip-path, so an element that starts
+// fully clipped (clip / wipe) would never report as visible. Those are watched
+// through their parent instead.
+const CLIPPED = new Set(['clip', 'wipe']);
+
 let started = false;
 
 export function startReveals() {
@@ -14,6 +19,8 @@ export function startReveals() {
   started = true;
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Observed node → the reveal elements it stands in for.
+  const waiting = new Map<Element, Set<Element>>();
 
   const io = reduce
     ? null
@@ -21,18 +28,32 @@ export function startReveals() {
         (entries) => {
           entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
-            entry.target.classList.add('is-in');
+            waiting.get(entry.target)?.forEach((node) => node.classList.add('is-in'));
+            waiting.delete(entry.target);
             io?.unobserve(entry.target);
           });
         },
         { rootMargin: '0px 0px -10% 0px', threshold: 0.06 },
       );
 
+  const watch = (node: Element) => {
+    if (!io) {
+      node.classList.add('is-in');
+      return;
+    }
+    const proxy = CLIPPED.has(node.getAttribute('data-reveal') ?? '') ? node.parentElement ?? node : node;
+    const group = waiting.get(proxy);
+    if (group) {
+      group.add(node);
+      return;
+    }
+    waiting.set(proxy, new Set([node]));
+    io.observe(proxy);
+  };
+
   const take = (root: ParentNode) => {
-    const nodes: Element[] = [];
-    if (root instanceof Element && root.matches(SELECTOR)) nodes.push(root);
-    root.querySelectorAll(SELECTOR).forEach((node) => nodes.push(node));
-    nodes.forEach((node) => (io ? io.observe(node) : node.classList.add('is-in')));
+    if (root instanceof Element && root.matches(SELECTOR)) watch(root);
+    root.querySelectorAll(SELECTOR).forEach(watch);
   };
 
   take(document);

@@ -1,157 +1,171 @@
-import { ArrowUpRight, Github } from 'lucide-react';
+import { useRef, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { featuredProjects } from '../content/portfolio';
-import type { Project } from '../content/portfolio';
-import { ButtonGhost, SectionHeading, Shell, Tag } from './primitives';
+import { Rule } from './motion/Rule';
+import { SplitLines } from './motion/SplitLines';
+import { ProjectPanel } from './ProjectPanel';
+import { SectionHeading, Shell } from './primitives';
+
+const PANEL_ID = 'work-panel';
+const tabId = (id: string) => `work-tab-${id}`;
 
 export function Work() {
+  const [active, setActive] = useState(0);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const viewer = useRef<HTMLDivElement>(null);
+  const project = featuredProjects[active];
+
+  const selectTab = (index: number) => {
+    setActive(index);
+    tabs.current[index]?.focus();
+  };
+
+  const onTabKey = (event: KeyboardEvent<HTMLButtonElement>) => {
+    const last = featuredProjects.length - 1;
+    const next =
+      event.key === 'ArrowRight'
+        ? active === last ? 0 : active + 1
+        : event.key === 'ArrowLeft'
+          ? active === 0 ? last : active - 1
+          : event.key === 'Home'
+            ? 0
+            : event.key === 'End'
+              ? last
+              : null;
+    if (next === null) return;
+    event.preventDefault();
+    selectTab(next);
+  };
+
+  /** Index-row click: select the project and bring the viewer into view. */
+  const openFromIndex = (index: number) => {
+    setActive(index);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    viewer.current?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    tabs.current[index]?.focus({ preventScroll: true });
+  };
+
   return (
     <section
       id="work"
       data-nav-section
       aria-labelledby="work-title"
-      className="band band-mist relative overflow-hidden py-[var(--section)]"
+      className="band band-paper relative py-[var(--section)]"
     >
       <Shell>
         <SectionHeading
-          index="01"
+          index="0.1"
           kicker="Selected work"
-          title="Things I built end to end."
-          lede="Three products, start to finish — schema, backend, front end, deploy. Each one runs on real data: mine, or a team's with no engineer of their own."
+          title="Three products, built end to end."
+          lede="Schema, backend, front end, deploy — each one on real data. Mine, or a team’s that had no engineer of its own."
           id="work-title"
         />
 
-        <div className="mt-[clamp(64px,9vw,110px)] flex flex-col">
-          {featuredProjects.map((project, i) => (
-            <FeatureBlock key={project.id} project={project} index={i} />
-          ))}
+        {/* Numbered index — each row selects its project in the viewer below. */}
+        <ol
+          aria-label="Featured projects"
+          className="mt-[clamp(64px,8vw,112px)] [&:hover_.row-name]:opacity-40 [&_.row:focus-visible_.row-name]:opacity-100 [&_.row:hover_.row-name]:opacity-100"
+        >
+          {featuredProjects.map((item, i) => {
+            const isActive = i === active;
+            return (
+              <li key={item.id}>
+                <Rule delay={i * 90} />
+                <button
+                  type="button"
+                  onClick={() => openFromIndex(i)}
+                  aria-controls={PANEL_ID}
+                  aria-current={isActive ? 'true' : undefined}
+                  className="row group grid w-full grid-cols-[minmax(0,1fr)_auto] gap-x-6 py-7 text-left md:py-9"
+                >
+                  <span className="min-w-0">
+                    <SplitLines
+                      text={item.title}
+                      delay={i * 90}
+                      className="row-name t-display block text-[clamp(3rem,7vw,6.5rem)] text-[var(--text)] transition-[opacity,transform] duration-[var(--t-medium)] ease-[var(--ease-out-expo)] group-hover:translate-x-2 group-focus-visible:translate-x-2"
+                    />
+                    <span
+                      className="reveal mt-4 block max-w-[52ch] text-[17px] leading-[1.4] text-[var(--text-2)] md:text-[20px]"
+                      style={{ '--reveal-delay': `${i * 90 + 200}ms` } as CSSProperties}
+                    >
+                      {item.tagline}
+                    </span>
+                  </span>
+
+                  <span
+                    className="reveal flex flex-col items-end gap-1.5 text-right"
+                    style={{ '--reveal-delay': `${i * 90 + 120}ms` } as CSSProperties}
+                  >
+                    <span className="t-index text-[var(--text)]">/0.{i + 1}</span>
+                    <span className="t-index num text-[var(--text-3)]">{item.year}</span>
+                    <span className="t-index hidden max-w-[22ch] text-[var(--text-3)] md:block">{item.category}</span>
+                    <span className="mt-auto flex items-center gap-2 pt-4">
+                      {isActive && <span className="t-eyebrow text-[var(--accent)]">Viewing</span>}
+                      <span
+                        aria-hidden="true"
+                        className="arrow-nudge text-[22px] leading-none text-[var(--text)] md:text-[28px]"
+                      >
+                        ↗
+                      </span>
+                    </span>
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+          <li aria-hidden="true">
+            <Rule delay={featuredProjects.length * 90} />
+          </li>
+        </ol>
+
+        {/* Viewer: pill tabs over a dark feature panel. */}
+        <div ref={viewer} className="mt-[clamp(56px,7vw,96px)] scroll-mt-[var(--nav-h)]">
+          <div className="reveal flex flex-wrap items-center justify-between gap-4">
+            <div role="tablist" aria-label="Project details" className="flex flex-wrap gap-1.5">
+              {featuredProjects.map((item, i) => {
+                const selected = i === active;
+                return (
+                  <button
+                    key={item.id}
+                    ref={(node) => {
+                      tabs.current[i] = node;
+                    }}
+                    type="button"
+                    role="tab"
+                    id={tabId(item.id)}
+                    aria-selected={selected}
+                    aria-controls={PANEL_ID}
+                    tabIndex={selected ? 0 : -1}
+                    onClick={() => setActive(i)}
+                    onKeyDown={onTabKey}
+                    className={`inline-flex min-h-[44px] items-center gap-2.5 rounded-[2px] px-4 text-[15px] tracking-[-0.01em] transition-[background-color,color] duration-[var(--t-base)] ease-[var(--ease-out-expo)] ${
+                      selected
+                        ? 'bg-[var(--surface-2)] text-[var(--text)]'
+                        : 'bg-[var(--surface)] text-[var(--text-3)] hover:bg-[var(--surface-2)] hover:text-[var(--text-2)]'
+                    }`}
+                  >
+                    <span className="t-index text-[11px]">/0.{i + 1}</span>
+                    {item.title}
+                  </button>
+                );
+              })}
+            </div>
+            <span className="t-index hidden text-[var(--text-3)] sm:inline" aria-hidden="true">
+              {String(active + 1).padStart(2, '0')} / {String(featuredProjects.length).padStart(2, '0')}
+            </span>
+          </div>
+
+          <div
+            id={PANEL_ID}
+            role="tabpanel"
+            aria-labelledby={tabId(project.id)}
+            tabIndex={0}
+            data-reveal="clip"
+            className="band band-slate mt-3 overflow-hidden rounded-[2px] px-[var(--pp)] py-[clamp(28px,4.5vw,64px)] [--pp:clamp(20px,4vw,56px)]"
+          >
+            <ProjectPanel key={project.id} project={project} position={active} />
+          </div>
         </div>
       </Shell>
     </section>
-  );
-}
-
-function FeatureBlock({ project, index }: { project: Project; index: number }) {
-  const isEven = index % 2 === 0;
-  const hasLinks = Boolean(project.liveUrl || project.repoUrl);
-  const hasShots = project.shots.length > 0;
-
-  return (
-    <article
-      className={`reveal ${
-        index > 0
-          ? 'mt-[clamp(64px,9vw,110px)] border-t border-[var(--line)] pt-[clamp(64px,9vw,110px)]'
-          : ''
-      }`}
-      style={{ '--reveal-delay': `${index * 70}ms` } as React.CSSProperties}
-    >
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="label text-[var(--accent)]">{project.index}</span>
-        <span className="h-px w-8 bg-[var(--line-strong)]" aria-hidden="true" />
-        <span className="label text-[var(--text-3)]">{project.category}</span>
-        <span className="h-px w-8 bg-[var(--line-strong)]" aria-hidden="true" />
-        <span className="label text-[var(--text-3)]">{project.year}</span>
-      </div>
-
-      <h3 className="font-display mt-6 text-[clamp(1.9rem,4.2vw,2.8rem)] text-[var(--text)]">
-        {project.title}
-      </h3>
-      <p className="mt-4 max-w-[62ch] text-[17px] leading-[1.6] text-[var(--text-2)]">
-        {project.tagline}
-      </p>
-
-      {/* The track sizes swap along with the order, so the prose column is
-          always the wide one no matter which side it sits on. */}
-      <div
-        className={`mt-10 grid gap-10 lg:gap-16 ${
-          isEven ? 'lg:grid-cols-[1fr_340px]' : 'lg:grid-cols-[340px_1fr]'
-        }`}
-      >
-        <div className={isEven ? 'lg:order-1' : 'lg:order-2'}>
-          <p className="text-[15px] leading-[1.65] text-[var(--text-2)]">{project.summary}</p>
-
-          <ol className="mt-8 flex flex-col divide-y divide-[var(--line)] border-t border-[var(--line)]">
-            {project.build.map((item, bi) => (
-              <li key={bi} className="grid grid-cols-[28px_1fr] gap-4 py-4">
-                <span className="mono text-[13px] text-[var(--text-3)]">
-                  {String(bi + 1).padStart(2, '0')}
-                </span>
-                <span className="text-[15px] leading-[1.65] text-[var(--text-2)]">{item}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
-
-        <div className={isEven ? 'lg:order-2' : 'lg:order-1'}>
-          {/* Figures sit on hairlines rather than in a boxed grid — no frame,
-              no fill, so they read as type rather than as tiles. */}
-          <div className="grid grid-cols-3 gap-x-6 border-t border-[var(--line-strong)] pt-5 lg:grid-cols-1 lg:gap-0 lg:divide-y lg:divide-[var(--line)] lg:pt-0">
-            {project.metrics.map((metric) => (
-              <div key={metric.label} className="lg:py-5 lg:first:pt-0 lg:last:pb-0">
-                <div className="num font-display text-[clamp(1.6rem,3vw,2.4rem)] text-[var(--text)]">
-                  {metric.value}
-                </div>
-                <div className="label mt-2 text-[var(--text-3)]">{metric.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-10 flex flex-wrap items-center gap-2">
-        {project.stack.map((tech) => (
-          <Tag key={tech}>{tech}</Tag>
-        ))}
-      </div>
-
-      {hasLinks && (
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          {project.liveUrl && (
-            <ButtonGhost href={project.liveUrl} external>
-              Open live
-              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-            </ButtonGhost>
-          )}
-          {project.repoUrl && (
-            <ButtonGhost href={project.repoUrl} external>
-              Source
-              <Github className="h-4 w-4" aria-hidden="true" />
-            </ButtonGhost>
-          )}
-        </div>
-      )}
-
-      {hasShots && (
-        <div className="mt-10">
-          <div className="flex items-center justify-between">
-            <span className="label text-[var(--text-3)]">Screens</span>
-            {project.shots.length > 1 && <span className="label text-[var(--text-3)]">Swipe →</span>}
-          </div>
-
-          <div className="rail -mx-[var(--gutter)] mt-4 flex snap-x snap-mandatory gap-5 overflow-x-auto px-[var(--gutter)] pb-2">
-            {project.shots.map((shot, si) => (
-              <figure
-                key={si}
-                className={`flex-none snap-start ${
-                  shot.kind === 'phone' ? 'w-[214px] sm:w-[248px]' : 'w-[min(620px,82vw)]'
-                }`}
-              >
-                <div className={shot.kind === 'phone' ? 'device' : 'screen'}>
-                  <img
-                    src={shot.src}
-                    alt={shot.alt}
-                    loading="lazy"
-                    decoding="async"
-                    className={`w-full object-cover ${
-                      shot.kind === 'phone' ? 'aspect-[758/1400]' : 'aspect-[2940/1604]'
-                    }`}
-                  />
-                </div>
-                <figcaption className="label mt-3 text-[var(--text-3)]">{shot.caption}</figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-      )}
-    </article>
   );
 }

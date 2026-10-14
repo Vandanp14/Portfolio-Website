@@ -39,6 +39,22 @@ export const stats = [
   { value: '390', suffix: '+', label: 'Tests written', note: 'Across four shipped products' },
 ];
 
+/** Full-bleed internship panel under the hero. Every figure traces to the resume. */
+export const fanaticsHighlight = {
+  eyebrow: 'Summer 2026 · New York',
+  role: 'Software Engineering Intern at Fanatics',
+  statement: ['Product Builder’s', 'first public API'],
+  progress: 'Progress: shipped',
+  imageAlt:
+    'Vandan Patel at the Fanatics office in New York, standing beside the Fanatics logo wall',
+  metrics: [
+    { value: '5', label: 'REST endpoints shipped', detail: 'Product Builder’s first API' },
+    { value: '82K+', label: 'Records served', detail: '37 ms worst case' },
+    { value: '36.5%', label: 'Card data recovered', detail: 'Dual-identifier SQL engine' },
+    { value: '3', label: 'Features to production', detail: '8 weeks' },
+  ],
+};
+
 export type ProjectShot = {
   src: string;
   alt: string;

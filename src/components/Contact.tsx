@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { ArrowUpRight, Check, Loader2, Send } from 'lucide-react';
+import { useState, type CSSProperties, type ReactNode } from 'react';
 import { profile } from '../content/portfolio';
 import { sendContact } from '../lib/contact';
-import { ButtonPrimary, SectionHeading, Shell } from './primitives';
+import { SplitLines } from './motion/SplitLines';
+import { ButtonPrimary, Shell } from './primitives';
 
 type FormState = {
   name: string;
@@ -106,222 +106,207 @@ export function Contact() {
     }
   }
 
+  const sending = status === 'sending';
+
   return (
     <section
       id="contact"
       data-nav-section
       aria-labelledby="contact-title"
-      className="band band-paper relative overflow-hidden py-[var(--section)]"
+      className="band band-mist relative overflow-hidden py-[var(--section)]"
     >
       <Shell>
-        <div className="grid gap-[clamp(48px,6vw,80px)] lg:grid-cols-2 lg:items-start">
-          <div>
-            <SectionHeading
-              index="04"
-              kicker="Contact"
-              title="Tell me what you're building."
-              lede="I read every message myself and reply personally — no ticket queue, no autoresponder. Tell me what you're working on, or just say hello."
-              id="contact-title"
-            />
+        <div className="grid gap-[var(--gutter)] lg:grid-cols-2">
+          {/* Statement panel */}
+          <div
+            data-reveal="clip"
+            className="band band-slate flex flex-col justify-between gap-16 p-[clamp(24px,4vw,56px)] lg:min-h-[720px]"
+          >
+            <div>
+              <div className="flex items-baseline justify-between gap-6">
+                <p className="t-eyebrow text-[var(--text-3)]">Contact</p>
+                <span className="t-index text-[var(--text-3)]">/0.4</span>
+              </div>
+              <SplitLines
+                as="h2"
+                id="contact-title"
+                text="Let's build the next system."
+                delay={200}
+                className="t-display mt-10 block text-[clamp(3rem,6vw,6.25rem)] uppercase text-[var(--text)]"
+              />
+              <p
+                className="reveal mt-8 max-w-[40ch] text-[18px] leading-[1.45] text-[var(--text-2)]"
+                style={{ '--reveal-delay': '420ms' } as CSSProperties}
+              >
+                I read every message myself and reply personally — no ticket queue, no autoresponder. Tell me
+                what you&apos;re working on, or just say hello.
+              </p>
+            </div>
 
-            <ul
-              className="reveal mt-10 divide-y divide-[var(--line)] border-y border-[var(--line)]"
-              style={{ '--reveal-delay': '80ms' } as React.CSSProperties}
-            >
-              <li className="flex items-center justify-between gap-4 py-5">
-                <span className="label text-[var(--text-3)]">Email</span>
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="group flex items-center gap-1.5 text-[15px] text-[var(--text)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:text-[var(--accent)]"
-                >
+            <dl className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+              <MetaItem label="Email" delay={500}>
+                <a href={`mailto:${profile.email}`} className="link-draw break-all text-[var(--text)]">
                   {profile.email}
-                  <ArrowUpRight
-                    className="h-4 w-4 shrink-0 transition-transform duration-[var(--t-fast)] ease-[var(--ease-out-expo)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    aria-hidden="true"
-                  />
                 </a>
-              </li>
-              <li className="flex items-center justify-between gap-4 py-5">
-                <span className="label text-[var(--text-3)]">LinkedIn</span>
-                <a
-                  href={profile.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-1.5 text-[15px] text-[var(--text)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:text-[var(--accent)]"
-                >
-                  {linkedinHandle}
-                  <ArrowUpRight
-                    className="h-4 w-4 shrink-0 transition-transform duration-[var(--t-fast)] ease-[var(--ease-out-expo)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    aria-hidden="true"
-                  />
-                </a>
-              </li>
-              <li className="flex items-center justify-between gap-4 py-5">
-                <span className="label text-[var(--text-3)]">GitHub</span>
+              </MetaItem>
+              <MetaItem label="Location" delay={560}>
+                <span className="text-[var(--text)]">{profile.location}</span>
+              </MetaItem>
+              <MetaItem label="GitHub" delay={620}>
                 <a
                   href={profile.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-1.5 text-[15px] text-[var(--text)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:text-[var(--accent)]"
+                  className="link-draw-in inline-flex min-h-[28px] items-center gap-1.5 text-[var(--text)]"
                 >
                   {githubHandle}
-                  <ArrowUpRight
-                    className="h-4 w-4 shrink-0 transition-transform duration-[var(--t-fast)] ease-[var(--ease-out-expo)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    aria-hidden="true"
-                  />
+                  <span className="arrow-nudge" aria-hidden="true">↗</span>
+                  <span className="sr-only">(opens in a new tab)</span>
                 </a>
-              </li>
-              <li className="flex items-center justify-between gap-4 py-5">
-                <span className="label text-[var(--text-3)]">Location</span>
-                <span className="text-[15px] text-[var(--text-2)]">{profile.location}</span>
-              </li>
-            </ul>
+              </MetaItem>
+              <MetaItem label="LinkedIn" delay={680}>
+                <a
+                  href={profile.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-draw-in inline-flex min-h-[28px] items-center gap-1.5 text-[var(--text)]"
+                >
+                  {linkedinHandle}
+                  <span className="arrow-nudge" aria-hidden="true">↗</span>
+                  <span className="sr-only">(opens in a new tab)</span>
+                </a>
+              </MetaItem>
+            </dl>
           </div>
 
-          {/* --surface is only an 8% chalk wash on cobalt, and a heavy shadow
-              reads muddy against a saturated ground — so the panel is held
-              together with a stronger border instead of elevation. */}
+          {/* Form panel */}
           <div
-            className="reveal rounded-[var(--r-xl)] border border-[var(--line-strong)] bg-[var(--surface)] p-[clamp(20px,3vw,32px)]"
-            style={{ '--reveal-delay': '140ms' } as React.CSSProperties}
+            className="reveal flex flex-col bg-[var(--surface)] p-[clamp(24px,4vw,56px)]"
+            style={{ '--reveal-delay': '160ms' } as CSSProperties}
           >
+            <div className="flex items-baseline justify-between gap-6 border-t border-[var(--line-strong)] pt-4">
+              <p className="t-eyebrow text-[var(--text-3)]">Write to me</p>
+              <span className="t-index text-[var(--text-3)]">
+                {status === 'success' ? 'SENT' : sending ? 'SENDING' : 'FORM'}
+              </span>
+            </div>
+
             {status === 'success' ? (
-              <div className="flex flex-col items-center py-6 text-center">
-                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--accent-soft)]">
-                  <Check className="h-6 w-6 text-[var(--accent)]" aria-hidden="true" />
-                </span>
-                <h3 className="font-display mt-6 text-[22px] text-[var(--text)]">Message sent.</h3>
-                <p className="mt-2 max-w-[34ch] text-[15px] leading-[1.6] text-[var(--text-2)]">
+              <div key="success" className="flex flex-1 flex-col justify-center py-16" aria-live="polite">
+                <p className="t-display anim-rise text-[clamp(3rem,6vw,5.5rem)] uppercase text-[var(--text)]">
+                  Message sent.
+                </p>
+                <p
+                  className="anim-rise mt-6 max-w-[38ch] text-[18px] leading-[1.45] text-[var(--text-2)]"
+                  style={{ '--i': 2 } as CSSProperties}
+                >
                   I&apos;ll reply to {form.email.trim() || 'the address you gave'}.
                 </p>
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="label mt-7 text-[var(--text-2)] underline decoration-[var(--line-strong)] underline-offset-4 transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:text-[var(--accent)]"
+                  className="anim-rise t-eyebrow mt-10 inline-flex min-h-[44px] items-center gap-2 self-start text-[var(--text)]"
+                  style={{ '--i': 4 } as CSSProperties}
                 >
-                  Send another
+                  <span className="link-draw">Send another</span>
+                  <span className="arrow-nudge-x inline-block transition-transform duration-[var(--t-base)] ease-[var(--ease-out-expo)]" aria-hidden="true">
+                    →
+                  </span>
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} noValidate>
-                <div className="flex flex-col gap-5">
-                  <div>
-                    <label htmlFor="contact-name" className="label text-[var(--text-2)]">
-                      Name
-                    </label>
+              <form onSubmit={handleSubmit} noValidate className="mt-10 flex flex-1 flex-col">
+                <div className="flex flex-col gap-8">
+                  <Field id="contact-name" label="Name" error={errors.name}>
                     <input
                       id="contact-name"
                       name="name"
                       type="text"
                       autoComplete="name"
-                      className="field mt-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="field disabled:cursor-not-allowed disabled:opacity-50"
                       value={form.name}
                       onChange={handleChange('name')}
-                      disabled={status === 'sending'}
+                      disabled={sending}
                       aria-invalid={errors.name ? 'true' : undefined}
                       aria-describedby={errors.name ? 'contact-name-error' : undefined}
                     />
-                    {errors.name && (
-                      <p id="contact-name-error" role="alert" className="mt-1.5 text-[13px] text-[var(--signal)]">
-                        {errors.name}
-                      </p>
-                    )}
-                  </div>
+                  </Field>
 
-                  <div>
-                    <label htmlFor="contact-email" className="label text-[var(--text-2)]">
-                      Email
-                    </label>
+                  <Field id="contact-email" label="Email" error={errors.email}>
                     <input
                       id="contact-email"
                       name="email"
                       type="email"
                       autoComplete="email"
-                      className="field mt-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="field disabled:cursor-not-allowed disabled:opacity-50"
                       value={form.email}
                       onChange={handleChange('email')}
-                      disabled={status === 'sending'}
+                      disabled={sending}
                       aria-invalid={errors.email ? 'true' : undefined}
                       aria-describedby={errors.email ? 'contact-email-error' : undefined}
                     />
-                    {errors.email && (
-                      <p id="contact-email-error" role="alert" className="mt-1.5 text-[13px] text-[var(--signal)]">
-                        {errors.email}
-                      </p>
-                    )}
-                  </div>
+                  </Field>
 
-                  <div>
-                    <label htmlFor="contact-subject" className="label text-[var(--text-2)]">
-                      Subject
-                    </label>
+                  <Field id="contact-subject" label="Subject" error={errors.subject}>
                     <input
                       id="contact-subject"
                       name="subject"
                       type="text"
                       autoComplete="off"
-                      className="field mt-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="field disabled:cursor-not-allowed disabled:opacity-50"
                       value={form.subject}
                       onChange={handleChange('subject')}
-                      disabled={status === 'sending'}
+                      disabled={sending}
                       aria-invalid={errors.subject ? 'true' : undefined}
                       aria-describedby={errors.subject ? 'contact-subject-error' : undefined}
                     />
-                    {errors.subject && (
-                      <p id="contact-subject-error" role="alert" className="mt-1.5 text-[13px] text-[var(--signal)]">
-                        {errors.subject}
-                      </p>
-                    )}
-                  </div>
+                  </Field>
 
-                  <div>
-                    <label htmlFor="contact-message" className="label text-[var(--text-2)]">
-                      Message
-                    </label>
+                  <Field id="contact-message" label="Message" error={errors.message}>
                     <textarea
                       id="contact-message"
                       name="message"
                       rows={5}
-                      className="field mt-2 min-h-[140px] resize-y disabled:cursor-not-allowed disabled:opacity-50"
+                      className="field min-h-[140px] resize-y disabled:cursor-not-allowed disabled:opacity-50"
                       value={form.message}
                       onChange={handleChange('message')}
-                      disabled={status === 'sending'}
+                      disabled={sending}
                       aria-invalid={errors.message ? 'true' : undefined}
                       aria-describedby={errors.message ? 'contact-message-error' : undefined}
                     />
-                    {errors.message && (
-                      <p id="contact-message-error" role="alert" className="mt-1.5 text-[13px] text-[var(--signal)]">
-                        {errors.message}
-                      </p>
-                    )}
-                  </div>
+                  </Field>
+                </div>
 
-                  {status === 'error' && submitError && (
-                    <div
-                      role="alert"
-                      className="rounded-[var(--r-md)] border border-[var(--line)] bg-[color-mix(in_srgb,var(--signal)_18%,transparent)] px-4 py-3 text-[13px] leading-[1.55] text-[var(--text)]"
+                {status === 'error' && submitError && (
+                  <div
+                    role="alert"
+                    className="anim-rise mt-8 border-l border-[var(--signal)] pl-3 text-[15px] leading-[1.5] text-[var(--signal)]"
+                  >
+                    <p>{submitError}</p>
+                    <a
+                      href={`mailto:${profile.email}`}
+                      className="link-draw mt-2 inline-flex min-h-[28px] items-center gap-1.5 text-[var(--text)]"
                     >
-                      <p>{submitError}</p>
-                      <a
-                        href={`mailto:${profile.email}`}
-                        className="mt-1 inline-flex items-center gap-1 font-medium text-[var(--accent)] hover:underline"
-                      >
-                        Email me directly
-                        <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-                      </a>
-                    </div>
-                  )}
+                      Email me directly
+                      <span className="arrow-nudge" aria-hidden="true">↗</span>
+                    </a>
+                  </div>
+                )}
 
-                  <ButtonPrimary type="submit" disabled={status === 'sending'} className="w-full sm:w-auto">
-                    {status === 'sending' ? (
-                      <>
-                        Sending…
-                        <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                      </>
+                <div className="mt-auto flex flex-wrap items-center justify-between gap-4 pt-12">
+                  <p className="t-eyebrow text-[var(--text-3)]">All fields required</p>
+                  <ButtonPrimary type="submit" disabled={sending} className="w-full sm:w-auto">
+                    {sending ? (
+                      'Sending…'
                     ) : (
                       <>
                         Send message
-                        <Send className="h-4 w-4" aria-hidden="true" />
+                        <span
+                          aria-hidden="true"
+                          className="arrow-nudge-x inline-block transition-transform duration-[var(--t-base)] ease-[var(--ease-out-expo)]"
+                        >
+                          →
+                        </span>
                       </>
                     )}
                   </ButtonPrimary>
@@ -332,5 +317,43 @@ export function Contact() {
         </div>
       </Shell>
     </section>
+  );
+}
+
+function Field({
+  id,
+  label,
+  error,
+  children,
+}: {
+  id: string;
+  label: string;
+  error?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div>
+      <label htmlFor={id} className="t-eyebrow block text-[var(--text-3)]">
+        {label}
+      </label>
+      {children}
+      {error && (
+        <p id={`${id}-error`} role="alert" className="mt-2 text-[13px] text-[var(--signal)]">
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function MetaItem({ label, delay, children }: { label: string; delay: number; children: ReactNode }) {
+  return (
+    <div
+      className="reveal border-l border-[var(--line-strong)] pl-2.5"
+      style={{ '--reveal-delay': `${delay}ms` } as CSSProperties}
+    >
+      <dt className="t-eyebrow text-[var(--text-3)]">{label}</dt>
+      <dd className="mt-1.5 text-[15px] leading-[1.4]">{children}</dd>
+    </div>
   );
 }

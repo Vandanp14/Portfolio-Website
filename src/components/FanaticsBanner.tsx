@@ -1,70 +1,95 @@
+import type { CSSProperties } from 'react';
 import banner from '../assets/fanatics-banner.jpg';
+import { fanaticsHighlight as h } from '../content/portfolio';
+import { Rule } from './motion/Rule';
+import { Scramble } from './motion/Scramble';
+import { SplitLines } from './motion/SplitLines';
 import { Shell } from './primitives';
 
-/** Every figure traces to a line in the resume — see src/content/portfolio.ts. */
-const metrics = [
-  { value: '5', label: 'REST endpoints shipped', detail: "Product Builder's first API" },
-  { value: '82K+', label: 'Records served', detail: '37 ms worst case' },
-  { value: '36.5%', label: 'Card data recovered', detail: '' },
-  { value: '3', label: 'Features to production', detail: '8 weeks' },
-];
+/** Fluid so each statement line holds one line at 1440 and still fits at 390. */
+const statement = 'text-[clamp(2.1rem,9vw,8.75rem)]';
 
+/**
+ * Full-bleed slate feature panel for the internship: eyebrow, role, two huge
+ * uppercase statement lines with a "progress" pill between them, the office
+ * photo under a lifting shutter, then the headline numbers.
+ */
 export function FanaticsBanner() {
+  const [first, second] = h.statement;
+  const firstWords = first.split(/\s+/).length;
+
   return (
-    <section className="band band-slate relative" aria-label="Internship highlight">
-      {/*
-        Composition reasoning: the source is 2000x1337 (ratio ~1.496:1), a
-        landscape frame with the full "Fanatics" wall wordmark running the
-        width of the shot. aspect-[2000/1337] governs the height directly at
-        every viewport, so the frame renders edge-to-edge and complete.
-        The frame is shown uncropped at every width — no max-height cap — so
-        the whole wall and the whole subject stay in view. This is the
-        internship highlight, so the banner is allowed to be tall.
-      */}
-      <div className="relative w-full">
-        <img
-          src={banner}
-          alt="Vandan Patel at the Fanatics office in New York, standing beside the Fanatics logo wall"
-          width={2000}
-          height={1337}
-          loading="eager"
-          decoding="async"
-          className="aspect-[2000/1337] w-full object-cover object-center"
-        />
-
-        <div className="absolute bottom-4 left-4 right-4 max-w-[420px] rounded-[var(--r-md)] bg-[var(--bg)] px-4 py-3 shadow-[var(--shadow-sm)] sm:bottom-6 sm:left-6 sm:right-auto">
-          <p className="label text-[var(--accent)]">Summer 2026</p>
-          <p className="mt-1 text-[15px] font-semibold leading-snug text-[var(--text)]">
-            Software Engineering Intern · Fanatics · New York
-          </p>
+    <section className="band band-slate relative" aria-labelledby="fanatics-statement">
+      <Shell className="py-[var(--section)]">
+        <div className="flex items-baseline justify-between gap-6">
+          <Scramble text={h.eyebrow} className="mono text-[12px] uppercase tracking-[0.04em] text-[var(--text-3)]" />
+          <span className="t-index text-[var(--text-3)]" aria-hidden="true">
+            /0.0
+          </span>
         </div>
-      </div>
-
-      <Shell className="relative py-[clamp(48px,7vw,72px)]">
-        <p className="reveal text-[15px] leading-[1.6] text-[var(--text-2)]">
-          What the summer actually produced:
+        <p
+          className="reveal mt-5 max-w-[24ch] text-[clamp(1.5rem,2.4vw,2.125rem)] leading-[1.15] tracking-[-0.03em] text-[var(--text)]"
+          style={{ '--reveal-delay': '80ms' } as CSSProperties}
+        >
+          {h.role}
         </p>
 
-        <dl
-          className="reveal mt-8 grid grid-cols-2 gap-x-6 gap-y-9 border-t border-[var(--line)] pt-9 md:grid-cols-4"
-          style={{ '--reveal-delay': '70ms' } as React.CSSProperties}
+        <h2 id="fanatics-statement" className={`t-display mt-[clamp(48px,7vw,104px)] uppercase ${statement}`}>
+          <SplitLines as="span" text={first} className="block text-[var(--text)]" />
+          <span
+            aria-hidden="true"
+            data-reveal="fade"
+            className="progress-sweep my-[clamp(14px,2vw,28px)] flex h-11 items-center justify-center rounded-full border border-[var(--line)] md:h-14"
+            style={{ '--reveal-delay': '300ms' } as CSSProperties}
+          >
+            <span className="mono relative z-[1] text-[11px] uppercase tracking-[0.08em] text-[var(--text-2)] md:text-[12px]">
+              {h.progress}
+            </span>
+          </span>
+          <SplitLines as="span" text={second} start={firstWords} className="block text-[var(--accent)]" />
+        </h2>
+
+        <div
+          data-reveal="cover"
+          className="mt-[clamp(48px,7vw,104px)] w-full"
+          style={{ '--reveal-delay': '100ms' } as CSSProperties}
         >
-          {metrics.map((metric, index) => (
-            <div
-              key={metric.label}
-              className="reveal"
-              style={{ '--reveal-delay': `${index * 70}ms` } as React.CSSProperties}
-            >
-              <dd className="num font-display text-[clamp(2.1rem,4.4vw,3rem)] text-[var(--text)]">
-                {metric.value}
-              </dd>
-              <dt className="label mt-2 text-[var(--text-3)]">{metric.label}</dt>
-              {metric.detail && (
-                <p className="mt-1 text-[13px] leading-[1.5] text-[var(--text-2)]">{metric.detail}</p>
-              )}
-            </div>
-          ))}
-        </dl>
+          <img
+            src={banner}
+            alt={h.imageAlt}
+            width={2000}
+            height={1337}
+            loading="lazy"
+            decoding="async"
+            className="aspect-[2000/1337] w-full object-cover object-center"
+          />
+        </div>
+
+        <div className="mt-[clamp(48px,6vw,88px)]">
+          <Rule />
+          <dl className="grid grid-cols-2 gap-y-10 pt-8 md:grid-cols-4 md:pt-10">
+            {h.metrics.map((metric, i) => (
+              <div
+                key={metric.label}
+                className="reveal flex flex-col border-l border-[var(--line)] pl-3 pr-2 md:pl-5"
+                style={{ '--reveal-delay': `${i * 80}ms` } as CSSProperties}
+              >
+                <dt className="mono mb-5 text-[11px] uppercase tracking-[0.04em] text-[var(--text-3)] md:mb-8">
+                  <span aria-hidden="true">/0.{i + 1} </span>
+                  {metric.label}
+                </dt>
+                <dd className="num t-display text-[clamp(2.75rem,6vw,5rem)] text-[var(--text)]">
+                  {metric.value}
+                </dd>
+                {metric.detail && (
+                  <dd className="mt-3 max-w-[24ch] text-[14px] leading-[1.45] text-[var(--text-2)]">
+                    {metric.detail}
+                  </dd>
+                )}
+              </div>
+            ))}
+          </dl>
+        </div>
       </Shell>
     </section>
   );

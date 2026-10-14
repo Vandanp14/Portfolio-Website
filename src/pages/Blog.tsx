@@ -1,8 +1,8 @@
 import DOMPurify from 'dompurify';
-import { ArrowLeft, ArrowRight, ArrowUpRight, RotateCw } from 'lucide-react';
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
-import { Shell } from '../components/primitives';
-import { useRevealObserver } from '../hooks/useReveal';
+import { ButtonGhost, Eyebrow, Shell } from '../components/primitives';
+import { Rule } from '../components/motion/Rule';
+import { SplitLines } from '../components/motion/SplitLines';
 import {
   fetchPost,
   fetchPosts,
@@ -86,53 +86,70 @@ function useDocumentTitle(title: string | null) {
 
 export default function Blog({ postId }: { postId: string | null }) {
   return (
-    <section className="band band-paper min-h-[100svh] pt-16">
+    <section className="band band-paper min-h-[100svh] pt-[var(--nav-h)]">
       {postId ? <PostView key={postId} id={postId} /> : <IndexView />}
     </section>
   );
 }
 
+const pad = (n: number) => String(n).padStart(2, '0');
+
 /* --- Index ---------------------------------------------------------------- */
 
 function IndexView() {
   const [state, retry] = useBlogData<PostIndex>('index', getCachedIndex(), fetchPosts);
-  useRevealObserver([state.status]);
   useDocumentTitle(state.status === 'ready' ? state.data.title : 'Writing');
 
   const ready = state.status === 'ready';
+  const count = ready ? state.data.posts.length : null;
 
   return (
-    <Shell className="pb-[var(--section)] pt-[clamp(56px,8vw,112px)]">
+    <Shell className="pb-[var(--section)] pt-[clamp(32px,5vw,72px)]">
       <header>
-        <div className="flex items-center gap-3">
-          <span className="label text-[var(--accent)]">05</span>
-          <span className="h-px w-8 bg-[var(--line-strong)]" aria-hidden="true" />
-          <span className="label text-[var(--text-3)]">Writing</span>
+        <Rule strong />
+        <div className="mt-4 flex items-baseline justify-between gap-6">
+          <Eyebrow>Writing</Eyebrow>
+          <span className="t-index text-[var(--text-3)]">/blog</span>
         </div>
-        {ready ? (
-          <>
-            <h1 className="font-editorial mt-5 max-w-[16ch] text-[clamp(2.75rem,7vw,5.25rem)] text-[var(--text)]">
-              {state.data.title}
-            </h1>
-            {state.data.description && (
-              <p className="mt-5 max-w-[58ch] text-[17px] leading-[1.65] text-[var(--text-2)]">
-                {state.data.description}
-              </p>
+
+        <div className="mt-[clamp(40px,6vw,88px)] grid gap-10 lg:grid-cols-12 lg:items-end">
+          <div className="min-w-0 lg:col-span-9">
+            {ready ? (
+              <>
+                <SplitLines
+                  as="h1"
+                  text={state.data.title}
+                  className="t-display block max-w-full text-[clamp(3.5rem,13vw,12rem)] uppercase text-[var(--text)] [overflow-wrap:anywhere]"
+                />
+                {state.data.description && (
+                  <p
+                    className="reveal mt-8 max-w-[56ch] text-[18px] leading-[1.45] text-[var(--text-2)]"
+                    style={{ '--reveal-delay': '240ms' } as CSSProperties}
+                  >
+                    {state.data.description}
+                  </p>
+                )}
+              </>
+            ) : (
+              <div aria-hidden="true">
+                <div className="skeleton h-[clamp(3.25rem,12vw,11rem)] w-[min(720px,85%)]" />
+                <div className="skeleton mt-8 h-5 w-[min(420px,60%)]" />
+              </div>
             )}
-          </>
-        ) : (
-          <div aria-hidden="true">
-            <div className="skeleton mt-6 h-[clamp(2.75rem,7vw,5.25rem)] w-[min(520px,80%)]" />
-            <div className="skeleton mt-6 h-5 w-[min(360px,60%)]" />
           </div>
-        )}
+
+          <dl className="grid grid-cols-2 gap-x-6 gap-y-5 lg:col-span-3 lg:grid-cols-1">
+            <MetaItem term="Posts" value={count === null ? '—' : pad(count)} mono />
+            <MetaItem term="Written in" value="Google Docs" />
+          </dl>
+        </div>
       </header>
 
-      <div className="mt-[clamp(48px,7vw,88px)] flex items-baseline justify-between border-t border-[var(--line)] pt-10">
-        <span className="label text-[var(--text-3)]">All posts</span>
-        {ready && (
-          <span className="label text-[var(--text-3)]">
-            {state.data.posts.length} {state.data.posts.length === 1 ? 'post' : 'posts'}
+      <div className="mt-[clamp(56px,8vw,120px)] flex items-baseline justify-between gap-6">
+        <Eyebrow>All posts</Eyebrow>
+        {count !== null && (
+          <span className="t-index text-[var(--text-3)]">
+            {count} {count === 1 ? 'post' : 'posts'}
           </span>
         )}
       </div>
@@ -140,12 +157,26 @@ function IndexView() {
       {state.status === 'loading' && <ListSkeleton />}
       {state.status === 'error' && <ErrorPanel message={state.error} onRetry={retry} />}
       {ready && state.data.posts.length === 0 && (
-        <p className="mt-6 border-y border-[var(--line)] py-10 text-[15px] text-[var(--text-2)]">
-          Nothing published yet — check back soon.
-        </p>
+        <div className="mt-4">
+          <Rule />
+          <p className="py-12 text-[18px] text-[var(--text-2)]">Nothing published yet — check back soon.</p>
+          <Rule />
+        </div>
       )}
       {ready && state.data.posts.length > 0 && <PostList posts={state.data.posts} />}
     </Shell>
+  );
+}
+
+/** Metadata line with a 1px left rule. */
+function MetaItem({ term, value, mono = false }: { term: string; value: string; mono?: boolean }) {
+  return (
+    <div className="border-l border-[var(--line-strong)] pl-2.5">
+      <dt className="t-eyebrow text-[var(--text-3)]">{term}</dt>
+      <dd className={`mt-1 text-[var(--text)] ${mono ? 't-index text-[15px]' : 'text-[15px] tracking-[-0.01em]'}`}>
+        {value}
+      </dd>
+    </div>
   );
 }
 
@@ -193,95 +224,74 @@ function usePreviews(posts: PostSummary[]) {
 
 function PostList({ posts }: { posts: PostSummary[] }) {
   const previews = usePreviews(posts);
-  const [featured, ...rest] = posts;
 
   return (
-    <div className="mt-6">
-      <FeaturedCard post={featured} preview={previews[featured.id]} />
-      {rest.length > 0 && (
-        <ul className="mt-4 divide-y divide-[var(--line)] border-y border-[var(--line)]">
-          {rest.map((post, i) => (
-            <li
-              key={post.id}
-              className={i < 8 ? 'reveal' : undefined}
-              style={i < 8 ? ({ '--reveal-delay': `${(i + 1) * 80}ms` } as CSSProperties) : undefined}
-            >
-              <PostRow post={post} preview={previews[post.id]} />
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <ol className="mt-4 border-b border-[var(--line)]">
+      {posts.map((post, i) => (
+        <li
+          key={post.id}
+          className={i < 8 ? 'reveal' : undefined}
+          style={i < 8 ? ({ '--reveal-delay': `${i * 80}ms` } as CSSProperties) : undefined}
+        >
+          <Rule delay={i < 8 ? i * 80 : 0} strong={i === 0} />
+          <PostRow post={post} preview={previews[post.id]} index={i + 1} latest={i === 0} />
+        </li>
+      ))}
+    </ol>
   );
 }
 
-function FeaturedCard({ post, preview }: { post: PostSummary; preview: PostPreview | null | undefined }) {
+function PostRow({
+  post,
+  preview,
+  index,
+  latest,
+}: {
+  post: PostSummary;
+  preview: PostPreview | null | undefined;
+  index: number;
+  latest: boolean;
+}) {
   return (
     <Link
       to={`/blog/${post.id}`}
-      className="reveal group relative block overflow-hidden rounded-[var(--r-xl)] border border-[var(--line)] bg-[var(--surface)] p-[clamp(24px,4vw,48px)] transition-[border-color,box-shadow,transform] duration-[var(--t-base)] ease-[var(--ease-out-expo)] hover:-translate-y-[2px] hover:border-[var(--line-strong)] hover:shadow-[var(--shadow)]"
+      className="hover-glitch group grid gap-x-[var(--gutter)] gap-y-4 py-8 md:grid-cols-12 md:py-12"
     >
-      <div className={preview?.image ? 'grid gap-8 md:grid-cols-[1.4fr_1fr] md:items-center' : ''}>
-        <div>
-          <div className="label flex flex-wrap items-center gap-x-3 gap-y-1 text-[var(--text-3)]">
-            <span className="text-[var(--accent)]">Latest</span>
-            <span className="h-px w-5 bg-[var(--line-strong)]" aria-hidden="true" />
-            <time dateTime={post.date}>{formatDate(post.date)}</time>
-            <ReadTime preview={preview} />
-          </div>
-          <h2 className="font-editorial mt-5 max-w-[22ch] text-[clamp(2rem,4.4vw,3.25rem)] text-[var(--text)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] group-hover:text-[var(--accent)]">
-            {post.title}
-          </h2>
-          <Excerpt preview={preview} chars={340} lines={4} className="mt-5 line-clamp-5 max-w-[62ch] text-[17px] leading-[1.7] md:line-clamp-none" />
-          <span className="label mt-8 inline-flex items-center gap-2 text-[var(--text)]">
-            Read the post
-            <ArrowRight
-              className="h-3.5 w-3.5 transition-transform duration-[var(--t-base)] ease-[var(--ease-out-expo)] group-hover:translate-x-1"
-              aria-hidden="true"
-            />
-          </span>
-        </div>
-        {preview?.image && <Thumb src={preview.image} className="aspect-[4/3]" />}
-      </div>
-    </Link>
-  );
-}
-
-function PostRow({ post, preview }: { post: PostSummary; preview: PostPreview | null | undefined }) {
-  return (
-    <Link
-      to={`/blog/${post.id}`}
-      className="group -mx-3 grid gap-x-8 gap-y-2 rounded-[var(--r-md)] px-3 py-7 transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:bg-[var(--surface)] md:grid-cols-[140px_1fr_auto] md:py-8"
-    >
-      <div className="label flex gap-3 text-[var(--text-3)] md:flex-col md:gap-1.5 md:pt-1.5">
+      <div className="t-index flex flex-wrap items-baseline gap-x-4 gap-y-1 text-[var(--text-3)] md:col-span-2 md:flex-col md:gap-y-2">
+        <span className="glitch-target inline-block text-[var(--text)]">/{pad(index)}</span>
         <time dateTime={post.date}>{formatDate(post.date)}</time>
-        <ReadTime preview={preview} bare />
+        <ReadTime preview={preview} />
+        {latest && <span className="t-eyebrow text-[var(--accent)]">Latest</span>}
       </div>
-      <div className="min-w-0">
-        <span className="block text-[clamp(1.15rem,2vw,1.4rem)] font-medium leading-[1.3] tracking-[-0.015em] text-[var(--text)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] group-hover:text-[var(--accent)]">
+
+      <div className={`min-w-0 ${preview?.image ? 'md:col-span-7' : 'md:col-span-9'}`}>
+        <span className="t-display block max-w-[22ch] text-[clamp(2rem,4.6vw,3.5rem)] leading-[1] tracking-[-0.04em] text-[var(--text)] transition-transform duration-[var(--t-medium)] ease-[var(--ease-out-expo)] [overflow-wrap:anywhere] group-hover:translate-x-2">
           {post.title}
         </span>
-        <Excerpt preview={preview} chars={220} lines={2} className="mt-2.5 max-w-[66ch] text-[15px] leading-[1.65]" />
-      </div>
-      <div className="hidden items-start gap-6 md:flex">
-        {preview?.image && <Thumb src={preview.image} className="aspect-[4/3] w-36" />}
-        <ArrowUpRight
-          className="mt-1.5 h-4 w-4 text-[var(--text-3)] transition-[transform,color] duration-[var(--t-fast)] ease-[var(--ease-out-expo)] group-hover:-translate-y-[2px] group-hover:translate-x-[2px] group-hover:text-[var(--accent)]"
-          aria-hidden="true"
+        <Excerpt
+          preview={preview}
+          chars={latest ? 340 : 220}
+          lines={latest ? 3 : 2}
+          className="mt-5 max-w-[62ch] text-[17px] leading-[1.5]"
         />
+      </div>
+
+      <div className="flex items-start justify-between gap-6 md:col-span-3 md:justify-end">
+        {preview?.image && <Thumb src={preview.image} className="aspect-[4/3] w-full max-w-[280px]" />}
+        <span
+          aria-hidden="true"
+          className={`arrow-nudge text-[22px] leading-none text-[var(--text)] ${preview?.image ? 'hidden md:inline-block' : ''}`}
+        >
+          ↗
+        </span>
       </div>
     </Link>
   );
 }
 
-function ReadTime({ preview, bare = false }: { preview: PostPreview | null | undefined; bare?: boolean }) {
+function ReadTime({ preview }: { preview: PostPreview | null | undefined }) {
   if (!preview) return null;
-  return (
-    <span className="preview-in inline-flex items-center gap-3">
-      {!bare && <span className="h-px w-5 bg-[var(--line-strong)]" aria-hidden="true" />}
-      {preview.minutes} min read
-    </span>
-  );
+  return <span className="preview-in">{preview.minutes} min read</span>;
 }
 
 /**
@@ -344,26 +354,23 @@ function trimExcerpt(text: string, max: number): string {
 
 function Thumb({ src, className }: { src: string; className: string }) {
   return (
-    <div className={`preview-in overflow-hidden rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface-2)] ${className}`}>
-      <img
-        src={src}
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="h-full w-full object-cover transition-transform duration-[var(--t-slow)] ease-[var(--ease-out-expo)] group-hover:scale-[1.03]"
-      />
+    <div data-reveal="cover" className={`bg-[var(--surface-2)] ${className}`}>
+      <img src={src} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
     </div>
   );
 }
 
 function ListSkeleton() {
   return (
-    <ul className="mt-6 divide-y divide-[var(--line)] border-y border-[var(--line)]" aria-busy="true">
+    <ul className="mt-4 divide-y divide-[var(--line)] border-y border-[var(--line)]" aria-busy="true">
       <li className="sr-only">Loading posts…</li>
       {[0, 1, 2].map((i) => (
-        <li key={i} className="grid gap-x-8 gap-y-3 py-7 md:grid-cols-[140px_1fr]" aria-hidden="true">
-          <div className="skeleton h-3 w-24" />
-          <div className="skeleton h-6" style={{ width: `${72 - i * 14}%` }} />
+        <li key={i} className="grid gap-x-[var(--gutter)] gap-y-4 py-8 md:grid-cols-12 md:py-12" aria-hidden="true">
+          <div className="skeleton h-3 w-24 md:col-span-2" />
+          <div className="md:col-span-9">
+            <div className="skeleton h-[clamp(2rem,4.6vw,3.5rem)]" style={{ width: `${72 - i * 14}%` }} />
+            <div className="skeleton mt-5 h-4 w-[60%]" />
+          </div>
         </li>
       ))}
     </ul>
@@ -388,8 +395,8 @@ function PostView({ id }: { id: string }) {
   const older = position >= 0 && index ? (index.posts[position + 1] ?? null) : null;
 
   return (
-    <Shell className="pb-[var(--section)] pt-[clamp(40px,6vw,80px)]">
-      <article className="mx-auto max-w-[68ch]">
+    <Shell className="pb-[var(--section)] pt-[clamp(32px,5vw,72px)]">
+      <article>
         <BackLink />
 
         {state.status === 'loading' && <ArticleSkeleton />}
@@ -397,11 +404,12 @@ function PostView({ id }: { id: string }) {
         {state.status === 'error' &&
           (state.notFound ? (
             <div className="mt-12">
-              <p className="label text-[var(--accent)]">404</p>
-              <h1 className="font-editorial mt-5 text-[clamp(2.25rem,5vw,3.5rem)] text-[var(--text)]">
+              <Rule strong />
+              <p className="t-index mt-4 text-[var(--text-3)]">/404</p>
+              <h1 className="t-display mt-8 max-w-[14ch] text-[clamp(3rem,9vw,7.5rem)] uppercase text-[var(--text)]">
                 This post doesn’t exist.
               </h1>
-              <p className="mt-4 text-[16px] leading-[1.65] text-[var(--text-2)]">
+              <p className="mt-8 max-w-[56ch] text-[18px] leading-[1.45] text-[var(--text-2)]">
                 It may have been unpublished or the link is mistyped.
               </p>
             </div>
@@ -411,26 +419,53 @@ function PostView({ id }: { id: string }) {
 
         {state.status === 'ready' && (
           <>
-            <header className="mt-12">
-              <div className="label flex flex-wrap items-center gap-x-3 gap-y-1 text-[var(--text-3)]">
-                <time dateTime={state.data.date}>{formatDate(state.data.date)}</time>
-                <span className="h-px w-5 bg-[var(--line-strong)]" aria-hidden="true" />
-                <span>{minutes} min read</span>
+            <header className="mt-10">
+              <Rule strong />
+              <div className="t-index mt-4 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 text-[var(--text-3)]">
+                <span className="flex flex-wrap gap-x-4 gap-y-1">
+                  <time dateTime={state.data.date}>{formatDate(state.data.date)}</time>
+                  <span>{minutes} min read</span>
+                </span>
+                {position >= 0 && <span>/{pad(position + 1)}</span>}
               </div>
-              <h1 className="font-editorial mt-6 text-[clamp(2.4rem,6vw,4rem)] text-[var(--text)]">
-                {state.data.title}
-              </h1>
+              <SplitLines
+                as="h1"
+                text={state.data.title}
+                className="t-display mt-[clamp(32px,5vw,72px)] block max-w-[20ch] text-[clamp(2.75rem,7vw,5.5rem)] text-[var(--text)] [overflow-wrap:anywhere]"
+              />
             </header>
-            <div className="mt-10 h-px bg-[var(--line)]" aria-hidden="true" />
-            <div className="post-body mt-10" dangerouslySetInnerHTML={{ __html: html }} />
 
-            <footer className="mt-16 border-t border-[var(--line)] pt-8">
+            <div className="mt-[clamp(48px,7vw,104px)] grid gap-x-[var(--gutter)] xl:grid-cols-12">
+              <aside className="hidden xl:col-span-3 xl:block" aria-label="Post details">
+                <dl className="sticky top-[var(--nav-h)] grid gap-5">
+                  <MetaItem term="Published" value={formatDate(state.data.date)} />
+                  <MetaItem term="Reading time" value={`${minutes} min`} mono />
+                  {index && position >= 0 && (
+                    <MetaItem term="Entry" value={`${pad(position + 1)} / ${pad(index.posts.length)}`} mono />
+                  )}
+                </dl>
+              </aside>
+              <div className="min-w-0 xl:col-span-9">
+                <div className="post-body max-w-[68ch]" dangerouslySetInnerHTML={{ __html: html }} />
+              </div>
+            </div>
+
+            <footer className="mt-[clamp(64px,8vw,120px)]">
+              <Rule strong />
               {(newer || older) && (
-                <nav aria-label="More posts" className="grid gap-4 sm:grid-cols-2">
-                  {older ? <Neighbour post={older} label="Older" /> : <span />}
+                <nav aria-label="More posts" className="grid sm:grid-cols-2">
+                  {older && <Neighbour post={older} label="Older" />}
                   {newer && <Neighbour post={newer} label="Newer" alignEnd />}
                 </nav>
               )}
+              <div className={newer || older ? 'border-t border-[var(--line)] pt-6' : 'pt-6'}>
+                <Link
+                  to="/blog"
+                  className="link-draw-in inline-flex min-h-[44px] items-center gap-2 text-[16px] text-[var(--text)]"
+                >
+                  <span aria-hidden="true">↳</span> Back to all writing
+                </Link>
+              </div>
             </footer>
           </>
         )}
@@ -443,13 +478,12 @@ function BackLink() {
   return (
     <Link
       to="/blog"
-      className="group label inline-flex items-center gap-2 text-[var(--text-2)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:text-[var(--accent)]"
+      className="t-eyebrow group inline-flex min-h-[44px] items-center gap-2 text-[var(--text-2)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:text-[var(--text)]"
     >
-      <ArrowLeft
-        className="h-3.5 w-3.5 transition-transform duration-[var(--t-fast)] ease-[var(--ease-out-expo)] group-hover:-translate-x-0.5"
-        aria-hidden="true"
-      />
-      All writing
+      <span aria-hidden="true" className="arrow-nudge-x inline-block transition-transform duration-[var(--t-base)] ease-[var(--ease-out-expo)]">
+        ↳
+      </span>
+      <span className="link-draw-in">All writing</span>
     </Link>
   );
 }
@@ -466,17 +500,18 @@ function Neighbour({
   return (
     <Link
       to={`/blog/${post.id}`}
-      className={`group block rounded-[var(--r-lg)] border border-[var(--line)] p-5 transition-[border-color,background-color] duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:border-[var(--line-strong)] hover:bg-[var(--surface)] ${
-        alignEnd ? 'sm:col-start-2 sm:text-right' : ''
+      className={`group block py-8 ${
+        alignEnd
+          ? '[&:not(:first-child)]:border-t [&:not(:first-child)]:border-[var(--line)] sm:col-start-2 sm:pl-[var(--gutter)] sm:text-right sm:[&:not(:first-child)]:border-l sm:[&:not(:first-child)]:border-t-0'
+          : 'sm:pr-[var(--gutter)]'
       }`}
     >
-      <span
-        className={`label inline-flex items-center gap-1.5 text-[var(--text-3)] ${alignEnd ? 'sm:flex-row-reverse' : ''}`}
-      >
-        {alignEnd ? <ArrowRight className="h-3 w-3" aria-hidden="true" /> : <ArrowLeft className="h-3 w-3" aria-hidden="true" />}
+      <span className="t-index flex items-center gap-2 text-[var(--text-3)] sm:inline-flex">
+        {alignEnd ? null : <span aria-hidden="true">←</span>}
         {label}
+        {alignEnd ? <span aria-hidden="true">→</span> : null}
       </span>
-      <span className="mt-2 block text-[16px] font-medium leading-[1.4] text-[var(--text)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] group-hover:text-[var(--accent)]">
+      <span className="mt-4 block text-[clamp(1.5rem,2.6vw,2.125rem)] leading-[1.08] tracking-[-0.035em] text-[var(--text)] transition-transform duration-[var(--t-medium)] ease-[var(--ease-out-expo)] group-hover:translate-x-1.5">
         {post.title}
       </span>
     </Link>
@@ -485,16 +520,18 @@ function Neighbour({
 
 function ArticleSkeleton() {
   return (
-    <div className="mt-12" aria-busy="true">
+    <div className="mt-10" aria-busy="true">
       <span className="sr-only">Loading post…</span>
       <div aria-hidden="true">
-        <div className="skeleton h-3 w-40" />
-        <div className="skeleton mt-6 h-12 w-[90%]" />
-        <div className="skeleton mt-3 h-12 w-[60%]" />
-        <div className="mt-10 h-px bg-[var(--line)]" />
-        {[100, 96, 98, 72, 0, 100, 94, 85].map((w, i) =>
-          w === 0 ? <div key={i} className="h-6" /> : <div key={i} className="skeleton mt-4 h-4" style={{ width: `${w}%` }} />,
-        )}
+        <div className="h-px bg-[var(--line-strong)]" />
+        <div className="skeleton mt-4 h-3 w-40" />
+        <div className="skeleton mt-[clamp(32px,5vw,72px)] h-[clamp(2.75rem,7vw,5.5rem)] w-[90%]" />
+        <div className="skeleton mt-3 h-[clamp(2.75rem,7vw,5.5rem)] w-[60%]" />
+        <div className="mt-[clamp(48px,7vw,104px)] max-w-[68ch] xl:ml-[25%]">
+          {[100, 96, 98, 72, 0, 100, 94, 85].map((w, i) =>
+            w === 0 ? <div key={i} className="h-6" /> : <div key={i} className="skeleton mt-4 h-4" style={{ width: `${w}%` }} />,
+          )}
+        </div>
       </div>
     </div>
   );
@@ -504,22 +541,14 @@ function ArticleSkeleton() {
 
 function ErrorPanel({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
-    <div
-      role="alert"
-      className="mt-8 rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-6 sm:flex sm:items-center sm:justify-between sm:gap-6"
-    >
+    <div role="alert" className="mt-8 border-y border-[var(--line)] py-8 sm:flex sm:items-center sm:justify-between sm:gap-6">
       <div>
-        <p className="label text-[var(--signal)]">Couldn’t load</p>
-        <p className="mt-2 text-[15px] leading-[1.6] text-[var(--text-2)]">{message}</p>
+        <p className="t-eyebrow text-[var(--signal)]">Couldn’t load</p>
+        <p className="mt-2 text-[17px] leading-[1.45] text-[var(--text-2)]">{message}</p>
       </div>
-      <button
-        type="button"
-        onClick={onRetry}
-        className="mt-5 inline-flex items-center gap-2 rounded-[var(--r-md)] border border-[var(--line-strong)] px-4 py-2.5 text-[14px] font-medium text-[var(--text)] transition-[border-color,background-color] duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:border-[var(--text-3)] hover:bg-[var(--surface-2)] sm:mt-0 sm:shrink-0"
-      >
-        <RotateCw className="h-3.5 w-3.5" aria-hidden="true" />
-        Try again
-      </button>
+      <ButtonGhost onClick={onRetry} className="mt-6 sm:mt-0 sm:shrink-0">
+        Try again <span aria-hidden="true">↻</span>
+      </ButtonGhost>
     </div>
   );
 }

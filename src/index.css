@@ -153,10 +153,13 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4, h5, p, figure, blockquote { margin: 0; }
-a { color: inherit; text-decoration: none; }
-button { font: inherit; color: inherit; background: none; border: none; padding: 0; }
-img { display: block; max-width: 100%; }
+/* Resets live in the base layer so Tailwind utilities (mt-*, border, …) win. */
+@layer base {
+  h1, h2, h3, h4, h5, p, figure, blockquote { margin: 0; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; padding: 0; }
+  img { display: block; max-width: 100%; }
+}
 ::selection { background: var(--c-ink); color: var(--c-paper); }
 .band-slate ::selection { background: var(--c-chalk); color: var(--c-slate); }
 
