@@ -1,16 +1,16 @@
 // Single source of truth for site content.
 // Derived from master_resume.json — keep the two in sync when the resume changes.
 
-import mfpDesktop from '../assets/projects/mfp-desktop.jpg';
-import mfp2 from '../assets/projects/mfp-2.jpg';
-import mfp3 from '../assets/projects/mfp-3.jpg';
-import mfp4 from '../assets/projects/mfp-4.jpg';
-import mfp5 from '../assets/projects/mfp-5.jpg';
-import ledger1 from '../assets/projects/ledger-1.jpg';
-import ledger2 from '../assets/projects/ledger-2.jpg';
-import ledger3 from '../assets/projects/ledger-3.jpg';
-import ledger4 from '../assets/projects/ledger-4.jpg';
-import ledger5 from '../assets/projects/ledger-5.jpg';
+import mfpDesktop from '../assets/projects/mfp-desktop.jpg?w=640;1400&format=avif;webp;jpg&as=picture';
+import mfp2 from '../assets/projects/mfp-2.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import mfp3 from '../assets/projects/mfp-3.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import mfp4 from '../assets/projects/mfp-4.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import mfp5 from '../assets/projects/mfp-5.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import ledger1 from '../assets/projects/ledger-1.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import ledger2 from '../assets/projects/ledger-2.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import ledger3 from '../assets/projects/ledger-3.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import ledger4 from '../assets/projects/ledger-4.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import ledger5 from '../assets/projects/ledger-5.jpg?w=480;758&format=avif;webp;jpg&as=picture';
 
 // In-app viewer; the PDF itself is always the newest file in the résumé
 // Drive folder (see api/resume.ts), so this never needs updating.
@@ -28,7 +28,7 @@ export const profile = {
   status: 'Software Engineering Intern at Fanatics · graduating Dec 2026',
   headline: 'I build the systems other people build on.',
   intro:
-    'CS student at SUNY Oswego. This summer I shipped Product Builder’s first public API at Fanatics and the first AI assistant on their internal developer platform to read non-GitHub data. Outside of work I build production tools for myself — a fitness analytics PWA, a personal finance ledger, a game platform — and ship them end to end.',
+    'CS student at SUNY Oswego. This summer I shipped Product Builder’s first API at Fanatics and the first AI assistant on their internal developer platform to read non-GitHub data. Outside of work I build production tools for myself — a fitness analytics PWA, a personal finance ledger, a game platform — and ship them end to end.',
 };
 
 /** Headline numbers. Every one traces to a line in the resume. */
@@ -43,7 +43,7 @@ export const stats = [
 export const fanaticsHighlight = {
   eyebrow: 'Summer 2026 · New York',
   role: 'Software Engineering Intern at Fanatics',
-  statement: ['Product Builder’s', 'first public API'],
+  statement: ['Product Builder’s', 'first API'],
   progress: 'Progress: shipped',
   imageAlt:
     'Vandan Patel at the Fanatics office in New York, standing beside the Fanatics logo wall',
@@ -56,7 +56,8 @@ export const fanaticsHighlight = {
 };
 
 export type ProjectShot = {
-  src: string;
+  /** Responsive AVIF/WebP/JPEG set from vite-imagetools. */
+  src: ImagePicture;
   alt: string;
   /** 'phone' renders in a device frame; 'wide' renders as a flat screen. */
   kind: 'phone' | 'wide';
@@ -277,7 +278,7 @@ export const experience: Role[] = [
     location: 'New York, NY',
     current: true,
     summary:
-      'Product Builder is the distributed product-configuration application behind global trading-card manufacturing. I built its first public API and the first AI assistant on the internal developer platform to read non-GitHub data.',
+      'Product Builder is the distributed product-configuration application behind global trading-card manufacturing. I built its first API and the first AI assistant on the internal developer platform to read non-GitHub data.',
     highlights: [
       'Architected an end-to-end AI Copilot connecting Slack through an internal message router to an Elixir runtime on AWS Bedrock AgentCore and a Phoenix backend, letting anyone query trading-card specs in plain English.',
       'Built Product Builder’s first-ever API — 5 read-only REST endpoints with dynamic OpenAPI 3.0 generation, enabling automated MCP tool discovery and establishing the agentic-AI proof of concept for internal systems.',
