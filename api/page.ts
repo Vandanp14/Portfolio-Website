@@ -41,43 +41,53 @@ type Meta = {
 
 const AUTHOR = { '@type': 'Person', name: SITE_NAME, url: `${ORIGIN}/` };
 
-/** The deployment's own origin, so previews read their own index.html. */
-function selfOrigin(request: Request): string {
-  const host = request.headers.get('x-forwarded-host') ?? request.headers.get('host');
-  if (host) {
-    const proto = request.headers.get('x-forwarded-proto') ?? new URL(request.url).protocol.replace(':', '');
-    return `${proto}://${host}`;
-  }
-  return new URL(request.url).origin;
+/**
+ * Where to fetch index.html from when the bundled copy is unavailable. Never
+ * derived from request headers: Host / X-Forwarded-Host are client-supplied,
+ * and trusting them would let a request point this fetch (and the bypass
+ * secret) at another server and get its HTML cached under our URL.
+ *   - On Vercel: the deployment's own URL from the platform env.
+ *   - Under `npm run dev`: the local Vite server, only when Host is loopback.
+ */
+function shellOrigin(request: Request): string | null {
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  const host = request.headers.get('host') ?? '';
+  return /^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(host) ? `http://${host}` : null;
 }
 
 type Fs = { readFile(path: string, encoding: 'utf8'): Promise<string> };
 
 /**
- * The built index.html. Fetched from this deployment first (always current,
- * and the only option under `npm run dev`); falls back to the copy bundled
- * into the function via vercel.json `includeFiles`, which also covers
- * preview deployments behind Vercel Authentication.
+ * The built index.html. The copy bundled into the function via vercel.json
+ * `includeFiles` comes first (no network, always this deployment's build);
+ * otherwise it's fetched from this deployment, which is also how
+ * `npm run dev` gets Vite's live index.html.
  */
 async function loadShell(request: Request): Promise<string | null> {
+  if (process.env.VERCEL) {
+    try {
+      // Non-literal specifier: api/ has no Node typings, and fs is a builtin.
+      const specifier = 'node:fs/promises';
+      const fs = (await import(specifier)) as Fs;
+      const html = await fs.readFile(`${process.cwd()}/dist/index.html`, 'utf8');
+      if (/<\/head>/i.test(html)) return html;
+    } catch {
+      // fall through to fetching it
+    }
+  }
+
+  const origin = shellOrigin(request);
+  if (!origin) return null;
   try {
     const headers: Record<string, string> = {};
-    if (process.env.VERCEL_AUTOMATION_BYPASS_SECRET) {
+    // Only ever sent to this deployment's own URL (see shellOrigin).
+    if (process.env.VERCEL_URL && process.env.VERCEL_AUTOMATION_BYPASS_SECRET) {
       headers['x-vercel-protection-bypass'] = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
     }
-    const response = await fetch(new URL('/index.html', selfOrigin(request)), { cache: 'no-store', headers });
-    if (response.ok) {
-      const html = await response.text();
-      if (/<\/head>/i.test(html)) return html;
-    }
-  } catch {
-    // fall through to the bundled copy
-  }
-  try {
-    // Non-literal specifier: api/ has no Node typings, and fs is a builtin.
-    const specifier = 'node:fs/promises';
-    const fs = (await import(specifier)) as Fs;
-    return await fs.readFile(`${process.cwd()}/dist/index.html`, 'utf8');
+    const response = await fetch(new URL('/index.html', origin), { cache: 'no-store', headers, redirect: 'error' });
+    if (!response.ok) return null;
+    const html = await response.text();
+    return /<\/head>/i.test(html) ? html : null;
   } catch {
     return null;
   }
