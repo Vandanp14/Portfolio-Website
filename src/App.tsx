@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { About } from './components/About';
 import { Contact } from './components/Contact';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Experience } from './components/Experience';
 import { FanaticsBanner } from './components/FanaticsBanner';
 import { Footer } from './components/Footer';
@@ -9,11 +10,12 @@ import { Nav } from './components/Nav';
 import { NotFound } from './components/NotFound';
 import { OtherWork } from './components/OtherWork';
 import { Work } from './components/Work';
-import type { SectionId } from './content/portfolio';
+import { featuredProjects, profile, type SectionId } from './content/portfolio';
 import { useRevealObserver } from './hooks/useReveal';
 import { scrollToSection, useScrollSpy } from './hooks/useScrollSpy';
 import { trackPageView } from './lib/analytics';
 import { isHome, usePath } from './lib/router';
+import { SITE_ORIGIN, useJsonLd, usePageMeta } from './lib/seo';
 
 // Code-split: the blog (and DOMPurify) only load when someone visits /blog.
 const Blog = lazy(() => import('./pages/Blog'));
@@ -49,9 +51,30 @@ function usePageViews(path: string) {
   }, [path]);
 }
 
+const projectsJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Selected work',
+  itemListElement: featuredProjects.map((project, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'SoftwareApplication',
+      name: project.title,
+      description: project.tagline,
+      applicationCategory: project.category,
+      url: project.liveUrl ?? `${SITE_ORIGIN}/#work`,
+      ...(project.repoUrl ? { codeRepository: project.repoUrl } : {}),
+      author: { '@id': `${SITE_ORIGIN}/#person` },
+    },
+  })),
+};
+
 function Home() {
   const active = useScrollSpy();
   useRevealObserver();
+  usePageMeta({ title: `${profile.name} — ${profile.role}`, exactTitle: true, path: '/' });
+  useJsonLd('ld-projects', projectsJsonLd);
 
   // Arriving from another page via `/#work` etc: the section didn't exist at
   // page load, so the browser's own anchor jump never happened.
@@ -92,17 +115,19 @@ export default function App() {
       <SkipLink href="#content" />
       <Nav active={null} page={blog ? 'blog' : resume ? 'resume' : null} />
       <main id="content">
-        {blog ? (
-          <Suspense fallback={<div className="band band-paper min-h-[100svh]" />}>
-            <Blog postId={blog[1] ?? null} />
-          </Suspense>
-        ) : resume ? (
-          <Suspense fallback={<div className="band band-mist min-h-[100svh]" />}>
-            <Resume />
-          </Suspense>
-        ) : (
-          <NotFound />
-        )}
+        <ErrorBoundary key={path}>
+          {blog ? (
+            <Suspense fallback={<div className="band band-paper min-h-[100svh]" />}>
+              <Blog postId={blog[1] ?? null} />
+            </Suspense>
+          ) : resume ? (
+            <Suspense fallback={<div className="band band-mist min-h-[100svh]" />}>
+              <Resume />
+            </Suspense>
+          ) : (
+            <NotFound />
+          )}
+        </ErrorBoundary>
       </main>
       <Footer />
     </>

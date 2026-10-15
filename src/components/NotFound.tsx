@@ -1,18 +1,22 @@
-import { useEffect, type CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
+import { RESUME_URL, type SectionId } from '../content/portfolio';
+import { goToSection } from '../lib/router';
+import { usePageMeta } from '../lib/seo';
 import { Link } from './Link';
 import { SplitLines } from './motion/SplitLines';
 import { Shell } from './primitives';
 
+const sections: ({ label: string; id: SectionId } | { label: string; to: string })[] = [
+  { label: 'Work', id: 'work' },
+  { label: 'Writing', to: '/blog' },
+  { label: 'Résumé', to: RESUME_URL },
+  { label: 'Contact', id: 'contact' },
+];
+
 const lineClass = 't-display block uppercase text-[clamp(3.75rem,13vw,12rem)]';
 
 export function NotFound() {
-  useEffect(() => {
-    const previous = document.title;
-    document.title = 'Page not found — Vandan Patel';
-    return () => {
-      document.title = previous;
-    };
-  }, []);
+  usePageMeta({ title: 'Page not found', noindex: true });
 
   return (
     <section className="band band-paper flex min-h-[100svh] flex-col pt-[var(--nav-h)]">
@@ -41,6 +45,34 @@ export function NotFound() {
             </Link>
           </div>
         </div>
+
+        <nav aria-label="Popular pages" className="border-t border-[var(--line)] pt-6">
+          <p className="t-eyebrow text-[var(--text-3)]">Try instead</p>
+          <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-1 sm:grid-cols-4">
+            {sections.map((item) => (
+              <li key={item.label}>
+                {'id' in item ? (
+                  <button
+                    type="button"
+                    onClick={() => goToSection(item.id)}
+                    className="inline-flex min-h-[44px] items-center gap-2 text-[20px] tracking-[-0.02em] text-[var(--text)]"
+                  >
+                    <span aria-hidden="true" className="text-[var(--text-3)]">↳</span>
+                    <span className="link-draw-in">{item.label}</span>
+                  </button>
+                ) : (
+                  <Link
+                    to={item.to}
+                    className="inline-flex min-h-[44px] items-center gap-2 text-[20px] tracking-[-0.02em] text-[var(--text)]"
+                  >
+                    <span aria-hidden="true" className="text-[var(--text-3)]">↳</span>
+                    <span className="link-draw-in">{item.label}</span>
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
 
         <div className="flex flex-col gap-4 border-t border-[var(--line)] pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-[44ch] text-[18px] leading-[1.4] text-[var(--text-2)]">

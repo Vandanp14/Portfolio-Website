@@ -1,10 +1,9 @@
 // Transport layer for the blog. Posts are written in Google Docs and served as
-// JSON by a separate, public, read-only Apps Script web app. Its GET responses
-// carry `Access-Control-Allow-Origin: *`, so a plain fetch works — no JSONP.
+// JSON by a separate, public, read-only Apps Script web app. The browser reads
+// it through our own `/api/blog` proxy (api/blog.ts), which the Vercel CDN
+// caches — so most visits never wait on Apps Script at all.
 
-export const BLOG_ENDPOINT =
-  (import.meta.env.VITE_BLOG_ENDPOINT as string | undefined) ||
-  'https://script.google.com/macros/s/AKfycby-Dsv41BX1B_KyLsvKLS31WvP_kpikatGcevOtHRqQGdQbyjsPia_K2bL9snSgF0poSg/exec';
+export const BLOG_ENDPOINT = (import.meta.env.VITE_BLOG_ENDPOINT as string | undefined) || '/api/blog';
 
 export type PostSummary = { id: string; title: string; date: string };
 export type PostIndex = { title: string; description: string; posts: PostSummary[] };
@@ -15,7 +14,33 @@ export type BlogResult<T> = { ok: true; data: T } | { ok: false; error: string; 
 const TIMEOUT_MS = 20000;
 const POST_ID = /^[\w-]+$/;
 
-let indexCache: PostIndex | null = null;
+// Two cache layers: memory for this page, sessionStorage so a reload or a
+// return within the TTL paints instantly. Storage can throw (private mode,
+// blocked cookies) — every access is guarded and failure just means a fetch.
+const STORE_PREFIX = 'blog:';
+const STORE_TTL_MS = 10 * 60 * 1000;
+
+function readStore<T>(key: string): T | null {
+  try {
+    const raw = sessionStorage.getItem(STORE_PREFIX + key);
+    if (!raw) return null;
+    const entry = JSON.parse(raw) as { at: number; data: T };
+    if (Date.now() - entry.at > STORE_TTL_MS) return null;
+    return entry.data;
+  } catch {
+    return null;
+  }
+}
+
+function writeStore(key: string, data: unknown) {
+  try {
+    sessionStorage.setItem(STORE_PREFIX + key, JSON.stringify({ at: Date.now(), data }));
+  } catch {
+    // Quota or blocked storage: memory cache still works.
+  }
+}
+
+let indexCache: PostIndex | null = readStore<PostIndex>('index');
 const postCache = new Map<string, Post>();
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -40,11 +65,15 @@ export function getCachedIndex(): PostIndex | null {
 }
 
 export function getCachedPost(id: string): Post | null {
-  return postCache.get(id) ?? null;
+  const hit = postCache.get(id);
+  if (hit) return hit;
+  const stored = readStore<Post>(`post:${id}`);
+  if (stored) postCache.set(id, stored);
+  return stored;
 }
 
 async function request(params: Record<string, string>): Promise<BlogResult<Record<string, unknown>>> {
-  const url = new URL(BLOG_ENDPOINT);
+  const url = new URL(BLOG_ENDPOINT, window.location.origin);
   Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
 
   const controller = new AbortController();
@@ -88,13 +117,14 @@ export async function fetchPosts(): Promise<BlogResult<PostIndex>> {
     description: str(result.data.description),
     posts,
   };
+  writeStore('index', indexCache);
   return { ok: true, data: indexCache };
 }
 
 export async function fetchPost(id: string): Promise<BlogResult<Post>> {
   if (!isValidPostId(id)) return { ok: false, error: 'That post doesn’t exist.', notFound: true };
 
-  const cached = postCache.get(id);
+  const cached = getCachedPost(id);
   if (cached) return { ok: true, data: cached };
 
   const result = await request({ api: 'post', id });
@@ -106,6 +136,7 @@ export async function fetchPost(id: string): Promise<BlogResult<Post>> {
   }
   const post: Post = { ...summary, html: str(result.data.post.html) };
   postCache.set(id, post);
+  writeStore(`post:${id}`, post);
   return { ok: true, data: post };
 }
 
