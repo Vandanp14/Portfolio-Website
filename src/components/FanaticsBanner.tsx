@@ -1,10 +1,10 @@
 import type { CSSProperties } from 'react';
-import banner from '../assets/fanatics-banner.jpg';
+import banner from '../assets/fanatics-banner.jpg?w=828;1440;2000&format=avif;webp;jpg&as=picture';
 import { fanaticsHighlight as h } from '../content/portfolio';
 import { Rule } from './motion/Rule';
 import { Scramble } from './motion/Scramble';
 import { SplitLines } from './motion/SplitLines';
-import { Shell } from './primitives';
+import { Picture, Shell } from './primitives';
 
 /** Fluid so each statement line holds one line at 1440 and still fits at 390. */
 const statement = 'text-[clamp(2.1rem,9vw,8.75rem)]';
@@ -54,13 +54,10 @@ export function FanaticsBanner() {
           className="mt-[clamp(48px,7vw,104px)] w-full"
           style={{ '--reveal-delay': '100ms' } as CSSProperties}
         >
-          <img
-            src={banner}
+          <Picture
+            image={banner}
+            sizes="(min-width: 1440px) 1380px, 96vw"
             alt={h.imageAlt}
-            width={2000}
-            height={1337}
-            loading="lazy"
-            decoding="async"
             className="aspect-[2000/1337] w-full object-cover object-center"
           />
         </div>

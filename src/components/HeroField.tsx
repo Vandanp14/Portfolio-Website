@@ -1,4 +1,5 @@
 import { useEffect, useRef, type RefObject } from 'react';
+import { onThemeChange } from '../lib/theme';
 
 /**
  * A quiet generative "ontology graph" behind the hero: small square nodes
@@ -162,6 +163,10 @@ export function HeroField({ hostRef }: { hostRef: RefObject<HTMLElement> }) {
 
     const onVisibility = () => (document.hidden ? stop() : start());
     document.addEventListener('visibilitychange', onVisibility);
+    const offTheme = onThemeChange(() => {
+      readInk();
+      draw();
+    });
 
     const onMove = (event: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
@@ -182,6 +187,7 @@ export function HeroField({ hostRef }: { hostRef: RefObject<HTMLElement> }) {
       ro.disconnect();
       io.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
+      offTheme();
       host.removeEventListener('pointermove', onMove);
       host.removeEventListener('pointerleave', onLeave);
     };

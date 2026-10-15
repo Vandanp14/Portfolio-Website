@@ -4,6 +4,8 @@ import { goToSection } from '../lib/router';
 import { Link } from './Link';
 import { MenuOverlay } from './MenuOverlay';
 import { Scramble } from './motion/Scramble';
+import { ThemeToggle } from './ThemeToggle';
+import { useTheme } from '../lib/theme';
 import { Wordmark } from './Wordmark';
 
 /*
@@ -15,7 +17,7 @@ import { Wordmark } from './Wordmark';
 const lightVars = {
   '--nav-fill': 'rgba(246, 246, 246, 0.78)',
   '--nav-text': '#1E2124',
-  '--nav-text-dim': 'rgba(30, 33, 36, 0.55)',
+  '--nav-text-dim': 'rgba(30, 33, 36, 0.68)',
   '--nav-line': 'rgba(30, 33, 36, 0.9)',
   '--nav-invert': '#FFFFFF',
 } as CSSProperties;
@@ -35,7 +37,10 @@ const crumbs = { blog: 'Blog', resume: 'Résumé' } as const;
 export function Nav({ active, page = null }: { active: SectionId | null; page?: 'blog' | 'resume' | null }) {
   const [open, setOpen] = useState(false);
   const [lifted, setLifted] = useState(false);
-  const [dark, setDark] = useState(false);
+  const [overSlate, setOverSlate] = useState(false);
+  const [theme] = useTheme();
+  // In the dark theme every band is dark, so the bar stays dark too.
+  const dark = theme === 'dark' || overSlate;
   const header = useRef<HTMLElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
 
@@ -48,7 +53,7 @@ export function Nav({ active, page = null }: { active: SectionId | null; page?: 
       const under = document
         .elementsFromPoint(window.innerWidth / 2, 42)
         .find((node) => !header.current?.contains(node));
-      setDark(Boolean(under?.closest('.band-slate')));
+      setOverSlate(Boolean(under?.closest('.band-slate')));
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -132,7 +137,7 @@ export function Nav({ active, page = null }: { active: SectionId | null; page?: 
             </Link>
           </nav>
 
-          <div className="flex flex-none items-center gap-3 sm:gap-[30px]">
+          <div className="flex flex-none items-center gap-3 sm:gap-4">
             <Link
               to={RESUME_URL}
               aria-current={page === 'resume' ? 'page' : undefined}
@@ -142,6 +147,7 @@ export function Nav({ active, page = null }: { active: SectionId | null; page?: 
             >
               Résumé
             </Link>
+            <ThemeToggle className="border-[var(--nav-line)] hover:bg-[var(--nav-text)] hover:text-[var(--nav-invert)]" />
             <button
               ref={menuButton}
               type="button"

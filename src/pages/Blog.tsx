@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-import { useEffect, useMemo, useState, type CSSProperties } from 'react';
+import { useDeferredValue, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { ButtonGhost, Eyebrow, Shell } from '../components/primitives';
 import { Rule } from '../components/motion/Rule';
 import { SplitLines } from '../components/motion/SplitLines';
@@ -18,6 +18,7 @@ import {
   type PostIndex,
 } from '../lib/blog';
 import { Link } from '../components/Link';
+import { usePageMeta } from '../lib/seo';
 
 // Post HTML comes from our own Apps Script converter, but it lands on this
 // origin — sanitize anyway, and strip inline styling so every post inherits
@@ -73,17 +74,6 @@ function useBlogData<T>(key: string, cached: T | null, load: () => Promise<BlogR
   return [state, () => setAttempt((n) => n + 1)] as const;
 }
 
-function useDocumentTitle(title: string | null) {
-  useEffect(() => {
-    if (!title) return;
-    const previous = document.title;
-    document.title = `${title} — Vandan Patel`;
-    return () => {
-      document.title = previous;
-    };
-  }, [title]);
-}
-
 export default function Blog({ postId }: { postId: string | null }) {
   return (
     <section className="band band-paper min-h-[100svh] pt-[var(--nav-h)]">
@@ -98,7 +88,13 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 function IndexView() {
   const [state, retry] = useBlogData<PostIndex>('index', getCachedIndex(), fetchPosts);
-  useDocumentTitle(state.status === 'ready' ? state.data.title : 'Writing');
+  usePageMeta({
+    title: state.status === 'ready' ? state.data.title : 'Writing',
+    description:
+      (state.status === 'ready' && state.data.description) ||
+      'Notes on systems, tools and the things Vandan Patel ships.',
+    path: '/blog',
+  });
 
   const ready = state.status === 'ready';
   const count = ready ? state.data.posts.length : null;
@@ -141,18 +137,30 @@ function IndexView() {
           <dl className="grid grid-cols-2 gap-x-6 gap-y-5 lg:col-span-3 lg:grid-cols-1">
             <MetaItem term="Posts" value={count === null ? '—' : pad(count)} mono />
             <MetaItem term="Written in" value="Google Docs" />
+            <div className="border-l border-[var(--line-strong)] pl-2.5">
+              <dt className="t-eyebrow text-[var(--text-3)]">Subscribe</dt>
+              <dd className="mt-1 text-[15px] tracking-[-0.01em]">
+                <a href="/rss.xml" className="link-draw-in inline-flex min-h-[24px] items-center text-[var(--text)]">
+                  RSS feed <span aria-hidden="true">↗</span>
+                </a>
+              </dd>
+            </div>
           </dl>
         </div>
       </header>
 
-      <div className="mt-[clamp(56px,8vw,120px)] flex items-baseline justify-between gap-6">
-        <Eyebrow>All posts</Eyebrow>
-        {count !== null && (
-          <span className="t-index text-[var(--text-3)]">
-            {count} {count === 1 ? 'post' : 'posts'}
-          </span>
-        )}
-      </div>
+      {ready && state.data.posts.length > 0 ? (
+        <SearchablePosts posts={state.data.posts} />
+      ) : (
+        <div className="mt-[clamp(56px,8vw,120px)] flex items-baseline justify-between gap-6">
+          <Eyebrow>All posts</Eyebrow>
+          {count !== null && (
+            <span className="t-index text-[var(--text-3)]">
+              {count} {count === 1 ? 'post' : 'posts'}
+            </span>
+          )}
+        </div>
+      )}
 
       {state.status === 'loading' && <ListSkeleton />}
       {state.status === 'error' && <ErrorPanel message={state.error} onRetry={retry} />}
@@ -163,7 +171,6 @@ function IndexView() {
           <Rule />
         </div>
       )}
-      {ready && state.data.posts.length > 0 && <PostList posts={state.data.posts} />}
     </Shell>
   );
 }
@@ -222,9 +229,153 @@ function usePreviews(posts: PostSummary[]) {
   return previews;
 }
 
-function PostList({ posts }: { posts: PostSummary[] }) {
-  const previews = usePreviews(posts);
+/* --- Search -------------------------------------------------------------- */
 
+// Plain text of each post, extracted once per id. Inert DOMParser document,
+// so nothing in the HTML executes.
+const textCache = new Map<string, string>();
+
+function postText(id: string): string {
+  const hit = textCache.get(id);
+  if (hit !== undefined) return hit;
+  const post = getCachedPost(id);
+  if (!post) return '';
+  const text = (new DOMParser().parseFromString(post.html, 'text/html').body.textContent ?? '').toLowerCase();
+  textCache.set(id, text);
+  return text;
+}
+
+function readQuery(): string {
+  return new URLSearchParams(window.location.search).get('q') ?? '';
+}
+
+/**
+ * Filters on title, excerpt and full text. Full text comes from the post
+ * cache that `usePreviews` fills in the background, so results sharpen as
+ * posts arrive. The query lives in `?q=` (replaceState, no history spam).
+ */
+function SearchablePosts({ posts }: { posts: PostSummary[] }) {
+  const previews = usePreviews(posts);
+  const [query, setQuery] = useState(readQuery);
+  const deferred = useDeferredValue(query.trim().toLowerCase());
+  const input = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (query.trim()) url.searchParams.set('q', query.trim());
+    else url.searchParams.delete('q');
+    window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash);
+  }, [query]);
+
+  // "/" jumps to search from anywhere on the page, unless already typing.
+  useEffect(() => {
+    const onKey = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      if (target && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName))) return;
+      event.preventDefault();
+      input.current?.focus();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  const results = useMemo(() => {
+    if (!deferred) return posts;
+    const terms = deferred.split(/\s+/);
+    return posts.filter((post) => {
+      const haystack = `${post.title.toLowerCase()} ${previews[post.id]?.excerpt.toLowerCase() ?? ''} ${postText(post.id)}`;
+      return terms.every((term) => haystack.includes(term));
+    });
+  }, [deferred, posts, previews]);
+
+  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape' && query) {
+      event.preventDefault();
+      setQuery('');
+    }
+  };
+
+  const searching = deferred !== '';
+  const total = posts.length;
+
+  return (
+    <>
+      <div className="mt-[clamp(56px,8vw,120px)] flex items-baseline justify-between gap-6">
+        <Eyebrow>{searching ? 'Results' : 'All posts'}</Eyebrow>
+        <span className="t-index text-[var(--text-3)]" aria-live="polite">
+          {searching
+            ? `${results.length} of ${total} ${total === 1 ? 'post' : 'posts'}`
+            : `${total} ${total === 1 ? 'post' : 'posts'}`}
+        </span>
+      </div>
+
+      <div role="search" className="relative mt-6">
+        <label htmlFor="blog-search" className="sr-only">
+          Search posts
+        </label>
+        <input
+          ref={input}
+          id="blog-search"
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          onKeyDown={onKeyDown}
+          placeholder="Search posts"
+          autoComplete="off"
+          spellCheck={false}
+          className="field pr-24 text-[clamp(1.25rem,2.2vw,1.625rem)] tracking-[-0.02em] [&::-webkit-search-cancel-button]:hidden"
+        />
+        <div className="absolute inset-y-0 right-0 flex items-center">
+          {query ? (
+            <button
+              type="button"
+              onClick={() => {
+                setQuery('');
+                input.current?.focus();
+              }}
+              className="t-eyebrow inline-flex min-h-[44px] items-center px-2 text-[var(--text-2)] hover:text-[var(--text)]"
+            >
+              Clear
+            </button>
+          ) : (
+            <kbd
+              aria-hidden="true"
+              className="t-index hidden h-7 min-w-7 items-center justify-center border border-[var(--line)] px-2 text-[12px] text-[var(--text-3)] sm:inline-flex"
+            >
+              /
+            </kbd>
+          )}
+        </div>
+      </div>
+
+      {results.length > 0 ? (
+        <PostList posts={results} all={posts} previews={previews} />
+      ) : (
+        <div className="mt-4 border-b border-[var(--line)] py-12">
+          <p className="text-[clamp(1.5rem,2.6vw,2.125rem)] leading-[1.1] tracking-[-0.03em] text-[var(--text)]">
+            No posts match “{query.trim()}”.
+          </p>
+          <p className="mt-3 text-[17px] text-[var(--text-2)]">Try fewer words, or browse everything.</p>
+          <ButtonGhost onClick={() => setQuery('')} className="mt-6">
+            Show all posts
+          </ButtonGhost>
+        </div>
+      )}
+    </>
+  );
+}
+
+function PostList({
+  posts,
+  all,
+  previews,
+}: {
+  posts: PostSummary[];
+  /** The unfiltered list: numbering and "Latest" stay stable while searching. */
+  all: PostSummary[];
+  previews: Record<string, PostPreview | null>;
+}) {
   return (
     <ol className="mt-4 border-b border-[var(--line)]">
       {posts.map((post, i) => (
@@ -234,7 +385,7 @@ function PostList({ posts }: { posts: PostSummary[] }) {
           style={i < 8 ? ({ '--reveal-delay': `${i * 80}ms` } as CSSProperties) : undefined}
         >
           <Rule delay={i < 8 ? i * 80 : 0} strong={i === 0} />
-          <PostRow post={post} preview={previews[post.id]} index={i + 1} latest={i === 0} />
+          <PostRow post={post} preview={previews[post.id]} index={all.indexOf(post) + 1} latest={post === all[0]} />
         </li>
       ))}
     </ol>
@@ -381,9 +532,14 @@ function ListSkeleton() {
 
 function PostView({ id }: { id: string }) {
   const [state, retry] = useBlogData<Post>(id, getCachedPost(id), () => fetchPost(id));
-  useDocumentTitle(
-    state.status === 'ready' ? state.data.title : state.status === 'error' && state.notFound ? 'Post not found' : null,
-  );
+  const excerpt = useMemo(() => (state.status === 'ready' ? buildPreview(state.data.html, 160).excerpt : ''), [state]);
+  usePageMeta({
+    title:
+      state.status === 'ready' ? state.data.title : state.status === 'error' && state.notFound ? 'Post not found' : null,
+    description: excerpt || undefined,
+    path: `/blog/${id}`,
+    noindex: state.status === 'error' && state.notFound,
+  });
 
   const html = useMemo(() => (state.status === 'ready' ? sanitize(state.data.html) : ''), [state]);
   const minutes = useMemo(() => (state.status === 'ready' ? readingMinutes(state.data.html) : 0), [state]);

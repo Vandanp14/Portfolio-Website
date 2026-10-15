@@ -1,20 +1,36 @@
 {
   "rewrites": [
+    { "source": "/blog", "destination": "/api/page?path=/blog" },
+    { "source": "/blog/:id", "destination": "/api/page?path=/blog/:id" },
+    { "source": "/resume", "destination": "/api/page?path=/resume" },
+    { "source": "/resume.pdf", "destination": "/api/resume" },
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+    { "source": "/rss.xml", "destination": "/api/rss" }
+  ],
+  "functions": {
+    "api/page.ts": { "includeFiles": "dist/index.html" }
+  },
+  "headers": [
     {
-      "source": "/blog",
-      "destination": "/index.html"
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://www.googletagmanager.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+        }
+      ]
     },
     {
-      "source": "/blog/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/resume",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/resume.pdf",
-      "destination": "/api/resume"
+      "source": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     }
   ]
 }

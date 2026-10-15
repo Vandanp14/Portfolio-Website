@@ -6,6 +6,7 @@ import { ButtonGhost, Eyebrow, Shell } from '../components/primitives';
 import { Rule } from '../components/motion/Rule';
 import { SplitLines } from '../components/motion/SplitLines';
 import { track } from '../lib/analytics';
+import { usePageMeta } from '../lib/seo';
 import { formatUpdated, loadResume, pdfUrl, RESUME_FILENAME, type ResumeFile } from '../lib/resume';
 
 // Legacy build: the modern one leans on very recent JS features that older
@@ -28,13 +29,11 @@ export default function Resume() {
   const [state, setState] = useState<State>({ kind: 'loading', step: 'checking' });
   const [attempt, setAttempt] = useState(0);
 
-  useEffect(() => {
-    const previous = document.title;
-    document.title = 'Résumé — Vandan Patel';
-    return () => {
-      document.title = previous;
-    };
-  }, []);
+  usePageMeta({
+    title: 'Résumé',
+    description: 'Vandan Patel’s current résumé — backend, distributed systems and applied AI. View in the browser or download the PDF.',
+    path: '/resume',
+  });
 
   useEffect(() => {
     let live = true;

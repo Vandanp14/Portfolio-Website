@@ -1,45 +1,83 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231E2124'/%3E%3Crect x='14' y='14' width='24' height='24' fill='none' stroke='%23F4F4F2' stroke-width='2.5'/%3E%3Crect x='26' y='26' width='24' height='24' fill='%23F4F4F2'/%3E%3C/svg%3E" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#FFFFFF" />
+    <!-- Theme (before paint) + GA4. External so the CSP can forbid inline scripts. -->
+    <script src="/boot.js"></script>
     <title>Vandan Patel — Software Engineer</title>
     <meta
       name="description"
       content="Vandan Patel builds backend and distributed systems. Software Engineering Intern at Fanatics, where he shipped Product Builder's first API and its first AI assistant over non-GitHub data."
     />
     <link rel="canonical" href="https://vandanpatel.me/" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="alternate" type="application/rss+xml" title="Vandan Patel — Writing" href="https://vandanpatel.me/rss.xml" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vandan Patel" />
     <meta property="og:url" content="https://vandanpatel.me/" />
     <meta property="og:title" content="Vandan Patel — Software Engineer" />
     <meta
       property="og:description"
       content="Backend and distributed systems. Shipped Product Builder's first API at Fanatics, plus a fitness analytics PWA, a personal finance ledger and a game platform."
     />
+    <meta property="og:image" content="https://vandanpatel.me/api/og?v=1" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Vandan Patel — I build the systems other people build on." />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Vandan Patel — Software Engineer" />
+    <meta
+      name="twitter:description"
+      content="Backend and distributed systems. Shipped Product Builder's first API at Fanatics, plus a fitness analytics PWA, a personal finance ledger and a game platform."
+    />
+    <meta name="twitter:image" content="https://vandanpatel.me/api/og?v=1" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://vandanpatel.me/#person",
+            "name": "Vandan Patel",
+            "url": "https://vandanpatel.me/",
+            "image": "https://vandanpatel.me/icon-512.png",
+            "jobTitle": "Software Engineer",
+            "description": "Backend and distributed systems engineer. Software Engineering Intern at Fanatics; CS student at SUNY Oswego.",
+            "email": "mailto:patelvandan024@gmail.com",
+            "address": { "@type": "PostalAddress", "addressLocality": "Oswego", "addressRegion": "NY", "addressCountry": "US" },
+            "alumniOf": { "@type": "CollegeOrUniversity", "name": "State University of New York at Oswego" },
+            "knowsAbout": ["Distributed systems", "Backend engineering", "Applied AI", "TypeScript", "Python", "PostgreSQL"],
+            "sameAs": ["https://github.com/Vandanp14", "https://www.linkedin.com/in/vpatel1410"]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://vandanpatel.me/#website",
+            "url": "https://vandanpatel.me/",
+            "name": "Vandan Patel",
+            "publisher": { "@id": "https://vandanpatel.me/#person" }
+          },
+          {
+            "@type": "ProfilePage",
+            "@id": "https://vandanpatel.me/#profile",
+            "url": "https://vandanpatel.me/",
+            "name": "Vandan Patel — Software Engineer",
+            "isPartOf": { "@id": "https://vandanpatel.me/#website" },
+            "mainEntity": { "@id": "https://vandanpatel.me/#person" }
+          }
+        ]
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <!-- Google Analytics (GA4). Production domain only, so local dev and
-         Vercel preview deployments don't pollute the numbers. Client-side
-         route changes are reported by usePageViews in src/App.tsx. -->
-    <script>
-      if (/(^|\.)vandanpatel\.me$/.test(location.hostname)) {
-        window.dataLayer = window.dataLayer || [];
-        window.gtag = function () { dataLayer.push(arguments); };
-        gtag('js', new Date());
-        gtag('config', 'G-4J59D7CV40');
-        var ga = document.createElement('script');
-        ga.async = true;
-        ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-4J59D7CV40';
-        document.head.appendChild(ga);
-      }
-    </script>
   </head>
   <body>
     <div id="root"></div>
