@@ -4,6 +4,7 @@ import { fetchPosts, formatDate, getCachedIndex, type PostSummary } from '../lib
 import { goToSection } from '../lib/router';
 import { Link } from './Link';
 import { Shell } from './primitives';
+import { ThemeToggle } from './ThemeToggle';
 import { Wordmark } from './Wordmark';
 
 type Posts = { status: 'loading' } | { status: 'ready'; posts: PostSummary[] } | { status: 'error' };
@@ -96,7 +97,7 @@ export function MenuOverlay({
           <Link to="/" onClick={onClose} aria-label="Vandan Patel — home">
             <Wordmark />
           </Link>
-          <div className="flex items-center gap-3 sm:gap-[30px]">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Link
               to={RESUME_URL}
               onClick={onClose}
@@ -104,6 +105,7 @@ export function MenuOverlay({
             >
               Résumé
             </Link>
+            <ThemeToggle className="border-[var(--line-strong)] hover:bg-[var(--text)] hover:text-[var(--bg)]" />
             <button
               ref={closeButton}
               type="button"

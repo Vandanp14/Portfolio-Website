@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties, ImgHTMLAttributes, ReactNode } from 'react';
 import { Rule } from './motion/Rule';
 import { SplitLines } from './motion/SplitLines';
 
@@ -7,6 +7,47 @@ export function Shell({ children, className = '' }: { children: ReactNode; class
     <div className={`mx-auto w-full max-w-[var(--content)] px-[var(--gutter)] ${className}`}>
       {children}
     </div>
+  );
+}
+
+const MIME: Record<string, string> = { avif: 'image/avif', webp: 'image/webp', jpeg: 'image/jpeg', jpg: 'image/jpeg', png: 'image/png' };
+
+/**
+ * Responsive image from a vite-imagetools `&as=picture` import: AVIF, then
+ * WebP, then the JPEG fallback, each with a width-based srcset. Width/height
+ * come from the source so the box is reserved before load (no layout shift).
+ * Lazy by default; pass `eager` for anything above the fold.
+ */
+export function Picture({
+  image,
+  sizes,
+  eager = false,
+  ...img
+}: {
+  image: ImagePicture;
+  sizes: string;
+  eager?: boolean;
+} & Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'srcSet' | 'sizes'>) {
+  const formats = Object.keys(image.sources);
+  const fallback = formats[formats.length - 1];
+  return (
+    <picture>
+      {Object.entries(image.sources)
+        .filter(([format]) => format !== fallback)
+        .map(([format, srcSet]) => (
+          <source key={format} type={MIME[format]} srcSet={srcSet} sizes={sizes} />
+        ))}
+      <img
+        src={image.img.src}
+        srcSet={fallback ? image.sources[fallback] : undefined}
+        sizes={sizes}
+        width={image.img.w}
+        height={image.img.h}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        {...img}
+      />
+    </picture>
   );
 }
 

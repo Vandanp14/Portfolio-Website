@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import type { Project, ProjectShot } from '../content/portfolio';
-import { Tag } from './primitives';
+import { Picture, Tag } from './primitives';
 
 /** Intrinsic sizes of the exported screenshots — reserve space, avoid CLS. */
 const SHOT_SIZE = {
@@ -123,7 +123,7 @@ function ShotRail({ shots, title }: { shots: ProjectShot[]; title: string }) {
           const isPhone = shot.kind === 'phone';
           return (
             <li
-              key={shot.src}
+              key={shot.src.img.src}
               className={`anim-rise flex-none snap-start ${isPhone ? 'w-[200px] sm:w-[236px]' : 'w-[min(640px,78vw)]'}`}
               style={{ ...rise(i), '--anim-delay': '260ms' } as CSSProperties}
             >
@@ -134,13 +134,12 @@ function ShotRail({ shots, title }: { shots: ProjectShot[]; title: string }) {
                     className={isPhone ? 'rounded-[21px]' : ''}
                     style={{ '--reveal-delay': `${i * 80}ms` } as CSSProperties}
                   >
-                    <img
-                      src={shot.src}
+                    <Picture
+                      image={shot.src}
+                      sizes={isPhone ? '(min-width: 640px) 236px, 200px' : 'min(640px, 78vw)'}
                       alt={shot.alt}
                       width={size.width}
                       height={size.height}
-                      loading="lazy"
-                      decoding="async"
                       className="h-auto w-full object-cover"
                       style={{ aspectRatio: `${size.width} / ${size.height}` }}
                     />

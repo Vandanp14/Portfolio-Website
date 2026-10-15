@@ -131,6 +131,56 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.32), 0 8px 22px -16px rgba(0, 0, 0, 0.55);
 }
 
+/* --- Dark theme ------------------------------------------------------------
+   Opt-in via the nav toggle (`<html data-theme="dark">`, set before paint by
+   public/boot.js). Paper and mist become near-black; slate keeps its value
+   and now reads as a lifted panel. Same variable names, so no component
+   changes.
+
+   Contrast (WCAG AA, body text):
+     chalk on paper   17.0:1     muted on paper   6.0:1
+     violet on paper   7.1:1     muted on mist    5.6:1
+--------------------------------------------------------------------------- */
+
+:root[data-theme='dark'] {
+  --c-paper: #0f1113;
+  --c-mist: #16181b;
+  --c-card: #1a1d21;
+  --c-ink: #f4f4f2;
+}
+
+:root[data-theme='dark'] .band-paper,
+:root[data-theme='dark'] .band-mist {
+  color-scheme: dark;
+  --text: var(--c-chalk);
+  --text-2: #b9b9b9;
+  --text-3: #8d9096;
+  --line: rgba(244, 244, 242, 0.14);
+  --line-strong: rgba(244, 244, 242, 0.85);
+  --accent: var(--c-violet-bright);
+  --accent-hover: #bdb2ff;
+  --accent-soft: rgba(159, 143, 255, 0.14);
+  --on-accent: var(--c-slate);
+  --signal: #f0714f;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 20px 48px -24px rgba(0, 0, 0, 0.7);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.32), 0 8px 22px -16px rgba(0, 0, 0, 0.55);
+}
+
+:root[data-theme='dark'] .band-paper {
+  --bg-alt: var(--c-mist);
+  --surface: var(--c-card);
+  --surface-2: var(--c-mist);
+}
+
+:root[data-theme='dark'] .band-mist {
+  --bg-alt: #1c1f23;
+  --surface: var(--c-card);
+  --surface-2: #202328;
+  --line: rgba(244, 244, 242, 0.16);
+}
+
+:root[data-theme='dark'] { color-scheme: dark; }
+
 /* ---------------------------------------------------------------------------
    Base
 --------------------------------------------------------------------------- */
@@ -645,7 +695,8 @@ button:hover .arrow-nudge-x { transform: translate3d(6px, 0, 0); }
   [data-reveal] { opacity: 1 !important; clip-path: none !important; transform: none !important; }
   [data-reveal] .sl-w { clip-path: none !important; transform: none !important; }
   [data-reveal='cover']::after { display: none; }
-  [data-reveal='cover'] > img { transform: none !important; }
+  [data-reveal='cover'] > img,
+  [data-reveal='cover'] > picture { transform: none !important; }
   .marquee-track { animation: none; flex-wrap: wrap; width: auto; }
   .marquee-dup { display: none; }
   .progress-sweep::before { animation: none; }
