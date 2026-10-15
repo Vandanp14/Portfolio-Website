@@ -1,0 +1,59 @@
+name: Uptime
+
+# Probes the live site every 15 minutes. A failed run makes GitHub email the
+# repo owner (Settings → Notifications → Actions). GitHub's cron is
+# best-effort, and scheduled workflows pause after 60 days without activity
+# in the repository.
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+    inputs:
+      base:
+        description: Base URL to check
+        required: false
+        default: https://vandanpatel.me
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      BASE: ${{ inputs.base || 'https://vandanpatel.me' }}
+    steps:
+      - name: Check endpoints
+        shell: bash
+        run: |
+          failures=()
+
+          check() {
+            local path="$1" marker="$2" body
+            if ! body=$(curl -fsS --retry 2 --retry-delay 10 --retry-all-errors --max-time 30 "$BASE$path"); then
+              failures+=("$path: request failed")
+              echo "✗ $path (request failed)"
+              return
+            fi
+            if ! grep -qF -- "$marker" <<<"$body"; then
+              failures+=("$path: missing '$marker'")
+              echo "✗ $path (missing '$marker')"
+              return
+            fi
+            echo "✓ $path"
+          }
+
+          check "/" "Vandan Patel"
+          check "/api/health" '"ok":true'
+          check "/api/blog?api=posts" '"posts"'
+          check "/api/resume?meta=1" '"version"'
+          check "/sitemap.xml" "<urlset"
+          check "/rss.xml" "<rss"
+
+          if (( ${#failures[@]} )); then
+            printf '\n%d check(s) failed against %s:\n' "${#failures[@]}" "$BASE"
+            printf ' - %s\n' "${failures[@]}"
+            exit 1
+          fi
