@@ -32,7 +32,7 @@ jobs:
 
           check() {
             local path="$1" marker="$2" body
-            if ! body=$(curl -fsS --retry 2 --retry-delay 10 --retry-all-errors --max-time 30 "$BASE$path"); then
+            if ! body=$(curl -fsSL --retry 2 --retry-delay 10 --retry-all-errors --max-time 30 "$BASE$path"); then
               failures+=("$path: request failed")
               echo "✗ $path (request failed)"
               return
