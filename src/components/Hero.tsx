@@ -1,6 +1,6 @@
 import { useRef, type CSSProperties } from 'react';
 import { profile, RESUME_URL } from '../content/portfolio';
-import { scrollToSection } from '../hooks/useScrollSpy';
+import { navigate } from '../lib/router';
 import { HeroField } from './HeroField';
 import { Link } from './Link';
 import { Scramble } from './motion/Scramble';
@@ -68,8 +68,11 @@ export function Hero() {
 
           <button
             type="button"
-            onClick={() => scrollToSection('work')}
-            aria-label="Scroll to selected work"
+            onClick={() => {
+              const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+              document.getElementById('index')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+            }}
+            aria-label="Scroll to the page index"
             className={`hover-glitch reveal t-display absolute bottom-0 right-0 flex min-h-[44px] min-w-[44px] items-end justify-end font-light text-[var(--text)] ${display}`}
             style={{ '--reveal-delay': `${HEADLINE_MS - 200}ms` } as CSSProperties}
           >
@@ -93,7 +96,7 @@ export function Hero() {
               className="reveal mt-8 flex flex-wrap items-center gap-x-6 gap-y-3"
               style={{ '--reveal-delay': `${HEADLINE_MS + 80}ms` } as CSSProperties}
             >
-              <ButtonGhost onClick={() => scrollToSection('work')}>
+              <ButtonGhost onClick={() => navigate('/work')}>
                 See the work
                 <span className="arrow-nudge arrow-nudge-x" aria-hidden="true">
                   →

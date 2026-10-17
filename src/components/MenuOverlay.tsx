@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react';
-import { navSections, profile, RESUME_URL, type SectionId } from '../content/portfolio';
+import { profile, RESUME_URL } from '../content/portfolio';
 import { fetchPosts, formatDate, getCachedIndex, type PostSummary } from '../lib/blog';
-import { goToSection } from '../lib/router';
+import { pages, type PageId } from '../lib/routes';
 import { Link } from './Link';
 import { Shell } from './primitives';
 import { ThemeToggle } from './ThemeToggle';
@@ -14,15 +14,7 @@ type Posts = { status: 'loading' } | { status: 'ready'; posts: PostSummary[] } |
  * type, the latest writing, and elsewhere-links. Traps focus, closes on Esc,
  * and restores focus to the menu button (handled by Nav's `onClose`).
  */
-export function MenuOverlay({
-  onClose,
-  active,
-  page,
-}: {
-  onClose: () => void;
-  active: SectionId | null;
-  page: 'blog' | 'resume' | null;
-}) {
+export function MenuOverlay({ onClose, current }: { onClose: () => void; current: PageId | null }) {
   const panel = useRef<HTMLDivElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
   const [crossed, setCrossed] = useState(false);
@@ -68,11 +60,6 @@ export function MenuOverlay({
       event.preventDefault();
       first.focus();
     }
-  };
-
-  const go = (id: SectionId) => {
-    onClose();
-    goToSection(id);
   };
 
   const bigLink =
@@ -127,42 +114,24 @@ export function MenuOverlay({
         <section aria-labelledby="menu-nav">
           <ColumnHead id="menu-nav" title="Navigation" />
           <nav className="mt-8 flex flex-col" aria-labelledby="menu-nav">
-            <button type="button" onClick={() => go('top')} className={`anim-rise ${bigLink} ${linkTone(false)}`} style={stagger()}>
-              Index
-            </button>
-            {navSections.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => go(item.id)}
-                aria-current={active === item.id ? 'true' : undefined}
-                className={`anim-rise ${bigLink} ${linkTone(active === item.id)}`}
-                style={stagger()}
-              >
-                <span className="text-[0.6em] text-[var(--text-3)]" aria-hidden="true">↳</span>
-                {item.label}
-              </button>
+            <div className="anim-rise" style={stagger()}>
+              <Link to="/" onClick={onClose} aria-current={current === null ? 'page' : undefined} className={`${bigLink} ${linkTone(false)}`}>
+                Index
+              </Link>
+            </div>
+            {pages.map((item) => (
+              <div key={item.id} className="anim-rise" style={stagger()}>
+                <Link
+                  to={item.path}
+                  onClick={onClose}
+                  aria-current={current === item.id ? 'page' : undefined}
+                  className={`${bigLink} ${linkTone(current === item.id)}`}
+                >
+                  <span className="text-[0.6em] text-[var(--text-3)]" aria-hidden="true">↳</span>
+                  {item.label}
+                </Link>
+              </div>
             ))}
-            <div className="anim-rise" style={stagger()}>
-              <Link
-                to="/blog"
-                onClick={onClose}
-                aria-current={page === 'blog' ? 'page' : undefined}
-                className={`${bigLink} ${linkTone(page === 'blog')}`}
-              >
-                Writing
-              </Link>
-            </div>
-            <div className="anim-rise" style={stagger()}>
-              <Link
-                to={RESUME_URL}
-                onClick={onClose}
-                aria-current={page === 'resume' ? 'page' : undefined}
-                className={`${bigLink} ${linkTone(page === 'resume')}`}
-              >
-                Résumé
-              </Link>
-            </div>
           </nav>
         </section>
 

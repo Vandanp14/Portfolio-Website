@@ -1,5 +1,9 @@
 {
   "rewrites": [
+    { "source": "/work", "destination": "/api/page?path=/work" },
+    { "source": "/experience", "destination": "/api/page?path=/experience" },
+    { "source": "/about", "destination": "/api/page?path=/about" },
+    { "source": "/contact", "destination": "/api/page?path=/contact" },
     { "source": "/blog", "destination": "/api/page?path=/blog" },
     { "source": "/blog/:id", "destination": "/api/page?path=/blog/:id" },
     { "source": "/resume", "destination": "/api/page?path=/resume" },

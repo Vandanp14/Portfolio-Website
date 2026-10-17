@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { navSections, RESUME_URL, type SectionId } from '../content/portfolio';
-import { goToSection } from '../lib/router';
+import { RESUME_URL } from '../content/portfolio';
+import { pageById, pages, type PageId } from '../lib/routes';
 import { Link } from './Link';
 import { MenuOverlay } from './MenuOverlay';
 import { Scramble } from './motion/Scramble';
@@ -32,9 +32,10 @@ const darkVars = {
   '--nav-invert': '#1E2124',
 } as CSSProperties;
 
-const crumbs = { blog: 'Blog', resume: 'Résumé' } as const;
+// Top-bar links; the résumé gets the outlined box on the right instead.
+const barPages = pages.filter((page) => page.id !== 'resume');
 
-export function Nav({ active, page = null }: { active: SectionId | null; page?: 'blog' | 'resume' | null }) {
+export function Nav({ current }: { current: PageId | null }) {
   const [open, setOpen] = useState(false);
   const [lifted, setLifted] = useState(false);
   const [overSlate, setOverSlate] = useState(false);
@@ -66,7 +67,7 @@ export function Nav({ active, page = null }: { active: SectionId | null; page?: 
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
     };
-  }, [page]);
+  }, [current]);
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -80,15 +81,14 @@ export function Nav({ active, page = null }: { active: SectionId | null; page?: 
     requestAnimationFrame(() => menuButton.current?.focus());
   };
 
-  const sectionLabel = navSections.find((item) => item.id === active)?.label;
-  const crumb = page ? crumbs[page] : sectionLabel;
+  const crumb = current ? pageById(current).label : null;
 
   return (
     <>
       <header
         ref={header}
         style={dark ? darkVars : lightVars}
-        className="fixed inset-x-2 top-2 z-50 text-[var(--nav-text)] transition-colors duration-[var(--t-medium)] ease-[var(--ease-out-expo)] sm:inset-x-[10px] sm:top-[10px]"
+        className="site-nav fixed inset-x-2 top-2 z-50 text-[var(--nav-text)] transition-colors duration-[var(--t-medium)] ease-[var(--ease-out-expo)] sm:inset-x-[10px] sm:top-[10px]"
       >
         <div
           className={`flex h-16 items-center justify-between gap-4 px-3 transition-[background-color,box-shadow,backdrop-filter] duration-[var(--t-medium)] ease-[var(--ease-out-expo)] sm:px-5 ${
@@ -98,9 +98,9 @@ export function Nav({ active, page = null }: { active: SectionId | null; page?: 
           }`}
         >
           <div className="flex min-w-0 items-center gap-3">
-            <button type="button" onClick={() => goToSection('top')} aria-label="Vandan Patel — back to top">
+            <Link to="/" aria-label="Vandan Patel — home">
               <Wordmark />
-            </button>
+            </Link>
             {crumb && (
               <span className="hidden items-center gap-3 text-[19px] leading-none tracking-[-0.03em] text-[var(--nav-text-dim)] sm:flex">
                 <span aria-hidden="true">/</span>
@@ -109,40 +109,30 @@ export function Nav({ active, page = null }: { active: SectionId | null; page?: 
             )}
           </div>
 
-          <nav className="hidden items-center gap-7 lg:flex" aria-label="Sections">
-            {navSections.map((item) => {
-              const isActive = active === item.id;
+          <nav className="hidden items-center gap-7 xl:flex" aria-label="Pages">
+            {barPages.map((item) => {
+              const isActive = current === item.id;
               return (
-                <button
+                <Link
                   key={item.id}
-                  type="button"
-                  onClick={() => goToSection(item.id)}
-                  aria-current={isActive ? 'true' : undefined}
+                  to={item.path}
+                  aria-current={isActive ? 'page' : undefined}
                   className={`text-[16px] tracking-[-0.01em] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] ${
                     isActive ? 'text-[var(--nav-text)]' : 'text-[var(--nav-text-dim)] hover:text-[var(--nav-text)]'
                   }`}
                 >
                   {item.label}
-                </button>
+                </Link>
               );
             })}
-            <Link
-              to="/blog"
-              aria-current={page === 'blog' ? 'page' : undefined}
-              className={`text-[16px] tracking-[-0.01em] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] ${
-                page === 'blog' ? 'text-[var(--nav-text)]' : 'text-[var(--nav-text-dim)] hover:text-[var(--nav-text)]'
-              }`}
-            >
-              Blog
-            </Link>
           </nav>
 
           <div className="flex flex-none items-center gap-3 sm:gap-4">
             <Link
               to={RESUME_URL}
-              aria-current={page === 'resume' ? 'page' : undefined}
+              aria-current={current === 'resume' ? 'page' : undefined}
               className={`hidden h-10 w-[170px] items-center justify-center border border-[var(--nav-line)] text-[16px] tracking-[-0.01em] transition-colors duration-[var(--t-base)] ease-[var(--ease-out-expo)] hover:bg-[var(--nav-text)] hover:text-[var(--nav-invert)] sm:inline-flex ${
-                page === 'resume' ? 'bg-[var(--nav-text)] text-[var(--nav-invert)]' : ''
+                current === 'resume' ? 'bg-[var(--nav-text)] text-[var(--nav-invert)]' : ''
               }`}
             >
               Résumé
@@ -167,7 +157,7 @@ export function Nav({ active, page = null }: { active: SectionId | null; page?: 
         </div>
       </header>
 
-      {open && <MenuOverlay onClose={close} active={active} page={page} />}
+      {open && <MenuOverlay onClose={close} current={current} />}
     </>
   );
 }
