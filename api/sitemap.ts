@@ -6,10 +6,15 @@
 
 import { fetchIndex, isoDate } from './_lib/blog.js';
 import { escapeXml } from './_lib/html.js';
-import { ORIGIN } from './_lib/site.js';
+import { ORIGIN, SECTION_PAGES } from './_lib/site.js';
 
 export async function GET(): Promise<Response> {
-  const urls: { loc: string; lastmod?: string }[] = [{ loc: `${ORIGIN}/` }, { loc: `${ORIGIN}/blog` }, { loc: `${ORIGIN}/resume` }];
+  const urls: { loc: string; lastmod?: string }[] = [
+    { loc: `${ORIGIN}/` },
+    ...Object.keys(SECTION_PAGES).map((path) => ({ loc: `${ORIGIN}${path}` })),
+    { loc: `${ORIGIN}/blog` },
+    { loc: `${ORIGIN}/resume` },
+  ];
 
   const index = await fetchIndex();
   if (index.ok) {

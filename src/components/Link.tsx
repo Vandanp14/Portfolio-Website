@@ -1,7 +1,12 @@
 import type { MouseEvent, ReactNode } from 'react';
+import { prefetchRoute } from '../lib/prefetch';
 import { navigate } from '../lib/router';
 
-/** In-app link: client-side navigation on plain left-click, native `<a>` otherwise. */
+/**
+ * In-app link: client-side navigation on plain left-click, native `<a>`
+ * otherwise. Hover or focus warms the target page's code-split chunk, so the
+ * slide transition never lands on a loading fallback.
+ */
 export function Link({
   to,
   children,
@@ -30,6 +35,8 @@ export function Link({
       aria-current={rest['aria-current']}
       aria-label={rest['aria-label']}
       onClick={handleClick}
+      onPointerEnter={() => prefetchRoute(to)}
+      onFocus={() => prefetchRoute(to)}
     >
       {children}
     </a>

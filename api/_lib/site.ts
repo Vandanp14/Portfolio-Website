@@ -21,3 +21,25 @@ export function ogImageUrl(params: Record<string, string | number> = {}): string
   Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, String(value)));
   return url.toString();
 }
+
+/**
+ * Section pages (each was a part of the one-page home before). Titles and
+ * descriptions mirror `pages` in src/lib/routes.ts — keep the two in sync.
+ */
+export const SECTION_PAGES: Record<string, { title: string; description: string }> = {
+  '/work': {
+    title: 'Work',
+    description:
+      'Selected work by Vandan Patel: a fitness analytics PWA, a cent-exact finance ledger, a game platform, and ten more builds.',
+  },
+  '/experience': {
+    title: 'Experience',
+    description:
+      "Vandan Patel's experience: Software Engineering Intern at Fanatics, plus software, data and project roles at SUNY Oswego.",
+  },
+  '/about': {
+    title: 'About',
+    description: 'About Vandan Patel: B.S. Computer Science at SUNY Oswego, his toolkit, recognition and leadership.',
+  },
+  '/contact': { title: 'Contact', description: 'Get in touch with Vandan Patel.' },
+};

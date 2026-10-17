@@ -682,6 +682,46 @@ button:hover .arrow-nudge-x { transform: translate3d(6px, 0, 0); }
    Reduced motion — every effect resolves to its final state instantly.
 --------------------------------------------------------------------------- */
 
+/* ---------------------------------------------------------------------------
+   Page transitions — the router (src/lib/router.ts) wraps every route change
+   in a View Transition and sets <html data-nav-dir>. Forward: the new page
+   slides in from the right over the old one, which recedes left and dims.
+   Back: the old page slides off to the right, uncovering the previous one.
+   The nav has its own transition name, so it stays put while pages move.
+--------------------------------------------------------------------------- */
+
+.site-nav { view-transition-name: site-nav; }
+
+:root[data-nav-dir]::view-transition-old(root),
+:root[data-nav-dir]::view-transition-new(root) {
+  animation-duration: 900ms;
+  animation-timing-function: var(--ease-wipe);
+  animation-fill-mode: both;
+  mix-blend-mode: normal;
+}
+:root[data-nav-dir='forward']::view-transition-old(root) { animation-name: vt-recede-left; }
+:root[data-nav-dir='forward']::view-transition-new(root) {
+  animation-name: vt-enter-right;
+  box-shadow: -48px 0 96px -24px rgba(0, 0, 0, 0.28);
+}
+:root[data-nav-dir='back']::view-transition-old(root) {
+  z-index: 2;
+  animation-name: vt-exit-right;
+  box-shadow: -48px 0 96px -24px rgba(0, 0, 0, 0.28);
+}
+:root[data-nav-dir='back']::view-transition-new(root) { animation-name: vt-return-left; }
+
+@keyframes vt-enter-right { from { transform: translate3d(100%, 0, 0); } }
+@keyframes vt-recede-left { to { transform: translate3d(-28%, 0, 0); filter: brightness(0.72); } }
+@keyframes vt-exit-right { to { transform: translate3d(100%, 0, 0); } }
+@keyframes vt-return-left { from { transform: translate3d(-28%, 0, 0); filter: brightness(0.72); } }
+
+/* No View Transitions support: the incoming page still slides in, alone. */
+.no-vt .page-enter { animation: page-enter var(--t-slow) var(--ease-out-expo) both; }
+@keyframes page-enter {
+  from { opacity: 0; transform: translate3d(48px, 0, 0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {

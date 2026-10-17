@@ -1,13 +1,14 @@
 // Per-route HTML for link previews and crawlers (Vercel Function). The site
 // is a client-rendered SPA, so bots that don't run JS would otherwise see
 // the home page's meta tags on every URL. vercel.json rewrites /blog,
-// /blog/:id and /resume here; this fetches the deployment's own index.html
+// /blog/:id, /resume and the section pages here; this fetches the deployment's own index.html
 // and swaps in route-specific <title>, description, canonical, Open Graph,
 // Twitter and JSON-LD. The SPA then boots as normal.
 //
 //   GET /api/page?path=/blog        → blog index meta + Blog JSON-LD
 //   GET /api/page?path=/blog/ID     → post meta + BlogPosting JSON-LD (404 if unknown)
 //   GET /api/page?path=/resume      → résumé meta
+//   GET /api/page?path=/work etc.   → section page meta (/work, /experience, /about, /contact)
 //   anything else                   → 404 + noindex (the SPA renders NotFound)
 
 import { fetchIndex, fetchPost, isoDate, POST_ID } from './_lib/blog.js';
@@ -18,6 +19,7 @@ import {
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
   ORIGIN,
+  SECTION_PAGES,
   SITE_NAME,
   ogImageUrl,
 } from './_lib/site.js';
@@ -172,6 +174,15 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
           }),
         },
       }),
+    };
+  }
+
+  const section = SECTION_PAGES[path];
+  if (section) {
+    return {
+      status: 200,
+      cache: CACHED,
+      meta: generic(path, { title: `${section.title} — ${SITE_NAME}`, description: section.description }),
     };
   }
 

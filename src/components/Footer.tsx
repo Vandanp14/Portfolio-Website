@@ -129,7 +129,12 @@ export function Footer() {
           <p className="t-index text-[var(--text-3)]">Built with React, TypeScript and Tailwind</p>
           <button
             type="button"
-            onClick={() => goToSection('top')}
+            onClick={() =>
+              window.scrollTo({
+                top: 0,
+                behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+              })
+            }
             className="group t-eyebrow inline-flex min-h-[44px] items-center gap-2 self-start text-[var(--text)] sm:self-auto"
           >
             <span className="link-draw-in">Back to top</span>
