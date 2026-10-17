@@ -17,6 +17,10 @@ npm run preview    # Preview production build locally
 
 There are no tests.
 
+## Shipping (read `docs/DEPLOYMENT.md`)
+
+`main` is production: Vercel auto-deploys every push/merge to `main` to vandanpatel.me; other branches get preview deploys. **Always work on a new branch** (`feat/…`, `fix/…`, `docs/…`) off fresh `main`, pass lint + typecheck + build, push, open a PR into `main`, check the preview, and merge only when the user says so. Never commit to `main` directly and never `vercel --prod`.
+
 ## Architecture
 
 - **`src/App.tsx`** — tiny router switch (`src/lib/router.ts`, History API, no react-router): `/` renders the one-page portfolio (`Home`); `/blog` and `/blog/:id` lazy-load `src/pages/Blog.tsx` (code-split, with DOMPurify); anything else renders `NotFound`.
