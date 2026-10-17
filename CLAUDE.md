@@ -17,6 +17,10 @@ npm run preview    # Preview production build locally
 
 There are no tests.
 
+## Shipping (read `docs/DEPLOYMENT.md`)
+
+`main` is production: Vercel auto-deploys every push/merge to `main` to vandanpatel.me; other branches get preview deploys. **Always work on a new branch** (`feat/…`, `fix/…`, `docs/…`) off fresh `main`, pass lint + typecheck + build, push, open a PR into `main`, check the preview, and merge only when the user says so. Never commit to `main` directly and never `vercel --prod`.
+
 ## Architecture
 
 - **`src/App.tsx`** — tiny router switch (`src/lib/router.ts`, History API, no react-router). `/` is the hero plus `PageIndex` (full-width rows linking every page); `/work`, `/experience`, `/about`, `/contact` are `SectionPage`s built from the old home sections (each ends with a "Next" row); `/blog`, `/blog/:id` and `/resume` lazy-load (`src/lib/prefetch.ts`, warmed on link hover/focus); anything else renders `NotFound`. Legacy `/#work`-style links are rewritten to `/work` before first render.
