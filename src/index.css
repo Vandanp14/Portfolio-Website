@@ -355,6 +355,76 @@ body {
   .home-stat dd { font-size: clamp(42px, 13vw, 60px); }
 }
 
+/* --- Case-study presentation -------------------------------------------- */
+.project-switch[aria-selected='true'] { background: var(--c-slate); color: var(--c-chalk); }
+.project-switch[aria-selected='false']:hover { background: var(--surface-2); color: var(--text); }
+.project-lead-shot { margin-top: clamp(28px, 5vw, 64px); }
+.project-shot-stage { position: relative; display: grid; min-height: clamp(260px, 38vw, 560px); place-items: center; overflow: hidden; padding: clamp(20px, 5vw, 72px); background: var(--surface); }
+.project-shot-label { position: absolute; z-index: 1; top: 16px; left: 18px; display: flex; align-items: center; gap: 10px; color: var(--text-3); font: 10px/1.4 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.04em; text-transform: uppercase; }
+.project-shot-label span { color: var(--accent); font-size: 16px; }
+.project-screen { width: 100%; max-width: 1120px; border-radius: 5px; box-shadow: 0 24px 52px -30px rgba(0, 0, 0, 0.7); }
+.project-screen img { display: block; width: 100%; height: auto; }
+.project-device { width: min(100%, 350px); padding: 7px; border-radius: 34px; }
+.project-device img { display: block; width: 100%; border-radius: 27px; }
+.project-lead-shot figcaption { max-width: 70ch; }
+.project-overview { align-items: start; }
+.project-story { min-width: 0; }
+.project-metrics > div { border-bottom: 1px solid var(--line); }
+.project-metrics dd { font-size: clamp(3rem, 5vw, 4.75rem); }
+.project-lead-shot [data-reveal='cover'] > picture { transform: scale(1.035); transition: transform var(--t-medium) var(--ease-out-expo); }
+.project-lead-shot [data-reveal='cover'].is-in > picture { transform: none; }
+
+/* --- A route-like experience timeline ----------------------------------- */
+.experience-timeline { position: relative; padding-left: clamp(24px, 4vw, 52px); }
+.experience-timeline::before { position: absolute; top: 8px; bottom: 12px; left: 5px; width: 1px; background: var(--line-strong); content: ''; transform-origin: top; animation: timeline-draw var(--t-slow) var(--ease-out-expo) both; }
+@keyframes timeline-draw { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.experience-timeline > li { position: relative; }
+.experience-timeline > li::before { position: absolute; top: 13px; left: calc(clamp(24px, 4vw, 52px) * -1 + 1px); width: 9px; height: 9px; border: 1px solid var(--text-3); border-radius: 50%; background: var(--bg); content: ''; transition: border-color var(--t-fast) var(--ease-out-expo), background-color var(--t-fast) var(--ease-out-expo), transform var(--t-fast) var(--ease-out-expo); }
+.experience-timeline > li:has(.experience-entry .animate-pulse)::before { border-color: var(--accent); background: var(--accent); transform: scale(1.2); }
+.experience-entry { padding-bottom: clamp(40px, 5vw, 70px); }
+.experience-entry .experience-current { color: var(--accent); }
+
+/* --- Toolkit index ------------------------------------------------------- */
+.about-skill-row { transition: background-color var(--t-fast) var(--ease-out-expo); }
+.about-skill-row:hover { background-color: color-mix(in srgb, var(--surface) 60%, transparent); }
+.about-skill-list li { display: inline-flex; min-height: 30px; align-items: center; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--text-2); font-size: 11px; line-height: 1.2; transition: border-color var(--t-fast) var(--ease-out-expo), color var(--t-fast) var(--ease-out-expo), transform var(--t-fast) var(--ease-out-expo); }
+.about-skill-list li:hover { border-color: var(--accent); color: var(--text); transform: translateY(-1px); }
+
+/* --- Shared navigation material ---------------------------------------- */
+.site-nav > div { border: 1px solid color-mix(in srgb, var(--nav-text) 12%, transparent); border-radius: 999px; background-color: var(--nav-fill); backdrop-filter: blur(18px); }
+.site-nav a[aria-current='page'] { color: var(--accent, var(--c-accent)); }
+.site-nav button,
+.site-nav a[aria-label='Vandan Patel — home'] { border-radius: 999px; }
+.site-nav > div > div:last-child > a,
+.site-nav > div > div:last-child > button { border-radius: 999px; }
+
+@media (max-width: 700px) {
+  .project-shot-stage { min-height: 260px; padding: 48px 18px 22px; }
+  .project-shot-label { top: 12px; left: 14px; }
+  .project-overview { gap: 32px; }
+  .experience-timeline { padding-left: 28px; }
+  .experience-timeline > li::before { left: -27px; }
+  .experience-timeline::before { left: 4px; }
+}
+
+/* --- Route directory: functional wayfinding with clear hover/focus states */
+.page-index-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.page-index-card { position: relative; display: grid; min-height: 160px; grid-template-columns: minmax(0, 1fr) auto; align-content: space-between; gap: 24px; padding: clamp(18px, 2.5vw, 30px); border: 1px solid var(--line); background: var(--surface); transition: border-color var(--t-fast) var(--ease-out-expo), background-color var(--t-fast) var(--ease-out-expo), transform var(--t-fast) var(--ease-out-expo); }
+.page-index-card:hover { transform: translateY(-2px); border-color: var(--text-3); background: var(--bg); }
+.page-index-card:active { transform: scale(0.99); }
+.page-index-meta { display: flex; justify-content: space-between; gap: 12px; grid-column: 1 / -1; color: var(--text-3); font: 10px/1.4 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.04em; text-transform: uppercase; }
+.page-index-main { display: flex; min-width: 0; flex-direction: column; gap: 7px; }
+.page-index-title { font-size: clamp(1.5rem, 2.5vw, 2.2rem); line-height: 1.05; letter-spacing: -0.045em; }
+.page-index-teaser { max-width: 38ch; color: var(--text-2); font-size: 13px; line-height: 1.45; }
+.page-index-arrow { display: grid; width: 38px; height: 38px; place-items: center; align-self: end; border: 1px solid var(--line); border-radius: 50%; color: var(--accent); transition: transform var(--t-fast) var(--ease-out-expo), background-color var(--t-fast) var(--ease-out-expo), color var(--t-fast) var(--ease-out-expo); }
+.page-index-card:hover .page-index-arrow { transform: translate(2px, -2px); background: var(--accent); color: var(--on-accent); }
+.page-index-card:focus-visible { outline-offset: 4px; }
+.page-index-grid:has(> li:only-child) { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 700px) {
+  .page-index-grid { grid-template-columns: minmax(0, 1fr); }
+  .page-index-card { min-height: 138px; }
+}
+
 /* ---------------------------------------------------------------------------
    Reveal engine — see src/lib/reveal.ts. One observer adds `.is-in` once per
    element; a MutationObserver picks up nodes that mount later, so anything

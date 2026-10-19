@@ -27,9 +27,9 @@ Editorial Premium, with a utility-first navigation layer. Take Apple's succinct 
 
 | Source | Transfer | Portfolio expression |
 |---|---|---|
-| Apple | concise product story, distinct section beats | concise engineer intro and case-study chapters |
-| Uber | legible orientation and clear next actions | compact links to work, experience, résumé, contact |
-| Cluely | show the interface early and explain through evidence | real project screenshots and outcome metrics in the first work section |
+| Apple | concise product story, distinct section beats, image reveals | asymmetrical opening, responsive project-screen reveal, and focused case-study chapters |
+| Uber | legible orientation, direct next actions, and task/progress cues | responsive route directory, active timeline rail, and explicit work/contact actions |
+| Cluely | show a product interface early, then explain through evidence | actual project screenshots lead each interactive case-study panel before summary and build details |
 | Vandan's existing site | substantive case studies and useful routes | preserve the content, route model, keyboard patterns, theme, and contact flow |
 
 ## Ranked palette candidates
@@ -63,8 +63,9 @@ Editorial Premium, with a utility-first navigation layer. Take Apple's succinct 
 ## Phased plan
 
 - P1 (M): Rework the homepage hierarchy into an editorial hero, selected project proof, and clear next steps.
-- P2 (M): Rebase shared palette/type/layout tokens and align global navigation, project and footer surfaces to the new direction.
-- P3 (S): Refine responsive details, motion/reduced motion, and accessibility; verify all routes and build checks.
+- P2 (M): Rebuild route directory, project viewer, experience timeline, and toolkit presentation around real content.
+- P3 (M): Rebase shared palette/type/layout tokens and align global navigation, contact, and footer surfaces to the new direction.
+- P4 (S): Refine responsive details, motion/reduced motion, and accessibility; verify all routes and build checks.
 
 ## Tradeoffs
 

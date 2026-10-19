@@ -117,7 +117,7 @@ export function Work() {
           </li>
         </ol>
 
-        {/* Viewer: pill tabs over a dark feature panel. */}
+        {/* The product viewer behaves like a small route selector into each case study. */}
         <div ref={viewer} className="mt-[clamp(56px,7vw,96px)] scroll-mt-[var(--nav-h)]">
           <div className="reveal flex flex-wrap items-center justify-between gap-4">
             <div role="tablist" aria-label="Project details" className="flex flex-wrap gap-1.5">
@@ -137,7 +137,7 @@ export function Work() {
                     tabIndex={selected ? 0 : -1}
                     onClick={() => setActive(i)}
                     onKeyDown={onTabKey}
-                    className={`inline-flex min-h-[44px] items-center gap-2.5 rounded-[2px] px-4 text-[15px] tracking-[-0.01em] transition-[background-color,color] duration-[var(--t-base)] ease-[var(--ease-out-expo)] ${
+                    className={`project-switch inline-flex min-h-[48px] items-center gap-2.5 rounded-full px-5 text-[14px] tracking-[-0.01em] transition-[background-color,color,transform] duration-[var(--t-base)] ease-[var(--ease-out-expo)] active:scale-[0.985] ${
                       selected
                         ? 'bg-[var(--surface-2)] text-[var(--text)]'
                         : 'bg-[var(--surface)] text-[var(--text-3)] hover:bg-[var(--surface-2)] hover:text-[var(--text-2)]'

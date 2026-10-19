@@ -17,6 +17,8 @@ const rise = (i: number) => ({ '--i': i }) as CSSProperties;
 export function ProjectPanel({ project, position }: { project: Project; position: number }) {
   const href = project.liveUrl ?? project.repoUrl;
   const hasShots = project.shots.length > 0;
+  const leadShot = project.shots.find((shot) => shot.kind === 'wide') ?? project.shots[0];
+  const supportingShots = leadShot ? project.shots.filter((shot) => shot !== leadShot) : [];
 
   return (
     <div className="flex flex-col">
@@ -28,7 +30,7 @@ export function ProjectPanel({ project, position }: { project: Project; position
       </div>
 
       <h3
-        className="anim-rise mt-6 max-w-[22ch] text-[clamp(2.125rem,3.2vw,2.5rem)] leading-[1.05] tracking-[-0.035em] text-[var(--text)]"
+        className="anim-rise mt-6 max-w-[22ch] text-[clamp(2.75rem,6vw,5rem)] leading-[0.98] tracking-[-0.055em] text-[var(--text)]"
         style={rise(1)}
       >
         {href ? (
@@ -44,13 +46,19 @@ export function ProjectPanel({ project, position }: { project: Project; position
         )}
       </h3>
 
-      <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
-        <div>
-          <p className="anim-rise max-w-[60ch] text-[18px] leading-[1.45] text-[var(--text-2)]" style={rise(2)}>
+      <p className="anim-rise mt-3 max-w-[58ch] text-[clamp(17px,2vw,22px)] leading-[1.4] text-[var(--text-2)]" style={rise(2)}>
+        {project.tagline}
+      </p>
+
+      {leadShot && <LeadShot shot={leadShot} title={project.title} />}
+
+      <div className="project-overview mt-12 grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
+        <div className="project-story">
+          <p className="anim-rise max-w-[60ch] text-[18px] leading-[1.5] text-[var(--text-2)]" style={rise(3)}>
             {project.summary}
           </p>
 
-          <p className="anim-fade t-eyebrow mt-10 text-[var(--text-3)]" style={rise(3)}>
+          <p className="anim-fade t-eyebrow mt-10 text-[var(--text-3)]" style={rise(4)}>
             How it’s built
           </p>
           <ol className="mt-4 border-t border-[var(--line)]">
@@ -68,7 +76,7 @@ export function ProjectPanel({ project, position }: { project: Project; position
         </div>
 
         <div className="flex flex-col gap-10">
-          <dl className="grid grid-cols-3 gap-x-5 border-t border-[var(--line-strong)] lg:grid-cols-1">
+          <dl className="project-metrics grid grid-cols-3 gap-x-5 border-t border-[var(--line-strong)] lg:grid-cols-1">
             {project.metrics.map((metric, i) => (
               <div
                 key={metric.label}
@@ -96,8 +104,35 @@ export function ProjectPanel({ project, position }: { project: Project; position
         </div>
       </div>
 
-      {hasShots ? <ShotRail shots={project.shots} title={project.title} /> : <Placeholder project={project} />}
+      {supportingShots.length > 0 ? <ShotRail shots={supportingShots} title={project.title} /> : !hasShots ? <Placeholder project={project} /> : null}
     </div>
+  );
+}
+
+function LeadShot({ shot, title }: { shot: ProjectShot; title: string }) {
+  const size = SHOT_SIZE[shot.kind];
+  const isPhone = shot.kind === 'phone';
+
+  return (
+    <figure className={`project-lead-shot ${isPhone ? 'project-lead-shot-phone' : ''}`}>
+      <div className="project-shot-stage">
+        <span className="project-shot-label">A closer look <span>↘</span></span>
+        <div className={isPhone ? 'device project-device' : 'screen project-screen'}>
+          <div data-reveal="cover" className={isPhone ? 'rounded-[21px]' : ''}>
+            <Picture
+              image={shot.src}
+              sizes={isPhone ? '(min-width: 900px) 360px, 68vw' : '(min-width: 900px) 72vw, 100vw'}
+              alt={shot.alt}
+              width={size.width}
+              height={size.height}
+              className="h-auto w-full object-cover"
+              style={{ aspectRatio: `${size.width} / ${size.height}` }}
+            />
+          </div>
+        </div>
+      </div>
+      <figcaption className="t-eyebrow mt-3 text-[var(--text-3)]">{title} — {shot.caption}</figcaption>
+    </figure>
   );
 }
 

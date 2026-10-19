@@ -1,30 +1,32 @@
-# Specialist review — portfolio refresh
+# Specialist review — portfolio editorial refresh
 
 ## Summary
 
-The homepage now communicates engineering focus, a real current project, and outcomes quickly. The chosen paper/rust direction is distinct from the referenced brands while using the layout and storytelling patterns described in the brief.
+The portfolio now uses a product-led opening, real interface imagery, chaptered project stories, and more legible route and experience navigation. It borrows pacing and interaction ideas from Apple, Uber, and Cluely while keeping an independent warm-paper and vermilion identity.
 
 ## Ship blockers
 
-- None found in the reviewed code or browser rendering.
+- None found in the reviewed code or desktop/mobile browser rendering.
 
 ## Findings
 
-- **Strength:** project proof is an actual screenshot, with intrinsic image dimensions and responsive sources.
-- **Strength:** primary and secondary actions are plain links with visible text, and touch targets meet the existing 44px floor.
-- **Strength:** shared color variables preserve dark-mode behavior across existing pages.
-- **Risk to monitor:** the longest case study content remains dense; it is still readable and was not shortened in this visual pass.
+- **Strength:** actual project screenshots lead the selected case study and update with the active project.
+- **Strength:** route-directory cards make the available destinations and their purpose easy to scan.
+- **Strength:** the experience rail gives the current role a visible place in the work history.
+- **Strength:** the toolkit is grouped and scannable, with small hover feedback rather than an auto-moving marquee.
+- **Strength:** shared color tokens preserve dark-mode behavior, focus treatment, and reduced-motion handling.
+- **Risk to monitor:** the longest case studies remain dense; the existing content is preserved and remains readable in the reviewed layouts.
 
 ## Competitive scorecard
 
-- Clear purpose: strong — headline plus concrete featured product.
-- Proof of work: strong — real interface, metrics, and dedicated case studies.
-- Wayfinding: strong — persistent résumé/menu and prominent work/contact links.
-- Distinct identity: strong — serif accent phrase, warm paper, and restrained rust.
-- Mobile entry: improved — concise intro and stacked image; deeper case-study browsing remains one tap away.
+- Clear purpose: strong — concise headline plus a real featured product.
+- Proof of work: strong — actual interface imagery, metrics, and dedicated case studies.
+- Wayfinding: strong — shared navigation, route directory, current experience marker, and direct work/contact actions.
+- Distinct identity: strong — warm paper, restrained vermilion, and editorial typography.
+- Mobile entry: improved — concise intro and stacked project media; deeper case-study browsing stays one tap away.
 
-## Top follow-ups
+## Follow-ups
 
-1. Validate the Vercel preview URL and its mobile rendering after push.
-2. Consider adding an authored photo or project-specific visual for MINT Game Hub when a real asset is available.
-3. Keep the portfolio metrics synced with resume source data.
+1. Review the Vercel preview URL and mobile rendering after the PR is opened.
+2. Add an authored MINT Game Hub visual when a real asset is available.
+3. Keep portfolio metrics synced with resume source data.
