@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { education, experience, featuredProjects, leadership, otherProjects, profile, recognition, skillGroups, stats } from '../content/portfolio';
+import { education, experience, featuredProjects, leadership, otherProjects, profile, recognition, skillGroups } from '../content/portfolio';
 import { sendContact } from '../lib/contact';
 import { Picture } from '../components/primitives';
 import { Link } from '../components/Link';
@@ -21,28 +21,17 @@ export function AtlasHome() {
   const lead = featuredProjects[0];
   return <div className="atlas">
     <section className="atlas-home-opening">
-      <div className="atlas-home-top"><span>VANDAN PATEL <i>—</i> SYSTEMS ENGINEER</span><span>OSWEGO, NY <b className="live-dot"/> AVAILABLE FOR WHAT’S NEXT</span></div>
       <div className="atlas-home-title">
-        <div className="atlas-route-stem"><span>01</span><i/><span>2026</span></div>
-        <div><p className="atlas-kicker">BACKEND · DISTRIBUTED SYSTEMS · APPLIED AI</p>
-          <h1>I build the<br/><em>systems</em> others<br/>build on.</h1>
-          <p className="atlas-deck">Software engineer at Fanatics. Computer science student. Interested in the infrastructure beneath the interface.</p>
-          <div className="atlas-actions"><Link to="/work" className="atlas-button">Explore the work <Arrow/></Link><Link to={RESUME_URL} className="atlas-text-link">Résumé <Arrow/></Link></div>
-        </div>
+        <p className="atlas-kicker">SOFTWARE ENGINEER · FANATICS · OSWEGO, NEW YORK</p>
+        <h1>Complex work,<br/><em>made clearer.</em></h1>
+        <p className="atlas-deck">Explore shipped software, see how it works, and review the engineering decisions behind it.</p>
+        <div className="atlas-actions"><Link to="/work" className="atlas-button">Explore selected work <Arrow/></Link><Link to="/experience" className="atlas-text-link">View experience <Arrow/></Link></div>
       </div>
       <div className="atlas-image-stage" aria-label="Preview of MFP Coach interface">
-        <div className="atlas-stage-label"><span>01 / SELECTED SYSTEM</span><span>MFP COACH · 2026</span></div>
+        <div className="atlas-stage-label"><span>FEATURED PROJECT</span><span>MFP COACH · 2026</span></div>
         <div className="atlas-stage-image"><Picture image={lead.shots[0].src} sizes="(max-width: 700px) 100vw, 76vw" alt={lead.shots[0].alt} eager /></div>
-        <div className="atlas-stage-caption"><span>01</span><p>Personal health data, made useful.</p><Link to="/work">View the build <Arrow/></Link></div>
+        <div className="atlas-stage-caption"><span>01</span><p>Fitness insights built from data I own.</p><Link to="/work">Explore this project <Arrow/></Link></div>
       </div>
-      <div className="atlas-proofline"><div className="atlas-route-mark"><i/><i/><i/><i/></div><p>RECENT WORK, MEASURED IN PRODUCTION</p>{stats.map((s) => <div className="atlas-proof" key={s.label}><strong>{s.value}{s.suffix}</strong><span>{s.label}</span></div>)}</div>
-    </section>
-    <section className="atlas-home-route">
-      <div className="atlas-section-lead"><span className="atlas-num">02 / ROUTE MAP</span><h2>From signal<br/>to <em>system.</em></h2><p>Three products. Different constraints. One consistent question: what should the system make easier?</p></div>
-      <div className="atlas-route-list">{featuredProjects.map((p, i) => <Link key={p.id} to="/work" className={`atlas-route-item atlas-route-item-${i+1}`}>
-        <span className="atlas-route-number">0{i+1}<i/></span><div><span className="atlas-kicker">{p.category} · {p.year}</span><h3>{p.title}</h3><p>{p.tagline}</p></div><span className="atlas-route-open">Explore <Arrow/></span>
-      </Link>)}</div>
-      <div className="atlas-home-end"><span>THE REST OF THE ROUTE</span><div><Link to="/experience">Experience <Arrow/></Link><Link to="/about">About <Arrow/></Link><Link to="/contact">Contact <Arrow/></Link></div></div>
     </section>
   </div>;
 }
@@ -70,7 +59,7 @@ export function AtlasWork() {
 }
 
 export function AtlasExperience() {
-  return <div className="atlas atlas-experience"><header className="atlas-route-header"><span className="atlas-kicker">EXPERIENCE / 2023—NOW</span><h1>Work that<br/><em>moves through</em><br/>the whole stack.</h1><p>From campus operations to product infrastructure at Fanatics—building close to the people who rely on it.</p></header>
+  return <div className="atlas atlas-experience"><header className="atlas-route-header"><span className="atlas-kicker">EXPERIENCE / 2023 TO NOW</span><h1>Work that<br/><em>moves through</em><br/>the whole stack.</h1><p>From campus operations to product infrastructure at Fanatics. Building close to the people who rely on it.</p></header>
     <div className="atlas-career-path">{experience.map((role,i)=><article key={role.company+role.title} className={i===0?'atlas-role-current':''}><div className="atlas-role-marker"><span>0{i+1}</span><i/></div><div className="atlas-role-body"><div className="atlas-role-meta"><span>{role.period}</span><span>{role.location}</span></div><h2>{role.company}</h2><h3>{role.title}</h3><p>{role.summary}</p><ul>{role.highlights.map((h,j)=><li key={j}>{h}</li>)}</ul><div className="atlas-tagline">{role.stack.map((s)=><span key={s}>{s}</span>)}</div></div></article>)}</div>
   </div>;
 }
