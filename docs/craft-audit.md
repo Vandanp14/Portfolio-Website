@@ -1,24 +1,24 @@
-# Craft audit — product-story revamp
+# Craft audit — systems atlas
 
-Review date: 2026-10-18 · Scope: all primary routes, project selection, case-study display, navigation, desktop and 390px mobile layouts.
+Review date: 2026-10-18 · Scope: main route compositions, navigation, real project media, and responsive presentation.
 
-## Main finding from the first pass
+## Result
 
-The first refresh changed colors and added cards but kept the previous typographic index composition. That did not meet the requested full redesign. This follow-up rebuilds the home and work hierarchies and changes shared navigation, section openers, contact, and page surfaces.
+This revision discards the last version's centered project showcase and selector. Home is offset and route-marked, Work is three full-bleed product chapters with supporting technical notes, Experience is chronological, About is a skills/foundations map, and Contact is a separate dark channel. Typography, color, and page structure all changed as one system.
 
-## Current review
+## Visual and interaction review
 
-- Home opens with one centered promise, direct actions, an actual MFP Coach screenshot in a framed interface stage, and verified outcome figures.
-- Home's featured-project switcher changes project copy, metrics, image, selected state, and progress indicator. MINT Game Hub has no supplied screenshot, so the display is clearly a typographic list of its five games.
-- Work replaces the previous oversized text list plus a second set of tabs with one keyboard-operable project selector beside the active case study.
-- About, Experience, Contact, and the route directory use the refreshed type, surfaces, controls, and page spacing.
+- Local browser review covered Home, Work, About, Experience, and Contact. All five main routes were checked at a 390px mobile viewport; each document measured 390px wide, with no horizontal overflow. Work and Contact were visually captured at mobile size.
+- Work uses the real supplied responsive screenshots. The screenshot controls are actual buttons with pressed state; image changes receive a short opacity/translate transition. MINT uses a labeled type composition because its data contains no screenshots.
+- Navigation preserves all primary routes, Writing, résumé, theme control, and active-page indication. Contact retains email, GitHub, LinkedIn, validation, and `sendContact` delivery behavior.
+- Page entrance and project-image changes honor `prefers-reduced-motion`; CSS uses transform/opacity for entrance motion.
+- Remaining review: keyboard interaction pass and numeric contrast sampling on the new warm palette.
 
-## Evidence
+## Verification
 
-- Chrome DevTools reviewed the home, work, about, experience, and contact routes at desktop and 390px mobile widths. Checked home project selection, work project presentation, and no horizontal overflow in those views.
-- Contrast: action blue `#1764E8` on white 5.22:1 and on cool-white canvas 4.83:1; bright blue `#94B6FF` on near-black 9.74:1; secondary light text `#C0C4CE` on near-black 11.27:1.
-- `npm run lint`, both TypeScript project checks, and `npm run build` passed. Build retains the existing Browserslist-data and PDF worker chunk warnings.
+- `npm run lint` — pass.
+- `npm run build` — pass. Existing warnings: outdated Browserslist data and the résumé PDF worker chunk exceeding the bundle size advisory.
 
-## Reference patterns
+## Reference translation
 
-Apple's centered product launches, Uber's direct navigation and process cues, and Cluely's early inspectable product surface are documented in `docs/research/portfolio-reference-patterns.md` and applied to original portfolio content.
+Apple's full-bleed product chapter storytelling, Cluely's visible real product surface and ordered evidence, and Uber's direct navigation/progression informed patterns only. The pages use portfolio-specific copy, images, route marks, and compositions. References: [Apple](https://www.apple.com/), [Cluely](https://cluely.com/), [Uber](https://www.uber.com/).

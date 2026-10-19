@@ -25,9 +25,10 @@ function metaEl(attr: MetaKey[0], key: string): HTMLMetaElement | null {
   return document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);
 }
 
-export function usePageMeta({ title, description, path, noindex = false, exactTitle = false }: PageMeta) {
+export function usePageMeta(meta: PageMeta | null) {
+  const { title, description, path, noindex = false, exactTitle = false } = meta ?? {};
   useEffect(() => {
-    if (!title) return;
+    if (!meta || !title) return;
     const fullTitle = exactTitle ? title : `${title} — ${SITE_NAME}`;
     const url = path ? SITE_ORIGIN + path : null;
 
@@ -70,18 +71,19 @@ export function usePageMeta({ title, description, path, noindex = false, exactTi
       if (canonical && previousCanonical !== null) canonical.setAttribute('href', previousCanonical);
       restore.forEach((undo) => undo());
     };
-  }, [title, description, path, noindex, exactTitle]);
+  }, [meta, title, description, path, noindex, exactTitle]);
 }
 
 /** Injects a JSON-LD block for the lifetime of the calling component. */
-export function useJsonLd(id: string, data: unknown) {
+export function useJsonLd(id: string, data: unknown | null) {
   const json = JSON.stringify(data);
   useEffect(() => {
+    if (data === null) return;
     const script = document.createElement('script');
     script.type = 'application/ld+json';
     script.id = id;
     script.textContent = json;
     document.head.appendChild(script);
     return () => script.remove();
-  }, [id, json]);
+  }, [id, json, data]);
 }

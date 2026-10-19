@@ -1,20 +1,26 @@
-# Specialist review — product-story revamp
+# Specialist review — systems atlas
 
 ## Summary
 
-The follow-up changes the site's composition as well as its palette. The home route centers one clear statement over a real product screen, then lets visitors switch between the three featured projects. The work route uses the same principle at case-study depth: select a project once, inspect its screen, then read the implementation and outcomes.
+The portfolio now has a new layout system rather than a restyle of the last one. Its hierarchy moves from a typographic opening into real work evidence, then through independent Work, Experience, About, and Contact compositions. The reference sites informed sequencing and evidence placement; branding and page layouts remain original.
 
-## Findings
+## Findings by priority
 
-- The opening and project switcher make the work visible sooner and provide direct next steps.
-- Each selected product stays connected to its own screenshot, description, metrics, and build story.
-- The reference patterns inform layout and interaction; the portfolio uses its own copy, imagery, and near-white/black/blue visual identity.
-- No horizontal overflow appeared in reviewed desktop or 390px mobile views across home, work, about, experience, and contact.
-- Keyboard-operable tabs, the existing focus treatment, theme control, reduced-motion rules, and contact behavior are preserved.
-- MINT Game Hub is shown with an explicit five-game index because no screenshots are supplied for it.
+- **S2 — Keyboard interaction pass.** Controls expose semantic buttons, pressed state, and focus styling, but Work screenshot selection was not exercised with a keyboard in browser.
+- **S2 — Verify contact error/success states.** The form retains validation and delivery transport, but this pass did not submit against the configured endpoint.
+- **S3 — Sample contrast on warm and dark palettes.** Text hierarchy is visible in browser review; numeric contrast ratios were not generated during this pass.
+- **S3 — Check project screenshot selection with keyboard.** Buttons expose `aria-pressed` and visible focus inherits the global outline; browser keyboard interaction was not separately exercised.
 
-## Tradeoffs
+## Strengths to preserve
 
-- The home screen gives the featured MFP Coach screenshot most of the first fold, so the project selector appears later in the page.
-- Work browsing is more compact but still retains the original detailed build notes and supporting mobile screenshots.
-- Build warnings remain for stale Browserslist data and the existing PDF worker chunk.
+- Distinct page compositions and no repeated 3-column card grid.
+- Actual project screenshots, real implementation details, and measured outcome data remain linked.
+- Chronological experience path and direct contact options help visitors move from evidence to outreach.
+- Blog/resume loading, analytics, page metadata, route navigation, theme selection, and reduced-motion path remain wired.
+
+## Prioritized follow-up
+
+1. Exercise Work screenshot controls with keyboard and confirm focus visibility.
+2. Check light/dark contrast on project scenes, muted text, and contact form labels.
+3. Submit a contact message in a safe preview context to observe configured success/error behavior.
+4. After preview deploy, inspect the same routes there and update the open PR. Do not merge without the user's instruction.

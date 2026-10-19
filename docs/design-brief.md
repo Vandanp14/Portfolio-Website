@@ -1,65 +1,58 @@
-# Design brief — portfolio product-story revamp
+# Design brief — systems atlas
 
 ## Intent
 
-Turn a resume-like editorial index into an experience that demonstrates how Vandan builds: make the software visible first, help visitors move quickly between the work and the engineering story, and keep verified facts close to the interface evidence.
+Replace the inherited portfolio layout entirely with a recognizable visual system and new page compositions. Visitors should understand Vandan's engineering focus, inspect real project evidence, and reach the résumé or contact channel without navigating a resume-shaped list of cards.
 
 ## Audience and primary task
 
-Recruiters and engineering collaborators need to assess focus, ownership, and shipped work, then reach the résumé or contact page. Primary task: explore projects. Secondary tasks: understand experience, technical range, and follow up.
+Engineering recruiters, hiring managers, and collaborators. Primary task: inspect the shipped work and how it was built. Secondary tasks: follow the work history, understand technical range, and contact Vandan.
 
-## Reference-site study
+## Reference patterns
 
-The current Apple landing page uses centered product headlines, a direct pair of actions, and full-width product imagery, then repeats that product-story unit in distinct page chapters. Uber makes the first task unmistakable and sequences the process into clear steps. Cluely leads with one product promise and lets visitors inspect a detailed, interactive app surface before explaining capabilities in separate chapters.
+- **Apple** — a concise story opens a page, full-bleed visual evidence carries the story, and each chapter has a distinct rhythm. Translate this as real screenshots and scene-based case studies; do not reproduce a product launch template.
+- **Cluely** — make the actual product surface inspectable early and explain how it works in ordered steps. Translate this as project imagery, implementation details, and selectable real screenshots; do not fabricate interfaces.
+- **Uber** — clear route choices, visible sequence, and direct next actions. Translate this as numbered chapter paths and the career timeline; do not copy Uber's navigation or branding.
 
-### Transfer into this portfolio
-
-| Reference | Observed pattern | Portfolio use |
-|---|---|---|
-| [Apple](https://www.apple.com/) | Centered launch story, concise actions, oversized product image, separated feature stories | Clear centered opening, a real interface stage, then focused story sections |
-| [Uber](https://www.uber.com/) | Direct first action, simple navigation, process ordering, visible progress cues | Full-width utility nav, direct project controls, numbered route and experience steps |
-| [Cluely](https://cluely.com/) | Immediate interface demo, a visible working surface, evidence-led feature sequence | Real project screen in the first viewport, selectable project viewer, interface-led case studies |
-
-Do not reuse their assets, product chrome, copy, or logos. The purpose is to translate their interaction and storytelling patterns to Vandan's own work.
+Sources: [Apple](https://www.apple.com/), [Cluely](https://cluely.com/), [Uber](https://www.uber.com/).
 
 ## Direction
 
-**Product story, clear utility.** Replace the previous warm editorial system throughout the site. Use a crisp near-white / black palette, a focused blue action color, substantial interface framing, and larger responsive type. Alternate light informational pages and dark product-story surfaces to make the portfolio read as a sequence of distinct chapters.
+**Systems atlas.** The previous version reused its centered launch hero, modular showcase, selector, and repeated section framing. This direction discards those compositions. The site uses numbered stops, route-like vertical rules, outsized sans/serif typography, actual interface screenshots, and three separate visual environments: warm paper, near-black project stages, and a signal-red finish. Work reads vertically as three case-study scenes, not as a dashboard, tiled gallery, or tabbed viewer. Experience uses a chronological path. About is an annotated skills map. Contact is a dark, direct channel.
 
-### Tokens
+### Token architecture
 
-- Canvas: near-white `#F5F6F8`; raised surface `#FFFFFF`; mist `#E9EDF4`; ink `#10131A`.
-- Product stage: near-black `#090B10` with `#F7F8FC` copy and blue `#94B6FF` active state.
-- Action blue: `#1764E8`, used for links, selected project state, and primary actions; 5.22:1 against white and 4.83:1 against the cool-white canvas.
-- Typography: existing Geist and Geist Mono, sans-first; large tight display headlines, calm readable body text, compact mono labels for data and progress only.
-- Layout: full-width utility bar; centered promise and interface proof; modular full-bleed product chapters; scannable route and work controls.
-- Surfaces: 10–22px radii for interface frames, media, and controls. Flat page backgrounds, restrained borders, and neutral shadows.
-- Motion: short state feedback and one-shot screen/section transitions. Keep content visible when motion is reduced; avoid motion that competes with the interface screenshots.
+- Warm paper `#eeece4`; secondary paper `#e2dfd4`; ink `#171915`.
+- Signal red `#d84f35` for active route markers, chapter emphasis, and the closing field.
+- Acid lime `#d8e54e` is reserved for project-stage route markers and the education chapter.
+- Project scene surfaces `#181a16` and `#252720`; readable warm-white copy.
+- Geist for oversized sans display and body; Georgia for selected italic display words only; Geist Mono for compact chapter metadata.
+- Primarily flow and flex composition. No repeated card grid. Media is edge-to-edge and uses verified source screenshots.
+- Motion: quick named-token hover feedback, a short opacity/translate route entrance, and no scroll-jacking or ambient animation. Reduced motion removes the entrance.
+- Light/dark theme toggle remains available and updates the full new palette.
 
-## Product structure
+## Page structure
 
-1. **Home:** centered headline and direct actions; product window containing an actual project screenshot; verified outcome strip; selectable showcase that cycles through the three featured products; route directory.
-2. **Work:** concise introduction; keyboard-operable project selector; active product story with lead screenshot, summary, build details, outcome metrics, and supporting images.
-3. **Experience:** current Fanatics chapter first, then a route-like progression through previous roles with dates, responsibilities, and stacks.
-4. **About:** compact story heading, grouped toolkit, degree and community/recognition sections.
-5. **Contact:** direct contact options beside a focused, validated message form.
+1. **Home:** topographic masthead; offset oversized statement with route stem; genuine MFP Coach interface image; proof line; numbered project route; direct links to the rest of the site.
+2. **Work:** tall typographic opener; numbered jump navigation; three vertically ordered full-bleed case-study scenes. Each has an actual screenshot carousel of buttons, implementation story, measured outcomes, and stack. MINT gets an explicitly labeled typographic game index because no screenshot exists. Smaller builds appear as a flowing list.
+3. **Experience:** title and chronology followed by a single career path, with real role details and dates.
+4. **About:** personal statement, skill vocabulary, education, and community/recognition as three distinct chapters.
+5. **Contact:** direct links and validated message form on a near-black page.
 
 ## Preserve
 
-- Keep every existing route and verified project fact, screenshot, outcome, and contact destination.
-- Preserve skip navigation, semantic headings, keyboard project selection, visible focus, reduced-motion support, theme choice, contact validation, analytics, and lazy loading for blog and résumé.
-- Avoid fabricated interface screenshots. MINT Game Hub gets an explicitly editorial game index until real screenshots exist.
+- Verified data, metrics, screenshots, project links, route behavior, analytics, skip link, résumé and blog lazy loading, theme choice, and message delivery.
+- Keyboard-operable screenshot controls, semantic page headings, clear focus styles, and reduced-motion behavior.
+- All project claims remain sourced from the existing portfolio data; no fabricated screenshots or metrics.
 
-## Tradeoffs
+## What we are not doing
 
-- A dark framed interface gives real screenshots room and makes the opening feel more product-oriented; use white space elsewhere so the site stays easy to read.
-- A selectable project story makes the work browsable without repeating a long project index and keeps each actual screenshot tied to its project.
-- The new blue action color is brighter than the previous accent and must retain readable text contrast in both themes.
-- The site borrows layout and interaction ideas from the references while keeping its own content, assets, and identity.
+- No reuse of the prior centered hero + selectable showcase, two-column work selector, generic card/grid system, or previous band-by-band section layout.
+- No imitation of reference site branding, assets, copy, product chrome, or exact layouts.
+- No decorative 3D, gradient backdrop, fabricated product UI, or animation that delays reading.
 
-## Implementation plan
+## Phased plan
 
-- Rebuild homepage composition and add a stateful featured-project showcase.
-- Rework project browsing into a keyboard-operable selector and screen-led case study.
-- Refresh shared navigation, section openers, route directory, experience, about, contact, and footer surfaces.
-- Review desktop and mobile routes, interaction states, reduced motion, and production build output.
+- **P1 (L):** replace the main route assembly and create a new atlas shell, home composition, sequential work scenes, experience route, and About chapters.
+- **P2 (M):** rebuild Contact around the existing send/validation contract; preserve blog/resume, analytics, theme, and metadata behavior.
+- **P3 (M):** inspect desktop/mobile, check keyboard/route interactions and reduced motion, update notes, lint and production build.

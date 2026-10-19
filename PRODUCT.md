@@ -8,7 +8,7 @@
 
 **Voice:** First person, direct, technically specific, no inflated claims.
 
-**Visual character:** Product-story driven, crisp near-white and near-black surfaces with a focused blue action color. Real interface screenshots lead the story; controls and route choices stay direct and easy to use.
+**Visual character:** A systems atlas: warm paper, near-black project stages, signal-red route markers, oversized sans/serif headlines, chronological route motifs, and real interface screenshots. Each main page has its own composition; work is a sequence of full-bleed case-study scenes rather than a card or tab layout.
 
 **Primary action:** Explore work. **Secondary actions:** Contact, résumé.
 
