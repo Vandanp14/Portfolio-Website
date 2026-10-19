@@ -4,8 +4,7 @@ import { Picture, Shell } from './primitives';
 
 const leadProject = featuredProjects[0];
 const leadShot = leadProject.shots.find((shot) => shot.kind === 'wide') ?? leadProject.shots[0];
-const headlineAccent = 'other people build on.';
-const headlineLead = profile.headline.slice(0, -headlineAccent.length).trimEnd();
+const proof = stats.slice(0, 3);
 
 export function Hero() {
   return (
@@ -15,40 +14,57 @@ export function Hero() {
           <div className="home-hero-copy">
             <p className="home-kicker"><span className="status-dot" aria-hidden="true" />{profile.status}</p>
             <h1 id="home-title" className="home-title">
-              {headlineLead} <em>{headlineAccent}</em>
+              I build the systems <span>other teams</span> build on.
             </h1>
-            <p className="home-intro">{profile.intro}</p>
+            <p className="home-intro">Backend systems, product interfaces, and practical AI—built with the care to make them useful beyond the demo.</p>
             <div className="home-actions">
-              <Link to="/work" className="home-primary-link">Explore the work <span aria-hidden="true">↗</span></Link>
-              <Link to="/contact" className="home-secondary-link">Get in touch <span aria-hidden="true">→</span></Link>
+              <Link to="/work" className="home-primary-link">Explore selected work <span aria-hidden="true">↗</span></Link>
+              <Link to="/contact" className="home-secondary-link">Let’s talk <span aria-hidden="true">→</span></Link>
             </div>
-            <div className="home-location"><span>Based in</span><strong>{profile.location}</strong><span className="location-divider">/</span><span>{profile.disciplines.join(' · ')}</span></div>
           </div>
 
           <Link to="/work" className="home-feature" aria-label={`Explore ${leadProject.title}: ${leadProject.tagline}`}>
-            <div className="home-feature-image">
-              <Picture
-                image={leadShot.src}
-                sizes="(min-width: 1024px) 58vw, 100vw"
-                eager
-                alt={leadShot.alt}
-                width={leadShot.kind === 'wide' ? 2940 : 758}
-                height={leadShot.kind === 'wide' ? 1604 : 1400}
-              />
-              <span className="home-feature-index">Featured work <span>01 / 03</span></span>
-              <span className="home-feature-open" aria-hidden="true">↗</span>
-            </div>
-            <div className="home-feature-caption">
-              <div><span className="home-overline">{leadProject.category} · {leadProject.year}</span><h2>{leadProject.title}</h2></div>
-              <p>{leadProject.tagline}</p>
+            <div className="home-feature-window">
+              <div className="home-window-bar" aria-hidden="true">
+                <span className="window-dots"><i /><i /><i /></span>
+                <span>MFP COACH / FULL-STACK SYSTEM</span>
+                <span className="window-live"><i /> LIVE PRODUCT</span>
+              </div>
+              <div className="home-feature-image">
+                <Picture
+                  image={leadShot.src}
+                  sizes="(min-width: 1024px) 92vw, 100vw"
+                  eager
+                  alt={leadShot.alt}
+                  width={leadShot.kind === 'wide' ? 2940 : 758}
+                  height={leadShot.kind === 'wide' ? 1604 : 1400}
+                />
+                <span className="home-feature-index">One directive. Then the data. <span>↗</span></span>
+                <span className="hero-proof-float"><strong>44</strong><span>API routes</span><i>20-table schema</i></span>
+              </div>
+              <div className="home-feature-caption">
+                <div><span className="home-overline">{leadProject.category} · {leadProject.year}</span><h2>{leadProject.title}</h2></div>
+                <p>{leadProject.tagline}</p>
+              </div>
             </div>
           </Link>
+
+          <div className="home-proof-strip" aria-label="Engineering outcomes">
+            {proof.map((stat) => (
+              <div className="home-proof-item" key={stat.label}>
+                <strong>{stat.value}<small>{stat.suffix}</small></strong>
+                <span>{stat.label}</span>
+              </div>
+            ))}
+            <Link to="/experience" className="home-proof-link">How I got here <span aria-hidden="true">↗</span></Link>
+          </div>
         </Shell>
+        <a className="home-scroll-cue" href="#index"><span aria-hidden="true" /> Scroll to explore</a>
       </section>
 
-      <section className="band band-paper home-proof" aria-label="Selected engineering outcomes">
+      <section className="band band-mist home-proof" aria-label="Selected engineering outcomes">
         <Shell>
-          <div className="home-proof-heading"><span>Recent work, in numbers</span><span>01 — 04</span></div>
+          <div className="home-proof-heading"><span>Built in production. Used by real teams.</span><span>2023 — 2026</span></div>
           <dl className="home-stats">
             {stats.map((stat) => (
               <div key={stat.label} className="home-stat">

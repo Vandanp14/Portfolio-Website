@@ -1,78 +1,65 @@
-# Design brief — Vandan Patel portfolio refresh
+# Design brief — portfolio product-story revamp
 
 ## Intent
 
-Turn the current typographic index into an inviting, product-led portfolio that makes Vandan's engineering range and shipped work understandable in the first screenful. The site should feel like an independent engineer's editorial portfolio: considered, tactile, and specific.
+Turn a resume-like editorial index into an experience that demonstrates how Vandan builds: make the software visible first, help visitors move quickly between the work and the engineering story, and keep verified facts close to the interface evidence.
 
 ## Audience and primary task
 
-Recruiters and engineering collaborators need to quickly understand the work, level of ownership, and how to follow up. Primary task: explore projects. Secondary tasks: review experience, résumé, and contact details.
+Recruiters and engineering collaborators need to assess focus, ownership, and shipped work, then reach the résumé or contact page. Primary task: explore projects. Secondary tasks: understand experience, technical range, and follow up.
+
+## Reference-site study
+
+The current Apple landing page uses centered product headlines, a direct pair of actions, and full-width product imagery, then repeats that product-story unit in distinct page chapters. Uber makes the first task unmistakable and sequences the process into clear steps. Cluely leads with one product promise and lets visitors inspect a detailed, interactive app surface before explaining capabilities in separate chapters.
+
+### Transfer into this portfolio
+
+| Reference | Observed pattern | Portfolio use |
+|---|---|---|
+| [Apple](https://www.apple.com/) | Centered launch story, concise actions, oversized product image, separated feature stories | Clear centered opening, a real interface stage, then focused story sections |
+| [Uber](https://www.uber.com/) | Direct first action, simple navigation, process ordering, visible progress cues | Full-width utility nav, direct project controls, numbered route and experience steps |
+| [Cluely](https://cluely.com/) | Immediate interface demo, a visible working surface, evidence-led feature sequence | Real project screen in the first viewport, selectable project viewer, interface-led case studies |
+
+Do not reuse their assets, product chrome, copy, or logos. The purpose is to translate their interaction and storytelling patterns to Vandan's own work.
 
 ## Direction
 
-Editorial Premium, with a utility-first navigation layer. Take Apple's succinct story pacing, Uber's orientation and clear next actions, and Cluely's concrete early product proof. Keep the existing site's excellent case-study depth and responsive routed structure.
+**Product story, clear utility.** Replace the previous warm editorial system throughout the site. Use a crisp near-white / black palette, a focused blue action color, substantial interface framing, and larger responsive type. Alternate light informational pages and dark product-story surfaces to make the portfolio read as a sequence of distinct chapters.
 
 ### Tokens
 
-- Canvas: warm paper `#F4F1E9`; raised surface `#FBFAF6`; dark ink `#181A18`; secondary ink `#555750`; quiet ink `#77786F`.
-- Signature accent: vermilion `#C34D36`, reserved for actions, active states, and small index marks.
-- Dark feature panel: `#202320` with warm-white copy; no gradients or broad glass surfaces.
-- Typography: existing Geist for readable, compact navigation and body copy; a high-contrast editorial serif for a few display moments only if available locally, otherwise system serif fallback. Avoid loading a new remote font.
-- Layout: generous editorial margins with a narrower readable text measure; asymmetrical split hero; image-led project feature; consistent hairline rules.
-- Corners: mostly square; modest rounding only for photographic media and controls where it improves affordance.
-- Motion: restrained, short entrance and interaction transitions; preserve reduced-motion behavior. The project screens are the one visual focal point.
-- Measured body-size contrast for the chosen palette: secondary ink on paper 6.49:1, quiet ink on paper 4.85:1, accent on paper 5.24:1, and secondary ink on dark slate 8.75:1.
+- Canvas: near-white `#F5F6F8`; raised surface `#FFFFFF`; mist `#E9EDF4`; ink `#10131A`.
+- Product stage: near-black `#090B10` with `#F7F8FC` copy and blue `#94B6FF` active state.
+- Action blue: `#1764E8`, used for links, selected project state, and primary actions; 5.22:1 against white and 4.83:1 against the cool-white canvas.
+- Typography: existing Geist and Geist Mono, sans-first; large tight display headlines, calm readable body text, compact mono labels for data and progress only.
+- Layout: full-width utility bar; centered promise and interface proof; modular full-bleed product chapters; scannable route and work controls.
+- Surfaces: 10–22px radii for interface frames, media, and controls. Flat page backgrounds, restrained borders, and neutral shadows.
+- Motion: short state feedback and one-shot screen/section transitions. Keep content visible when motion is reduced; avoid motion that competes with the interface screenshots.
 
-## Differentiation map
+## Product structure
 
-| Source | Transfer | Portfolio expression |
-|---|---|---|
-| Apple | concise product story, distinct section beats, image reveals | asymmetrical opening, responsive project-screen reveal, and focused case-study chapters |
-| Uber | legible orientation, direct next actions, and task/progress cues | responsive route directory, active timeline rail, and explicit work/contact actions |
-| Cluely | show a product interface early, then explain through evidence | actual project screenshots lead each interactive case-study panel before summary and build details |
-| Vandan's existing site | substantive case studies and useful routes | preserve the content, route model, keyboard patterns, theme, and contact flow |
+1. **Home:** centered headline and direct actions; product window containing an actual project screenshot; verified outcome strip; selectable showcase that cycles through the three featured products; route directory.
+2. **Work:** concise introduction; keyboard-operable project selector; active product story with lead screenshot, summary, build details, outcome metrics, and supporting images.
+3. **Experience:** current Fanatics chapter first, then a route-like progression through previous roles with dates, responsibilities, and stacks.
+4. **About:** compact story heading, grouped toolkit, degree and community/recognition sections.
+5. **Contact:** direct contact options beside a focused, validated message form.
 
-## Ranked palette candidates
+## Preserve
 
-1. **Warm paper + vermilion** — selected. Distinct from the three references, supports technical screenshots, and gives links/actions one clear role.
-2. Cool white + cobalt — legible, but drifts toward common developer portfolio/AI-product palettes.
-3. Charcoal + lime — energetic, but risks making screenshots compete and would keep the site visually close to the current dark feature panels.
-
-## Do not regress
-
-- Keep `/work`, `/experience`, `/about`, `/contact`, `/resume`, and `/blog` working.
-- Retain substantive, factual project content and existing real screenshots.
-- Preserve skip navigation, semantic headings, keyboard-friendly project selection, visible focus, and reduced-motion support.
-- Preserve the contact validation/submission behavior, theme toggle, lazy-loaded blog/resume, SEO metadata, analytics, and mobile menu.
-- Maintain sufficient text contrast on paper and dark surfaces.
-
-## Assets not to imitate
-
-- Apple's product photography, hero compositions, marketing copy, or product iconography.
-- Uber's brand colors, ride-booking form, or imagery.
-- Cluely's AI overlay, app chrome, gradient backdrop, or brand marks.
-- Generic portfolio mockups or fabricated client logos/metrics.
-
-## What we are NOT doing
-
-- Replacing project facts with marketing claims.
-- Turning the homepage into a SaaS feature grid or a dashboard.
-- Adding remote dependencies, external font requests, 3D scenes, or a decorative animated background.
-- Removing any existing route or interactive capability.
-
-## Phased plan
-
-- P1 (M): Rework the homepage hierarchy into an editorial hero, selected project proof, and clear next steps.
-- P2 (M): Rebuild route directory, project viewer, experience timeline, and toolkit presentation around real content.
-- P3 (M): Rebase shared palette/type/layout tokens and align global navigation, contact, and footer surfaces to the new direction.
-- P4 (S): Refine responsive details, motion/reduced motion, and accessibility; verify all routes and build checks.
+- Keep every existing route and verified project fact, screenshot, outcome, and contact destination.
+- Preserve skip navigation, semantic headings, keyboard project selection, visible focus, reduced-motion support, theme choice, contact validation, analytics, and lazy loading for blog and résumé.
+- Avoid fabricated interface screenshots. MINT Game Hub gets an explicitly editorial game index until real screenshots exist.
 
 ## Tradeoffs
 
-- **Visible project proof vs. minimal hero:** moving screenshots up makes the portfolio more credible sooner but gives the opening less empty space. Use one featured visual and keep supporting projects below.
-- **Expressive editorial type vs. scanability:** use display type for the name and section pivots, keep body and metadata at practical sizes.
-- **Warm light canvas vs. existing dark panels:** warm paper differentiates the identity, while a single dark case-study panel keeps depth and preserves screenshot contrast. Theme toggle remains available.
+- A dark framed interface gives real screenshots room and makes the opening feel more product-oriented; use white space elsewhere so the site stays easy to read.
+- A selectable project story makes the work browsable without repeating a long project index and keeps each actual screenshot tied to its project.
+- The new blue action color is brighter than the previous accent and must retain readable text contrast in both themes.
+- The site borrows layout and interaction ideas from the references while keeping its own content, assets, and identity.
 
-## Sources
+## Implementation plan
 
-See [portfolio reference patterns](research/portfolio-reference-patterns.md).
+- Rebuild homepage composition and add a stateful featured-project showcase.
+- Rework project browsing into a keyboard-operable selector and screen-led case study.
+- Refresh shared navigation, section openers, route directory, experience, about, contact, and footer surfaces.
+- Review desktop and mobile routes, interaction states, reduced motion, and production build output.

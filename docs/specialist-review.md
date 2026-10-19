@@ -1,32 +1,20 @@
-# Specialist review — portfolio editorial refresh
+# Specialist review — product-story revamp
 
 ## Summary
 
-The portfolio now uses a product-led opening, real interface imagery, chaptered project stories, and more legible route and experience navigation. It borrows pacing and interaction ideas from Apple, Uber, and Cluely while keeping an independent warm-paper and vermilion identity.
-
-## Ship blockers
-
-- None found in the reviewed code or desktop/mobile browser rendering.
+The follow-up changes the site's composition as well as its palette. The home route centers one clear statement over a real product screen, then lets visitors switch between the three featured projects. The work route uses the same principle at case-study depth: select a project once, inspect its screen, then read the implementation and outcomes.
 
 ## Findings
 
-- **Strength:** actual project screenshots lead the selected case study and update with the active project.
-- **Strength:** route-directory cards make the available destinations and their purpose easy to scan.
-- **Strength:** the experience rail gives the current role a visible place in the work history.
-- **Strength:** the toolkit is grouped and scannable, with small hover feedback rather than an auto-moving marquee.
-- **Strength:** shared color tokens preserve dark-mode behavior, focus treatment, and reduced-motion handling.
-- **Risk to monitor:** the longest case studies remain dense; the existing content is preserved and remains readable in the reviewed layouts.
+- The opening and project switcher make the work visible sooner and provide direct next steps.
+- Each selected product stays connected to its own screenshot, description, metrics, and build story.
+- The reference patterns inform layout and interaction; the portfolio uses its own copy, imagery, and near-white/black/blue visual identity.
+- No horizontal overflow appeared in reviewed desktop or 390px mobile views across home, work, about, experience, and contact.
+- Keyboard-operable tabs, the existing focus treatment, theme control, reduced-motion rules, and contact behavior are preserved.
+- MINT Game Hub is shown with an explicit five-game index because no screenshots are supplied for it.
 
-## Competitive scorecard
+## Tradeoffs
 
-- Clear purpose: strong — concise headline plus a real featured product.
-- Proof of work: strong — actual interface imagery, metrics, and dedicated case studies.
-- Wayfinding: strong — shared navigation, route directory, current experience marker, and direct work/contact actions.
-- Distinct identity: strong — warm paper, restrained vermilion, and editorial typography.
-- Mobile entry: improved — concise intro and stacked project media; deeper case-study browsing stays one tap away.
-
-## Follow-ups
-
-1. Review the Vercel preview URL and mobile rendering after the PR is opened.
-2. Add an authored MINT Game Hub visual when a real asset is available.
-3. Keep portfolio metrics synced with resume source data.
+- The home screen gives the featured MFP Coach screenshot most of the first fold, so the project selector appears later in the page.
+- Work browsing is more compact but still retains the original detailed build notes and supporting mobile screenshots.
+- Build warnings remain for stale Browserslist data and the existing PDF worker chunk.

@@ -1,14 +1,21 @@
-# TRANSFORM_PLAN.md — portfolio editorial refresh
+# TRANSFORM_PLAN.md — product-story portfolio revamp
 
-Brief: `docs/design-brief.md` · Baseline: `a2cfe7f`
+Brief: `docs/design-brief.md` · Review baseline: `95548f1` · Stack: React 18 + TypeScript + Vite 5 + Tailwind 3
 
-- [x] Phase 1 — Audit and route/content preserve-list (`DESIGN_PLAN.md`, `PRODUCT.md`)
-- [x] Phase 2 — Palette and typography direction (`docs/design-brief.md`, `src/index.css`)
-- [x] Phase 3 — Homepage structure and route directory (`src/components/Hero.tsx`, `src/components/PageIndex.tsx`)
-- [x] Phase 4 — Case-study viewer, experience rail, toolkit, shared surfaces (`src/components/ProjectPanel.tsx`, `src/components/Experience.tsx`, `src/components/About.tsx`, `src/index.css`)
-- [x] Phase 5 — Navigation, responsive, accessible, reduced-motion pass (`src/components/Nav.tsx`)
-- [x] Phase 6 — Lint, TypeScript, production build, and desktop/mobile route rendering review
+## Audit
 
-## Preserve-list check
+The prior iteration changed the palette and added cards but retained a typographic index, split hero, and hairline-driven content structure. It did not carry the reference sites' centered launch story, visible interface demo, or utility-led project navigation far enough. This revision restructures page composition and browsing behavior.
 
-All routes and existing page implementations remain wired through `src/App.tsx`. Case study data and screenshots still come from `src/content/portfolio.ts`. The homepage lead and each case-study lead use the existing responsive image component. Keyboard-operable project selection, contact form, resume, blog, theme control, and visible focus remain active. Reveal motion resolves to its static state under reduced motion. Desktop and narrow mobile rendering were reviewed on home, work, about, experience, and contact routes.
+## Work plan
+
+- [x] Refresh reference findings and replace the old visual direction in the design brief.
+- [x] Rebuild the homepage into a centered product promise, real interface stage, proof strip, and selectable project story.
+- [x] Replace the duplicate project list/tab viewer with one keyboard-operable project selector and screen-led case study.
+- [x] Rework shared section headers and navigation; update About, Experience, Contact, and route-directory surfaces.
+- [x] Review home, work, about, experience, and contact at desktop and 390px mobile sizes; inspect project selection, contrast, and overflow.
+- [x] Run production build, lint, and both TypeScript checks; resolve implementation regressions.
+- [x] Update the craft/specialist reviews and prepare the follow-up for the existing unmerged PR.
+
+## Preserve list
+
+All routes remain wired through `src/App.tsx`; project facts and actual screens remain in `src/content/portfolio.ts`; contact form behavior, résumé and blog lazy loading, analytics, skip link, keyboard focus, theme toggle, and reduced motion are preserved. MINT Game Hub has no project screenshots, so its showcase uses a labeled typographic game index instead of a fabricated product screenshot.

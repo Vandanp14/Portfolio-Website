@@ -8,7 +8,7 @@
 
 **Voice:** First person, direct, technically specific, no inflated claims.
 
-**Visual character:** Editorial and product-led, warm paper and ink with a vermilion accent. Real product screenshots carry the color. Keep controls clear and navigation useful.
+**Visual character:** Product-story driven, crisp near-white and near-black surfaces with a focused blue action color. Real interface screenshots lead the story; controls and route choices stay direct and easy to use.
 
 **Primary action:** Explore work. **Secondary actions:** Contact, résumé.
 

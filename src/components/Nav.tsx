@@ -15,21 +15,21 @@ import { Wordmark } from './Wordmark';
  * custom properties on the header and every className below reads those.
  */
 const lightVars = {
-  '--nav-fill': 'rgba(244, 241, 233, 0.9)',
-  '--nav-text': '#191B18',
-  '--nav-text-dim': 'rgba(25, 27, 24, 0.68)',
-  '--nav-line': 'rgba(25, 27, 24, 0.76)',
-  '--nav-invert': '#F4F1E9',
+  '--nav-fill': 'rgba(245, 246, 248, 0.98)',
+  '--nav-text': '#10131A',
+  '--nav-text-dim': 'rgba(16, 19, 26, 0.64)',
+  '--nav-line': 'rgba(16, 19, 26, 0.76)',
+  '--nav-invert': '#F5F6F8',
 } as CSSProperties;
 
 // Over a slate band the bar flips to a dark glass, so it never sits on the
 // dark panels as a grey smear.
 const darkVars = {
-  '--nav-fill': 'rgba(32, 35, 32, 0.86)',
-  '--nav-text': '#F2F0E8',
-  '--nav-text-dim': 'rgba(242, 240, 232, 0.68)',
-  '--nav-line': 'rgba(242, 240, 232, 0.76)',
-  '--nav-invert': '#202320',
+  '--nav-fill': 'rgba(9, 11, 16, 0.98)',
+  '--nav-text': '#F7F8FC',
+  '--nav-text-dim': 'rgba(247, 248, 252, 0.64)',
+  '--nav-line': 'rgba(247, 248, 252, 0.76)',
+  '--nav-invert': '#090B10',
 } as CSSProperties;
 
 // Top-bar links; the résumé gets the outlined box on the right instead.

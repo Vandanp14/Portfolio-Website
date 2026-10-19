@@ -6,8 +6,8 @@ import { IndexRow } from './PageIndex';
 import { Eyebrow, Shell } from './primitives';
 
 /**
- * A top-level page built from home sections. Clears the floating nav with a
- * spacer in the first section's band, sets the page's meta, and ends with a
+ * A top-level page built from home sections. Leaves the fixed utility nav
+ * above the page, sets the page's meta, and ends with a
  * "Next" row so visitors can keep moving without going back to the index.
  */
 export function SectionPage({
@@ -26,7 +26,7 @@ export function SectionPage({
 
   return (
     <div>
-      <div aria-hidden="true" className={`band band-${band} h-[var(--nav-h)]`} />
+      <div aria-hidden="true" className={`band band-${band} h-0`} />
       {children}
       <nav aria-label="Next page" className="band band-paper pb-[clamp(64px,8vw,120px)] pt-[clamp(64px,8vw,120px)]">
         <Shell>

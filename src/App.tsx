@@ -6,6 +6,7 @@ import { Experience } from './components/Experience';
 import { FanaticsBanner } from './components/FanaticsBanner';
 import { Footer } from './components/Footer';
 import { Hero } from './components/Hero';
+import { HomeShowcase } from './components/HomeShowcase';
 import { Nav } from './components/Nav';
 import { NotFound } from './components/NotFound';
 import { OtherWork } from './components/OtherWork';
@@ -78,6 +79,7 @@ function Home() {
   return (
     <>
       <Hero />
+      <HomeShowcase />
       <PageIndex />
     </>
   );
