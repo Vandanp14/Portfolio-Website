@@ -23,12 +23,12 @@ Sources: [Apple](https://www.apple.com/), [Cluely](https://cluely.com/), [Uber](
 ### Token architecture
 
 - Warm paper `#eeece4`; secondary paper `#e2dfd4`; ink `#171915`.
-- Signal red `#d84f35` for active route markers, chapter emphasis, and the closing field.
+- Signal red `#b93d29` for active route markers, chapter emphasis, and the closing field; contrast is 4.72:1 on warm paper. In dark theme, a lighter red `#f17159` is used against dark text surfaces (6.11:1).
 - Acid lime `#d8e54e` is reserved for project-stage route markers and the education chapter.
 - Project scene surfaces `#181a16` and `#252720`; readable warm-white copy.
 - Geist for oversized sans display and body; Georgia for selected italic display words only; Geist Mono for compact chapter metadata.
 - Primarily flow and flex composition. No repeated card grid. Media is edge-to-edge and uses verified source screenshots.
-- Motion: quick named-token hover feedback, a short opacity/translate route entrance, and no scroll-jacking or ambient animation. Reduced motion removes the entrance.
+- Motion: quick named-token hover feedback, a short opacity/translate route entrance, and a subtle screenshot change. No scroll-jacking or ambient animation. Reduced motion removes the entrance and screenshot transition.
 - Light/dark theme toggle remains available and updates the full new palette.
 
 ## Page structure

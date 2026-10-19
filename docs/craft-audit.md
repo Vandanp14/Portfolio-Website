@@ -12,7 +12,8 @@ This revision discards the last version's centered project showcase and selector
 - Work uses the real supplied responsive screenshots. The screenshot controls are actual buttons with pressed state; image changes receive a short opacity/translate transition. MINT uses a labeled type composition because its data contains no screenshots.
 - Navigation preserves all primary routes, Writing, résumé, theme control, and active-page indication. Contact retains email, GitHub, LinkedIn, validation, and `sendContact` delivery behavior.
 - Page entrance and project-image changes honor `prefers-reduced-motion`; CSS uses transform/opacity for entrance motion.
-- Remaining review: keyboard interaction pass and numeric contrast sampling on the new warm palette.
+- Keyboard check: focused the second project screenshot control and activated it with Enter; its pressed state moved and the associated screen/alt text updated.
+- Sampled contrast: muted `#66685f` on paper `#eeece4` is 4.78:1; signal red `#b93d29` on paper is 4.72:1; light-theme project text `#dddcd3` on stage `#181a16` is 12.73:1; dark-theme red `#f17159` on `#171915` is 6.11:1; contact muted copy `#b7b6aa` on `#171915` is 8.67:1. Remaining review: contrast of every component state and a live contact submission.
 
 ## Verification
 
