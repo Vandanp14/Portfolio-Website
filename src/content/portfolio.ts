@@ -28,7 +28,7 @@ export const profile = {
   status: 'Software Engineering Intern at Fanatics · graduating Dec 2026',
   headline: 'I build the systems other people build on.',
   intro:
-    'CS student at SUNY Oswego. This summer I shipped Product Builder’s first API at Fanatics and the first AI assistant on their internal developer platform to read non-GitHub data. Outside of work I build production tools for myself — a fitness analytics PWA, a personal finance ledger, a game platform — and ship them end to end.',
+    'CS student at SUNY Oswego building backend and distributed systems. At Fanatics, I shipped Product Builder’s first API and an AI assistant that reads data beyond GitHub.',
 };
 
 /** Headline numbers. Every one traces to a line in the resume. */
