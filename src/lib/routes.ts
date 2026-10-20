@@ -59,7 +59,7 @@ export const pages: PageDef[] = [
     path: '/contact',
     label: 'Contact',
     teaser: 'Say hello, or tell me what you are building',
-    description: 'Get in touch with Vandan Patel.',
+    description: 'Contact Vandan Patel for backend, platform or applied AI roles — available for Summer 2027.',
   },
 ];
 

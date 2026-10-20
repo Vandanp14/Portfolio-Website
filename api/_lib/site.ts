@@ -12,7 +12,7 @@ export const BLOG_TITLE = 'Writing — Vandan Patel';
 export function blogTitle(indexTitle: string): string {
   return indexTitle ? `${indexTitle} — ${SITE_NAME}` : BLOG_TITLE;
 }
-export const BLOG_DESCRIPTION = 'Notes on backend, distributed systems and building software end to end.';
+export const BLOG_DESCRIPTION = 'Notes on backend boundaries, data integrity and building software end to end.';
 
 /** Absolute URL of the generated Open Graph card; bump `v` to bust the CDN cache. */
 export function ogImageUrl(params: Record<string, string | number> = {}): string {

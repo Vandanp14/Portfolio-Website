@@ -56,7 +56,7 @@ export function WritingList() {
               <span className="mono">Status</span>
               <span className="writing__title">The writing index is out of reach right now.</span>
               <Link to="/blog" className="link">
-                Open the archive <span className="arrow" aria-hidden="true">↗</span>
+                Open the archive <span className="arrow" aria-hidden="true">→</span>
               </Link>
             </div>
           ) : null}
@@ -66,7 +66,7 @@ export function WritingList() {
               <span className="mono">Status</span>
               <span className="writing__title">The first essay is in draft.</span>
               <Link to="/blog" className="link">
-                Visit the archive <span className="arrow" aria-hidden="true">↗</span>
+                Visit the archive <span className="arrow" aria-hidden="true">→</span>
               </Link>
             </div>
           ) : null}
@@ -76,7 +76,7 @@ export function WritingList() {
               <span className="mono">{formatDate(post.date)}</span>
               <span className="writing__title">{post.title}</span>
               <span className="mono" aria-hidden="true">
-                Read ↗
+                Read →
               </span>
             </Link>
           ))}

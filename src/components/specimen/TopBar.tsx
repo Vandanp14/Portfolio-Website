@@ -104,7 +104,7 @@ export function TopBar({ current }: { current: PageId | null }) {
               </Link>
             ))}
             <Link to="/resume" className="navlink" aria-label="Résumé">
-              Résumé ↗
+              Résumé
             </Link>
           </nav>
 
