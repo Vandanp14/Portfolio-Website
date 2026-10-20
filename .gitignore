@@ -33,3 +33,6 @@ dist-ssr
 
 # Raw source images — optimized derivatives are committed in src/assets/
 /assets/
+
+# OpenCode local state
+.opencode/

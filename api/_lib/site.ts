@@ -17,7 +17,7 @@ export const BLOG_DESCRIPTION = 'Notes on backend, distributed systems and build
 /** Absolute URL of the generated Open Graph card; bump `v` to bust the CDN cache. */
 export function ogImageUrl(params: Record<string, string | number> = {}): string {
   const url = new URL('/api/og', ORIGIN);
-  url.searchParams.set('v', '1');
+  url.searchParams.set('v', '2');
   Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, String(value)));
   return url.toString();
 }
