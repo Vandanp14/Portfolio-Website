@@ -1,18 +1,14 @@
 // Runs before first paint (render-blocking, in <head>). Kept as a file rather
 // than inline so the Content-Security-Policy can forbid inline scripts.
 
-// Theme: light unless the visitor chose dark (see src/lib/theme.ts).
+// One ground, one signal colour. The site has no dark mode; a stored
+// preference from an earlier version is cleared so nobody is left stranded.
 (function () {
-  var theme = 'light';
+  document.documentElement.setAttribute('data-theme', 'light');
   try {
-    if (localStorage.getItem('theme') === 'dark') theme = 'dark';
+    if (localStorage.getItem('theme')) localStorage.removeItem('theme');
   } catch (e) {
-    /* storage blocked — stay light */
-  }
-  document.documentElement.setAttribute('data-theme', theme);
-  if (theme === 'dark') {
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', '#0F1113');
+    /* storage blocked — nothing to clear */
   }
 })();
 

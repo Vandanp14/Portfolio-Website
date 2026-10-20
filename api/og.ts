@@ -14,12 +14,12 @@ import type { ReactElement } from 'react';
 
 const WIDTH = 1200;
 const HEIGHT = 630;
-const SLATE = '#1E2124';
-const CHALK = '#F4F4F2';
-const DIM = 'rgba(244, 244, 242, 0.55)';
-const LINE = 'rgba(244, 244, 242, 0.22)';
-const VIOLET = '#9F8FFF';
-const HOME_TITLE = 'I build the systems other people build on.';
+const SLATE = '#0C0C0B';
+const CHALK = '#EFEBE0';
+const DIM = 'rgba(239, 235, 224, 0.56)';
+const LINE = 'rgba(239, 235, 224, 0.18)';
+const ACCENT = '#7C8CFF';
+const HOME_TITLE = 'I ship the layer everyone else depends on.';
 
 type Style = Record<string, string | number>;
 type Node = { type: string; props: { style?: Style; children?: Node | string | (Node | string)[] } };
@@ -70,17 +70,14 @@ function card(eyebrow: string, title: string, meta: string): Node {
           el(
             'div',
             {
-              width: 56,
-              height: 56,
+              width: 52,
+              height: 52,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: CHALK,
-              color: SLATE,
-              fontSize: 26,
-              letterSpacing: '-0.04em',
+              border: '1px solid rgba(239, 235, 224, 0.55)',
             },
-            'VP',
+            [el('div', { width: 14, height: 14, background: CHALK })],
           ),
           el('div', { marginLeft: 20, fontSize: 30, letterSpacing: '-0.035em' }, 'Vandan Patel'),
         ]),
@@ -101,7 +98,7 @@ function card(eyebrow: string, title: string, meta: string): Node {
       el('div', { display: 'flex', flexDirection: 'column' }, [
         el('div', { height: 1, width: '100%', background: LINE }),
         el('div', { display: 'flex', justifyContent: 'space-between', marginTop: 22, fontSize: 24 }, [
-          el('div', { color: VIOLET, letterSpacing: '-0.01em' }, 'vandanpatel.me'),
+          el('div', { color: ACCENT, letterSpacing: '-0.01em' }, 'vandanpatel.me'),
           el('div', { color: DIM, letterSpacing: '-0.01em' }, meta),
         ]),
       ]),

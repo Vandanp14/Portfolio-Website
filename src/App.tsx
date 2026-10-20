@@ -1,45 +1,39 @@
 import { lazy, Suspense, useEffect, useRef } from 'react';
-import { About } from './components/About';
-import { Contact } from './components/Contact';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { Experience } from './components/Experience';
-import { FanaticsBanner } from './components/FanaticsBanner';
-import { Footer } from './components/Footer';
-import { Hero } from './components/Hero';
-import { Nav } from './components/Nav';
-import { NotFound } from './components/NotFound';
-import { OtherWork } from './components/OtherWork';
-import { PageIndex } from './components/PageIndex';
-import { SectionPage } from './components/SectionPage';
-import { Work } from './components/Work';
+import { Link } from './components/Link';
+import { CapabilityGrid } from './components/specimen/CapabilityGrid';
+import { ContactBlock } from './components/specimen/ContactBlock';
+import { Hero } from './components/specimen/Hero';
+import { Ledger } from './components/specimen/Ledger';
+import { NotFound } from './components/specimen/NotFound';
+import { ProofBand } from './components/specimen/ProofBand';
+import { SectionHead, Shell } from './components/specimen/primitives';
+import { SiteFooter } from './components/specimen/SiteFooter';
+import { TopBar } from './components/specimen/TopBar';
+import { WorkAct } from './components/specimen/WorkAct';
+import { WritingList } from './components/specimen/WritingList';
 import { featuredProjects, profile } from './content/portfolio';
 import { trackPageView } from './lib/analytics';
 import { loadBlog, loadResume } from './lib/prefetch';
 import { isHome, usePath } from './lib/router';
 import { pageForPath } from './lib/routes';
 import { SITE_ORIGIN, useJsonLd, usePageMeta } from './lib/seo';
+import AboutPage from './pages/About';
+import ContactPage from './pages/Contact';
+import ExperiencePage from './pages/Experience';
+import WorkPage from './pages/Work';
 
-// Code-split: the blog (and DOMPurify) and the résumé (pdf.js) only load
-// when someone heads there — links prefetch them on hover/focus.
 const Blog = lazy(loadBlog);
 const Resume = lazy(loadResume);
 
-function SkipLink({ href }: { href: string }) {
+function SkipLink() {
   return (
-    <a
-      href={href}
-      className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-[#1E2124] focus:px-4 focus:py-2 focus:text-[#FFFFFF]"
-    >
+    <a href="#content" className="skip-link">
       Skip to content
     </a>
   );
 }
 
-/**
- * GA4's own config call reports the first page; every client-side route
- * change after that is reported here (the property's history-based
- * enhanced measurement is off, and must stay off to avoid double counts).
- */
 function usePageViews(path: string) {
   const first = useRef(true);
   useEffect(() => {
@@ -47,9 +41,26 @@ function usePageViews(path: string) {
       first.current = false;
       return;
     }
-    // Short delay so lazy pages have mounted and set document.title.
     const timer = setTimeout(trackPageView, 400);
     return () => clearTimeout(timer);
+  }, [path]);
+}
+
+/** Deep links like /work#transit-ledger should land on the case, not the top. */
+function useHashScroll(path: string) {
+  useEffect(() => {
+    const { hash } = window.location;
+    if (!hash) return;
+    const id = decodeURIComponent(hash.slice(1));
+    const frame = requestAnimationFrame(() => {
+      const target = document.getElementById(id);
+      if (!target) return;
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const header = document.querySelector('.topbar')?.getBoundingClientRect().height ?? 64;
+      const top = target.getBoundingClientRect().top + window.scrollY - header - 16;
+      window.scrollTo({ top: Math.max(0, top), behavior: reduce ? 'auto' : 'smooth' });
+    });
+    return () => cancelAnimationFrame(frame);
   }, [path]);
 }
 
@@ -74,22 +85,42 @@ const projectsJsonLd = {
 
 function Home() {
   usePageMeta({ title: `${profile.name} — ${profile.role}`, exactTitle: true, path: '/' });
+  useJsonLd('ld-projects', projectsJsonLd);
 
   return (
     <>
       <Hero />
-      <PageIndex />
-    </>
-  );
-}
 
-function WorkPage() {
-  useJsonLd('ld-projects', projectsJsonLd);
-  return (
-    <SectionPage id="work" band="paper">
-      <Work />
-      <OtherWork />
-    </SectionPage>
+      <section className="band band-paper section" id="work">
+        <Shell>
+          <SectionHead
+            index="01 — Selected work"
+            title={
+              <>
+                Three products. <em>End to end.</em>
+              </>
+            }
+            note="Designed, built, deployed and maintained alone — data model through interface."
+          />
+          <div>
+            {featuredProjects.map((project, i) => (
+              <WorkAct key={project.id} project={project} position={i} />
+            ))}
+          </div>
+          <p style={{ marginTop: 40 }}>
+            <Link to="/work" className="link">
+              Every case in detail <span className="arrow" aria-hidden="true">→</span>
+            </Link>
+          </p>
+        </Shell>
+      </section>
+
+      <ProofBand />
+      <Ledger />
+      <CapabilityGrid />
+      <WritingList />
+      <ContactBlock />
+    </>
   );
 }
 
@@ -99,7 +130,7 @@ function Page({ path }: { path: string }) {
   const blog = path.match(/^\/blog\/?(?:([^/]+)\/?)?$/);
   if (blog) {
     return (
-      <Suspense fallback={<div className="band band-paper min-h-[100svh]" />}>
+      <Suspense fallback={<div className="band band-paper" style={{ minHeight: '100svh' }} />}>
         <Blog postId={blog[1] ?? null} />
       </Suspense>
     );
@@ -109,27 +140,14 @@ function Page({ path }: { path: string }) {
     case '/work':
       return <WorkPage />;
     case '/experience':
-      return (
-        <SectionPage id="experience" band="slate">
-          <FanaticsBanner />
-          <Experience />
-        </SectionPage>
-      );
+      return <ExperiencePage />;
     case '/about':
-      return (
-        <SectionPage id="about" band="mist">
-          <About />
-        </SectionPage>
-      );
+      return <AboutPage />;
     case '/contact':
-      return (
-        <SectionPage id="contact" band="mist">
-          <Contact />
-        </SectionPage>
-      );
+      return <ContactPage />;
     case '/resume':
       return (
-        <Suspense fallback={<div className="band band-mist min-h-[100svh]" />}>
+        <Suspense fallback={<div className="band band-paper" style={{ minHeight: '100svh' }} />}>
           <Resume />
         </Suspense>
       );
@@ -141,17 +159,18 @@ function Page({ path }: { path: string }) {
 export default function App() {
   const path = usePath();
   usePageViews(path);
+  useHashScroll(path);
 
   return (
     <>
-      <SkipLink href="#content" />
-      <Nav current={isHome(path) ? null : (pageForPath(path)?.id ?? null)} />
+      <SkipLink />
+      <TopBar current={isHome(path) ? null : (pageForPath(path)?.id ?? null)} />
       <main id="content" key={path} className="page-enter">
         <ErrorBoundary>
           <Page path={path} />
         </ErrorBoundary>
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

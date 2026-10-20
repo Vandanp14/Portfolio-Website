@@ -2,6 +2,8 @@
 // Script's base64 chunks into a real PDF; this side only checks which version
 // is newest and downloads that version's bytes, reporting progress.
 
+import { formatCalendarDate } from './dates';
+
 export const RESUME_API = '/api/resume';
 export const RESUME_FILENAME = 'Vandan_Patel_Resume.pdf';
 
@@ -126,7 +128,5 @@ export async function loadResume(
 }
 
 export function formatUpdated(value: string): string {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return '';
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  return formatCalendarDate(value);
 }

@@ -1,23 +1,19 @@
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
 import type { PDFDocumentLoadingTask, PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist/legacy/build/pdf.mjs';
 import workerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import { ButtonGhost, Eyebrow, Shell } from '../components/primitives';
-import { Rule } from '../components/motion/Rule';
-import { SplitLines } from '../components/motion/SplitLines';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Eyebrow, Shell, TextLink } from '../components/specimen/primitives';
 import { track } from '../lib/analytics';
 import { usePageMeta } from '../lib/seo';
 import { formatUpdated, loadResume, pdfUrl, RESUME_FILENAME, type ResumeFile } from '../lib/resume';
 
-// Legacy build: the modern one leans on very recent JS features that older
-// mobile Safari versions lack.
+// Legacy build: the modern one leans on JS features older mobile Safari lacks.
 GlobalWorkerOptions.workerSrc = workerUrl;
 
 const MIN_SCALE = 0.5;
 const MAX_SCALE = 3;
 const STEP = 0.25;
 const MAX_DPR = 2.5;
-/** Fit-to-width never blows the page up past this on wide screens. */
 const MAX_FIT = 1.5;
 
 type State =
@@ -31,7 +27,8 @@ export default function Resume() {
 
   usePageMeta({
     title: 'Résumé',
-    description: 'Vandan Patel’s current résumé — backend, distributed systems and applied AI. View in the browser or download the PDF.',
+    description:
+      'Vandan Patel’s current résumé — backend, distributed systems and applied AI. View in the browser or download the PDF.',
     path: '/resume',
   });
 
@@ -52,8 +49,8 @@ export default function Resume() {
 
       setState({ kind: 'loading', step: 'rendering' });
       try {
-        // pdf.js transfers (detaches) the buffer it's given — hand it a copy so
-        // the original bytes stay intact for the Download button.
+        // pdf.js detaches the buffer it is given — hand it a copy so the
+        // original bytes stay intact for the download.
         task = getDocument({ data: result.data.bytes.slice() });
         const doc = await task.promise;
         const pages = await Promise.all(Array.from({ length: doc.numPages }, (_, i) => doc.getPage(i + 1)));
@@ -69,44 +66,36 @@ export default function Resume() {
     };
   }, [attempt]);
 
-
   const updated = state.kind === 'ready' && state.file.meta.updatedAt ? formatUpdated(state.file.meta.updatedAt) : '';
-  const size = state.kind === 'ready' && state.file.meta.size ? `${Math.max(1, Math.round(state.file.meta.size / 1024))} KB` : '';
+  const size =
+    state.kind === 'ready' && state.file.meta.size
+      ? `${Math.max(1, Math.round(state.file.meta.size / 1024))} KB`
+      : '';
 
   return (
-    <section className="band band-mist min-h-[100svh] pt-[var(--nav-h)]">
-      <Shell className="pb-[var(--section)] pt-[clamp(32px,5vw,72px)]">
-        <header>
-          <Rule strong />
-          <div className="mt-4 flex items-baseline justify-between gap-6">
-            <Eyebrow>Résumé</Eyebrow>
-            <span className="t-index text-[var(--text-3)]">/cv</span>
-          </div>
-
-          <div className="mt-[clamp(40px,6vw,88px)] grid gap-10 lg:grid-cols-12 lg:items-end">
-            <div className="min-w-0 lg:col-span-9">
-              <SplitLines
-                as="h1"
-                text="Résumé"
-                className="t-display block text-[clamp(4rem,17vw,15rem)] uppercase text-[var(--text)]"
-              />
-              <p
-                className="reveal mt-8 max-w-[56ch] text-[18px] leading-[1.45] text-[var(--text-2)]"
-                style={{ '--reveal-delay': '240ms' } as CSSProperties}
-              >
-                Always the latest version — read it here or download the PDF.
-              </p>
+    <div className="band band-paper">
+      <section className="page-intro">
+        <Shell>
+          <Eyebrow>Résumé — always the latest</Eyebrow>
+          <h1 className="display page-intro__claim" style={{ marginTop: 20 }}>
+            The <em>short</em> version.
+          </h1>
+          <div className="page-intro__note">
+            <p className="small col-6" style={{ maxWidth: '52ch' }}>
+              Read it here or take the PDF. Both come from the same file, so what you see is what
+              recruiters get.
+            </p>
+            <div className="mono col-4 start-9 align-end" style={{ lineHeight: 2 }}>
+              <div>Updated — {updated || (state.kind === 'ready' ? 'latest' : '—')}</div>
+              <div>Pages — {state.kind === 'ready' ? String(state.pages.length).padStart(2, '0') : '—'}</div>
+              <div>Format — {size ? `PDF · ${size}` : 'PDF'}</div>
             </div>
-
-            <dl className="grid grid-cols-2 gap-x-6 gap-y-5 lg:col-span-3 lg:grid-cols-1">
-              <MetaItem term="Updated" value={updated || (state.kind === 'ready' ? 'Latest version' : '—')} />
-              <MetaItem term="Pages" value={state.kind === 'ready' ? String(state.pages.length).padStart(2, '0') : '—'} mono />
-              <MetaItem term="Format" value={size ? `PDF · ${size}` : 'PDF'} mono />
-            </dl>
           </div>
-        </header>
+        </Shell>
+      </section>
 
-        <div className="mt-[clamp(56px,8vw,120px)]">
+      <section className="section--tight">
+        <Shell>
           {state.kind === 'ready' ? (
             <Viewer file={state.file} pages={state.pages} />
           ) : state.kind === 'error' ? (
@@ -114,18 +103,8 @@ export default function Resume() {
           ) : (
             <LoadingPaper step={state.step} progress={state.progress} />
           )}
-        </div>
-      </Shell>
-    </section>
-  );
-}
-
-/** Metadata line with a 1px left rule. */
-function MetaItem({ term, value, mono = false }: { term: string; value: string; mono?: boolean }) {
-  return (
-    <div className="border-l border-[var(--line-strong)] pl-2.5">
-      <dt className="t-eyebrow text-[var(--text-3)]">{term}</dt>
-      <dd className={`mt-1 text-[15px] text-[var(--text)] ${mono ? 't-index' : 'tracking-[-0.01em]'}`}>{value}</dd>
+        </Shell>
+      </section>
     </div>
   );
 }
@@ -141,7 +120,6 @@ function Viewer({ file, pages }: { file: ResumeFile; pages: PDFPageProxy[] }) {
   const scale = zoom === 'fit' ? fitScale : zoom;
   const baseWidth = useMemo(() => pages[0].getViewport({ scale: 1 }).width, [pages]);
 
-  // Fit-to-width tracks the stage's width (rotation, resize, sidebar, …).
   useEffect(() => {
     const stage = stageRef.current;
     if (!stage) return;
@@ -176,7 +154,6 @@ function Viewer({ file, pages }: { file: ResumeFile; pages: PDFPageProxy[] }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [zoomBy]);
 
-  // Current page = the one most in view.
   useEffect(() => {
     const stage = stageRef.current;
     if (!stage) return;
@@ -194,8 +171,6 @@ function Viewer({ file, pages }: { file: ResumeFile; pages: PDFPageProxy[] }) {
     return () => observer.disconnect();
   }, [pages]);
 
-  // Download hands over exactly the bytes being previewed. Created inside the
-  // effect (not useMemo) so the URL is never revoked while still rendered.
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
   useEffect(() => {
     const url = URL.createObjectURL(new Blob([file.bytes], { type: 'application/pdf' }));
@@ -203,65 +178,38 @@ function Viewer({ file, pages }: { file: ResumeFile; pages: PDFPageProxy[] }) {
     return () => URL.revokeObjectURL(url);
   }, [file]);
 
-
-  const toolButton =
-    'inline-flex h-11 min-w-11 items-center justify-center px-2 text-[18px] leading-none text-[var(--text-2)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:bg-[var(--text)] hover:text-[var(--bg)] disabled:pointer-events-none disabled:opacity-40';
-
   return (
     <div>
-      <div
-        role="toolbar"
-        aria-label="Résumé viewer"
-        className="sticky top-[calc(var(--nav-h)-12px)] z-20 flex items-center justify-between gap-2 border border-[var(--line)] bg-[var(--bg)] p-1"
-      >
-        <div className="flex items-center">
-          <span className="t-index hidden px-3 text-[var(--text-2)] sm:inline" aria-live="polite">
-            Page {String(current).padStart(2, '0')} / {String(pages.length).padStart(2, '0')}
+      <div role="toolbar" aria-label="Résumé viewer" className="toolbar">
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <span className="mono" style={{ padding: '0 12px' }} aria-live="polite">
+            {String(current).padStart(2, '0')} / {String(pages.length).padStart(2, '0')}
           </span>
-          <span className="mx-1 hidden h-6 w-px bg-[var(--line)] sm:block" aria-hidden="true" />
-          <button
-            type="button"
-            className={toolButton}
-            onClick={() => zoomBy(-STEP)}
-            disabled={scale <= MIN_SCALE}
-            aria-label="Zoom out"
-          >
+          <button type="button" className="tool" onClick={() => zoomBy(-STEP)} disabled={scale <= MIN_SCALE} aria-label="Zoom out">
             <span aria-hidden="true">−</span>
           </button>
-          <span className="t-index w-12 text-center text-[var(--text)] sm:w-14" aria-live="polite">
+          <span className="mono" style={{ width: 56, textAlign: 'center', color: 'var(--fg)' }} aria-live="polite">
             {Math.round(scale * 100)}%
           </span>
-          <button
-            type="button"
-            className={toolButton}
-            onClick={() => zoomBy(STEP)}
-            disabled={scale >= MAX_SCALE}
-            aria-label="Zoom in"
-          >
+          <button type="button" className="tool" onClick={() => zoomBy(STEP)} disabled={scale >= MAX_SCALE} aria-label="Zoom in">
             <span aria-hidden="true">+</span>
           </button>
           <button
             type="button"
-            className={`${toolButton} t-eyebrow ml-1 px-3 ${zoom === 'fit' ? 'text-[var(--text)] underline decoration-1 underline-offset-4' : ''}`}
+            className={`tool tool--text ${zoom === 'fit' ? 'is-active' : ''}`}
             onClick={() => setZoom('fit')}
-            aria-label="Fit to width"
             aria-pressed={zoom === 'fit'}
           >
             Fit
           </button>
         </div>
 
-        <div className="flex items-center gap-1">
-          <a
-            href={pdfUrl(file.meta.version)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${toolButton} t-eyebrow hidden gap-1.5 px-3 sm:inline-flex`}
-            aria-label="Open PDF in a new tab"
-          >
-            Open <span aria-hidden="true" className="arrow-nudge text-[14px]">↗</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <a className="tool tool--text" href={pdfUrl(file.meta.version)} target="_blank" rel="noopener noreferrer">
+            Open ↗
           </a>
           <a
+            className="pill"
             href={blobUrl ?? pdfUrl(file.meta.version, true)}
             download={RESUME_FILENAME}
             onClick={() =>
@@ -271,27 +219,28 @@ function Viewer({ file, pages }: { file: ResumeFile; pages: PDFPageProxy[] }) {
                 resume_version: file.meta.updatedAt,
               })
             }
-            className="group inline-flex min-h-[44px] items-center justify-center gap-3 border border-[var(--text)] bg-[var(--text)] px-5 text-[16px] tracking-[-0.01em] text-[var(--bg)] transition-[background-color,color] duration-[var(--t-base)] ease-[var(--ease-out-expo)] hover:bg-transparent hover:text-[var(--text)]"
           >
-            Download PDF
-            <span aria-hidden="true" className="inline-block transition-transform duration-[var(--t-base)] ease-[var(--ease-out-expo)] group-hover:translate-y-[3px]">
-              ↓
-            </span>
+            Download PDF ↓
           </a>
         </div>
       </div>
 
-      <div ref={stageRef} className="mt-6 overflow-x-auto pb-2">
-        <div className="mx-auto flex w-max min-w-full flex-col items-center gap-6">
+      <div ref={stageRef} style={{ marginTop: 24, overflowX: 'auto' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24, width: 'max-content', minWidth: '100%' }}>
           {pages.map((page) => (
             <PageCanvas key={page.pageNumber} page={page} scale={scale} />
           ))}
         </div>
       </div>
+
+      <p style={{ marginTop: 24 }}>
+        <TextLink href={pdfUrl(file.meta.version)}>Open in a new tab</TextLink>
+      </p>
     </div>
   );
 }
 
+/* --- Page canvas ---------------------------------------------------------- */
 
 type LinkBox = { url: string; left: number; top: number; width: number; height: number };
 
@@ -307,7 +256,6 @@ function PageCanvas({ page, scale }: { page: PDFPageProxy; scale: number }) {
     const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
     const sharp = page.getViewport({ scale: scale * dpr });
 
-    // Debounced so stepping through zoom levels doesn't queue a render each.
     let task: ReturnType<PDFPageProxy['render']> | null = null;
     const timer = setTimeout(() => {
       canvas.width = Math.floor(sharp.width);
@@ -327,7 +275,6 @@ function PageCanvas({ page, scale }: { page: PDFPageProxy; scale: number }) {
     };
   }, [page, scale]);
 
-  // Real links from the PDF (email, LinkedIn, GitHub…) overlaid as anchors.
   useEffect(() => {
     let live = true;
     page.getAnnotations().then((annotations) => {
@@ -357,16 +304,20 @@ function PageCanvas({ page, scale }: { page: PDFPageProxy; scale: number }) {
   return (
     <div
       data-page={page.pageNumber}
-      className="band band-paper relative overflow-hidden border border-[var(--line)] bg-[var(--bg)]"
-      style={{ width: viewport.width, height: viewport.height }}
+      style={{
+        position: 'relative',
+        overflow: 'hidden',
+        width: viewport.width,
+        height: viewport.height,
+        background: '#fff',
+        border: '1px solid var(--rule)',
+      }}
     >
       <canvas
         ref={canvasRef}
         aria-label={`Résumé page ${page.pageNumber}`}
         role="img"
-        className={`block h-full w-full transition-opacity duration-[var(--t-medium)] ease-[var(--ease-out)] ${
-          drawn ? 'opacity-100' : 'opacity-0'
-        }`}
+        style={{ display: 'block', width: '100%', height: '100%', opacity: drawn ? 1 : 0, transition: 'opacity 240ms var(--ease)' }}
       />
       {links.map((link, i) => (
         <a
@@ -375,8 +326,14 @@ function PageCanvas({ page, scale }: { page: PDFPageProxy; scale: number }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={link.url.replace(/^mailto:/, '')}
-          className="absolute rounded-[2px] transition-colors duration-[var(--t-fast)] hover:bg-[var(--accent-soft)]"
-          style={{ left: link.left, top: link.top, width: link.width, height: link.height }}
+          style={{
+            position: 'absolute',
+            left: link.left,
+            top: link.top,
+            width: link.width,
+            height: link.height,
+            background: 'transparent',
+          }}
         />
       ))}
     </div>
@@ -391,41 +348,54 @@ const STEP_LABEL = {
   rendering: 'Rendering',
 } as const;
 
-
 function LoadingPaper({ step, progress }: { step: keyof typeof STEP_LABEL; progress?: number }) {
-  // 0% = the server is still stitching chunks together; show that honestly
-  // as indeterminate rather than a bar stuck at zero.
   const percent = step === 'downloading' && progress ? Math.round(progress * 100) : null;
   const label = step === 'downloading' && percent === null ? 'Preparing the PDF' : STEP_LABEL[step];
 
   return (
     <div aria-busy="true">
-      <div className="flex min-h-[54px] items-center justify-between gap-4 border border-[var(--line)] bg-[var(--bg)] px-4">
-        <span className="t-eyebrow text-[var(--text-2)]" role="status">
+      <div className="toolbar" style={{ position: 'static' }}>
+        <span className="mono" role="status">
           {label}
           {percent !== null ? ` · ${percent}%` : '…'}
         </span>
       </div>
-      <div className="h-px w-full overflow-hidden bg-[var(--line)]" aria-hidden="true">
+      <div style={{ height: 1, background: 'var(--rule)', overflow: 'hidden' }} aria-hidden="true">
         <div
-          className={`h-full bg-[var(--text)] transition-[width] duration-[var(--t-base)] ease-[var(--ease-out)] ${
-            percent === null ? 'resume-indeterminate w-1/3' : ''
-          }`}
-          style={percent !== null ? { width: `${Math.max(4, percent)}%` } : undefined}
+          className={percent === null ? 'resume-indeterminate' : undefined}
+          style={{
+            height: '100%',
+            background: 'var(--ink)',
+            width: percent !== null ? `${Math.max(4, percent)}%` : '33%',
+            transition: 'width 240ms var(--ease)',
+          }}
         />
       </div>
 
       <div
-        className="band band-paper mx-auto mt-6 aspect-[8.5/11] w-full max-w-[918px] border border-[var(--line)] p-[7%]"
         aria-hidden="true"
+        style={{
+          marginTop: 24,
+          marginInline: 'auto',
+          aspectRatio: '8.5 / 11',
+          width: '100%',
+          maxWidth: 918,
+          border: '1px solid var(--rule)',
+          background: '#fff',
+          padding: '7%',
+        }}
       >
-        <div className="skeleton h-[4%] w-[45%]" />
-        <div className="skeleton mt-[2%] h-[1.6%] w-[70%]" />
+        <div className="skeleton" style={{ height: '4%', width: '45%' }} />
+        <div className="skeleton" style={{ height: '1.6%', width: '70%', marginTop: '2%' }} />
         {[0, 1, 2].map((block) => (
-          <div key={block} className="mt-[7%]">
-            <div className="skeleton h-[1.8%] min-h-2 w-[28%]" />
+          <div key={block} style={{ marginTop: '7%' }}>
+            <div className="skeleton" style={{ height: '1.8%', width: '28%' }} />
             {[96, 100, 88, 92].map((w, i) => (
-              <div key={i} className="skeleton mt-[1.6%] h-[1.3%] min-h-1.5" style={{ width: `${w - block * 4}%` }} />
+              <div
+                key={i}
+                className="skeleton"
+                style={{ height: '1.3%', width: `${w - block * 4}%`, marginTop: '1.6%' }}
+              />
             ))}
           </div>
         ))}
@@ -436,14 +406,19 @@ function LoadingPaper({ step, progress }: { step: keyof typeof STEP_LABEL; progr
 
 function ErrorPanel({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
-    <div role="alert" className="border-y border-[var(--line)] py-8 sm:flex sm:items-center sm:justify-between sm:gap-6">
-      <div>
-        <p className="t-eyebrow text-[var(--signal)]">Couldn’t load the résumé</p>
-        <p className="mt-2 text-[17px] leading-[1.45] text-[var(--text-2)]">{message}</p>
-      </div>
-      <ButtonGhost onClick={onRetry} className="mt-6 sm:mt-0 sm:shrink-0">
-        Try again <span aria-hidden="true">↻</span>
-      </ButtonGhost>
+    <div role="alert" style={{ borderTop: '1px solid var(--rule-strong)', borderBottom: '1px solid var(--rule)', padding: '32px 0' }}>
+      <p className="eyebrow">Status</p>
+      <p className="body" style={{ marginTop: 8 }}>
+        {message}
+      </p>
+      <p style={{ marginTop: 20 }}>
+        <button type="button" className="pill" onClick={onRetry}>
+          Try again ↻
+        </button>
+      </p>
+      <p style={{ marginTop: 16 }}>
+        <TextLink href="/resume.pdf">Download the PDF directly</TextLink>
+      </p>
     </div>
   );
 }

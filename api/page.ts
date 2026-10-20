@@ -11,11 +11,11 @@
 //   GET /api/page?path=/work etc.   → section page meta (/work, /experience, /about, /contact)
 //   anything else                   → 404 + noindex (the SPA renders NotFound)
 
-import { fetchIndex, fetchPost, isoDate, POST_ID } from './_lib/blog.js';
+import { fetchPost, isoDate, POST_ID } from './_lib/blog.js';
 import { escapeHtml, excerptFromHtml, readingMinutes, wordCount } from './_lib/html.js';
 import {
   BLOG_DESCRIPTION,
-  blogTitle,
+  BLOG_TITLE,
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
   ORIGIN,
@@ -52,9 +52,12 @@ const AUTHOR = { '@type': 'Person', name: SITE_NAME, url: `${ORIGIN}/` };
  *   - Under `npm run dev`: the local Vite server, only when Host is loopback.
  */
 function shellOrigin(request: Request): string | null {
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  // vercel dev sets VERCEL_URL to `localhost:3001` (no scheme), so the request
+  // host is the reliable source for local development.
   const host = request.headers.get('host') ?? '';
-  return /^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(host) ? `http://${host}` : null;
+  if (/^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(host)) return `http://${host}`;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return null;
 }
 
 type Fs = { readFile(path: string, encoding: 'utf8'): Promise<string> };
@@ -148,12 +151,11 @@ function generic(path: string, overrides: Partial<Meta> = {}): Meta {
 
 async function resolve(path: string): Promise<{ meta: Meta; status: number; cache: string }> {
   if (path === '/blog') {
-    const index = await fetchIndex();
-    const description = (index.ok && index.data.description) || BLOG_DESCRIPTION;
-    const title = blogTitle(index.ok ? index.data.title : '');
+    const description = BLOG_DESCRIPTION;
+    const title = BLOG_TITLE;
     return {
       status: 200,
-      cache: index.ok ? CACHED : SHORT,
+      cache: CACHED,
       meta: generic('/blog', {
         title,
         description,
@@ -164,14 +166,6 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
           description,
           url: `${ORIGIN}/blog`,
           author: AUTHOR,
-          ...(index.ok && {
-            blogPost: index.data.posts.slice(0, 20).map((post) => ({
-              '@type': 'BlogPosting',
-              headline: post.title,
-              url: `${ORIGIN}/blog/${post.id}`,
-              ...(isoDate(post.date) && { datePublished: isoDate(post.date) }),
-            })),
-          }),
         },
       }),
     };

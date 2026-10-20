@@ -45,7 +45,8 @@ export const pages: PageDef[] = [
     path: '/blog',
     label: 'Writing',
     teaser: 'Notes on systems, tools and things I ship',
-    description: 'Notes on backend, distributed systems and building software end to end.',
+    description:
+      'Short essays on backend boundaries, data integrity and the parts of shipping nobody puts in a demo.',
   },
   {
     id: 'resume',
@@ -59,7 +60,7 @@ export const pages: PageDef[] = [
     path: '/contact',
     label: 'Contact',
     teaser: 'Say hello, or tell me what you are building',
-    description: 'Get in touch with Vandan Patel.',
+    description: 'Contact Vandan Patel for backend, platform or applied AI roles — available for Summer 2027.',
   },
 ];
 

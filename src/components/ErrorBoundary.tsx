@@ -1,5 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { ButtonGhost, Shell } from './primitives';
+import { Shell } from './specimen/primitives';
 
 const RELOAD_KEY = 'chunk-reload-at';
 const RELOAD_WINDOW_MS = 30_000;
@@ -44,31 +44,28 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
   render() {
     if (!this.state.error) return this.props.children;
     return (
-      <section className="band band-paper min-h-[100svh] pt-[var(--nav-h)]">
-        <Shell className="pb-[var(--section)] pt-[clamp(32px,5vw,72px)]">
-          <div role="alert" className="border-t border-[var(--line-strong)] pt-4">
-            <div className="flex items-baseline justify-between gap-6">
-              <p className="t-eyebrow text-[var(--signal)]">Something broke</p>
-              <span className="t-index text-[var(--text-3)]">/500</span>
-            </div>
-            <h1 className="t-display mt-[clamp(40px,6vw,88px)] max-w-[14ch] text-[clamp(3rem,9vw,7.5rem)] uppercase text-[var(--text)]">
-              This page failed to load.
+      <div className="band band-paper" style={{ minHeight: '70svh' }}>
+        <Shell>
+          <div role="alert" className="section--tight" style={{ borderTop: '1px solid var(--rule-strong)' }}>
+            <p className="eyebrow">Error — 500</p>
+            <h1 className="display" style={{ marginTop: 20, maxWidth: '14ch' }}>
+              This page failed to <em>load</em>.
             </h1>
-            <p className="mt-8 max-w-[56ch] text-[18px] leading-[1.45] text-[var(--text-2)]">
-              Usually a reload fixes it — the site may have just been updated. If it keeps happening, the rest of the
-              site still works.
+            <p className="lead" style={{ marginTop: 24 }}>
+              Usually a reload fixes it — the site may have just been updated. If it keeps happening,
+              the rest of the site still works.
             </p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <ButtonGhost onClick={() => window.location.reload()}>
-                Reload <span aria-hidden="true">↻</span>
-              </ButtonGhost>
-              <ButtonGhost onClick={() => window.location.assign('/')}>
-                Home <span aria-hidden="true">→</span>
-              </ButtonGhost>
+            <div style={{ marginTop: 32, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              <button type="button" className="pill" onClick={() => window.location.reload()}>
+                Reload ↻
+              </button>
+              <button type="button" className="link" onClick={() => window.location.assign('/')}>
+                Home <span className="arrow" aria-hidden="true">→</span>
+              </button>
             </div>
           </div>
         </Shell>
-      </section>
+      </div>
     );
   }
 }
