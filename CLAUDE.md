@@ -21,6 +21,8 @@ There are no tests.
 
 `main` is production: Vercel auto-deploys every push/merge to `main` to vandanpatel.me; other branches get preview deploys. **Always work on a new branch** (`feat/…`, `fix/…`, `docs/…`) off fresh `main`, pass lint + typecheck + build, push, open a PR into `main`, check the preview, and merge only when the user says so. Never commit to `main` directly and never `vercel --prod`.
 
+**Never merge a PR into `main` unless the user explicitly authorizes that specific merge.** Merging automatically deploys to production. Creating or updating a PR, or a general request to finish work, is not merge authorization. Leave the PR open until the user explicitly says to merge it.
+
 ## Architecture
 
 - **`src/App.tsx`** — tiny router switch (`src/lib/router.ts`, History API, no react-router). `/` is the hero plus `PageIndex` (full-width rows linking every page); `/work`, `/experience`, `/about`, `/contact` are `SectionPage`s built from the old home sections (each ends with a "Next" row); `/blog`, `/blog/:id` and `/resume` lazy-load (`src/lib/prefetch.ts`, warmed on link hover/focus); anything else renders `NotFound`. Legacy `/#work`-style links are rewritten to `/work` before first render.

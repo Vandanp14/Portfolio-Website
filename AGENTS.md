@@ -2,6 +2,8 @@
 
 `main` is production (Vercel auto-deploys it to vandanpatel.me). **Always start a new branch** off fresh `main`, open a PR, and merge only when the user says so. Never commit to `main` or run `vercel --prod`. Full workflow, preview checks, smoke test and rollback: `docs/DEPLOYMENT.md`.
 
+**Never merge a PR into `main` unless the user explicitly authorizes that specific merge.** Merging automatically deploys to production. Creating or updating a PR, or a general request to finish work, is not merge authorization. Leave the PR open until the user explicitly says to merge it.
+
 
 ## Imported skills (vandan-llm-toolkit)
 
