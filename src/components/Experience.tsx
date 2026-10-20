@@ -28,7 +28,7 @@ export function Experience() {
           id="experience-title"
         />
 
-        <ol className="mt-[clamp(56px,7vw,96px)]">
+        <ol className="experience-timeline mt-[clamp(56px,7vw,96px)]">
           {experience.map((role, index) => (
             <RoleRow key={role.company} role={role} index={index} />
           ))}
@@ -53,7 +53,7 @@ function RoleRow({ role, index }: { role: Role; index: number }) {
       <Rule strong={primary} delay={index * 60} />
 
       <div
-        className={`grid grid-cols-1 gap-x-[var(--gutter)] gap-y-8 lg:grid-cols-12 ${
+        className={`experience-entry grid grid-cols-1 gap-x-[var(--gutter)] gap-y-8 lg:grid-cols-12 ${
           primary ? 'pb-[clamp(56px,7vw,96px)] pt-8 lg:pt-10' : 'pb-[clamp(40px,5vw,64px)] pt-6 lg:pt-8'
         }`}
       >

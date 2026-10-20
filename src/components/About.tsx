@@ -1,20 +1,11 @@
 import type { CSSProperties } from 'react';
 import type { SkillGroup } from '../content/portfolio';
 import { education, leadership, recognition, skillGroups } from '../content/portfolio';
-import { Marquee } from './motion/Marquee';
 import { Rule } from './motion/Rule';
 import { SplitLines } from './motion/SplitLines';
 import { SectionHeading, Shell } from './primitives';
 
 const pad = (n: number) => String(n).padStart(2, '0');
-
-const allSkills = Array.from(new Set(skillGroups.flatMap((group) => group.skills)));
-const half = Math.ceil(allSkills.length / 2);
-const skillsA = allSkills.slice(0, half);
-const skillsB = allSkills.slice(half);
-
-/* 5 groups on a 6-col grid: two wide cards, then three narrow ones. */
-const cardSpan = ['lg:col-span-3', 'lg:col-span-3', 'lg:col-span-2', 'lg:col-span-2', 'lg:col-span-2'];
 
 export function About() {
   return (
@@ -34,32 +25,19 @@ export function About() {
         />
       </Shell>
 
-      {/* Skill marquees — decorative; the same skills are listed in the cards below. */}
-      <div aria-hidden="true" className="mt-[clamp(56px,7vw,96px)] border-y border-[var(--line)]" data-reveal="fade">
-        <Marquee duration={60} className="py-5">
-          <SkillWords words={skillsA} />
-        </Marquee>
-        <div className="border-t border-[var(--line)] [&_.marquee-track]:[animation-direction:reverse]">
-          <Marquee duration={60} className="py-5">
-            <SkillWords words={skillsB} muted />
-          </Marquee>
-        </div>
-      </div>
-
       <Shell>
         {/* Skill groups */}
-        <div className="mt-[clamp(56px,7vw,96px)]">
+        <div className="about-toolkit mt-[clamp(72px,10vw,136px)]">
           <div className="flex items-baseline justify-between gap-6">
             <h3 className="t-eyebrow text-[var(--text-3)]">Toolkit</h3>
-            <span className="t-index text-[var(--text-3)]">{pad(skillGroups.length)} groups</span>
+            <span className="t-index text-[var(--text-3)]">{pad(skillGroups.length)} disciplines</span>
           </div>
-          <ul className="mt-5 grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-6">
+          <ul className="mt-5">
             {skillGroups.map((group, i) => (
               <SkillCard
                 key={group.title}
                 group={group}
                 n={i + 1}
-                className={`${cardSpan[i] ?? 'lg:col-span-2'} ${i === skillGroups.length - 1 ? 'md:col-span-2' : ''}`}
               />
             ))}
           </ul>
@@ -133,36 +111,18 @@ export function About() {
   );
 }
 
-function SkillWords({ words, muted = false }: { words: string[]; muted?: boolean }) {
-  return (
-    <>
-      {words.map((word) => (
-        <span
-          key={word}
-          className={`t-display flex shrink-0 items-center whitespace-nowrap text-[clamp(2rem,4.6vw,3.5rem)] ${
-            muted ? 'text-[var(--text-2)]' : 'text-[var(--text)]'
-          }`}
-        >
-          {word}
-          <span className="mx-[0.45em] inline-block h-[0.16em] w-[0.16em] bg-[var(--text-3)]" />
-        </span>
-      ))}
-    </>
-  );
-}
-
-function SkillCard({ group, n, className }: { group: SkillGroup; n: number; className: string }) {
+function SkillCard({ group, n }: { group: SkillGroup; n: number }) {
   return (
     <li
-      className={`reveal flex min-h-[300px] flex-col bg-[var(--surface)] p-6 md:p-8 ${className}`}
-      style={{ '--reveal-delay': `${(n - 1) * 70}ms` } as CSSProperties}
+      className="about-skill-row reveal grid gap-x-6 gap-y-3 border-t border-[var(--line)] py-6 md:grid-cols-12 md:items-start md:py-8"
+      style={{ '--reveal-delay': `${Math.min(n - 1, 5) * 70}ms` } as CSSProperties}
     >
-      <span className="t-index text-[var(--text-3)]">/{pad(n)}</span>
-      <h4 className="mt-6 text-[clamp(1.75rem,2.6vw,2.125rem)] leading-[1.05] tracking-[-0.035em] text-[var(--text)]">
+      <span className="t-index text-[var(--accent)] md:col-span-1">/{pad(n)}</span>
+      <h4 className="text-[clamp(1.75rem,2.6vw,2.125rem)] leading-[1.05] tracking-[-0.035em] text-[var(--text)] md:col-span-3">
         {group.title}
       </h4>
-      <p className="mt-3 max-w-[40ch] text-[16px] leading-[1.45] text-[var(--text-2)]">{group.note}</p>
-      <ul className="mono mt-auto flex flex-wrap gap-x-3 gap-y-1.5 border-t border-[var(--line)] pt-5 text-[13px] leading-[1.5] text-[var(--text-2)]">
+      <p className="max-w-[38ch] text-[15px] leading-[1.5] text-[var(--text-2)] md:col-span-3">{group.note}</p>
+      <ul className="about-skill-list mono flex flex-wrap gap-2 md:col-span-5">
         {group.skills.map((skill) => (
           <li key={skill}>{skill}</li>
         ))}

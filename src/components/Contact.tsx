@@ -116,11 +116,11 @@ export function Contact() {
       className="band band-mist relative overflow-hidden py-[var(--section)]"
     >
       <Shell>
-        <div className="grid gap-[var(--gutter)] lg:grid-cols-2">
+        <div className="contact-layout grid gap-[var(--gutter)] lg:grid-cols-2">
           {/* Statement panel */}
           <div
             data-reveal="clip"
-            className="band band-slate flex flex-col justify-between gap-16 p-[clamp(24px,4vw,56px)] lg:min-h-[720px]"
+            className="contact-statement band band-slate flex flex-col justify-between gap-16 p-[clamp(24px,4vw,56px)] lg:min-h-[640px]"
           >
             <div>
               <div className="flex items-baseline justify-between gap-6">
@@ -181,7 +181,7 @@ export function Contact() {
 
           {/* Form panel */}
           <div
-            className="reveal flex flex-col bg-[var(--surface)] p-[clamp(24px,4vw,56px)]"
+            className="contact-form-panel reveal flex flex-col bg-[var(--surface)] p-[clamp(24px,4vw,56px)]"
             style={{ '--reveal-delay': '160ms' } as CSSProperties}
           >
             <div className="flex items-baseline justify-between gap-6 border-t border-[var(--line-strong)] pt-4">

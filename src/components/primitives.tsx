@@ -1,5 +1,4 @@
 import type { CSSProperties, ImgHTMLAttributes, ReactNode } from 'react';
-import { Rule } from './motion/Rule';
 import { SplitLines } from './motion/SplitLines';
 
 export function Shell({ children, className = '' }: { children: ReactNode; className?: string }) {
@@ -57,8 +56,8 @@ export function Eyebrow({ children, className = '' }: { children: ReactNode; cla
 }
 
 /**
- * Section opener: a strong hairline draws across, the eyebrow and mono index
- * sit on it, and the title rises word by word.
+ * Section opener: a compact utility label leads into a split, product-style
+ * story heading with its supporting context kept beside the title.
  */
 export function SectionHeading({
   index,
@@ -76,26 +75,27 @@ export function SectionHeading({
   id?: string;
 }) {
   return (
-    <header>
-      <Rule strong />
-      <div className="mt-4 flex items-baseline justify-between gap-6">
-        <Eyebrow>{kicker}</Eyebrow>
+    <header className="section-heading">
+      <div className="section-heading-meta">
+        <Eyebrow><span className="section-heading-dot" aria-hidden="true" />{kicker}</Eyebrow>
         <span className="t-index text-[var(--text-3)]">/{index}</span>
       </div>
-      <SplitLines
-        as="h2"
-        id={id}
-        text={title}
-        className="t-title mt-8 block max-w-[20ch] text-[var(--text)]"
-      />
-      {lede && (
-        <p
-          className="reveal mt-6 max-w-[56ch] text-[18px] leading-[1.45] text-[var(--text-2)]"
-          style={{ '--reveal-delay': '160ms' } as CSSProperties}
-        >
-          {lede}
-        </p>
-      )}
+      <div className="section-heading-main">
+        <SplitLines
+          as="h2"
+          id={id}
+          text={title}
+          className="section-heading-title t-title block text-[var(--text)]"
+        />
+        {lede && (
+          <p
+            className="section-heading-lede reveal text-[var(--text-2)]"
+            style={{ '--reveal-delay': '160ms' } as CSSProperties}
+          >
+            {lede}
+          </p>
+        )}
+      </div>
     </header>
   );
 }

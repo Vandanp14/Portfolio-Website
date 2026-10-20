@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import './studio/atlas.css';
 import { injectSpeedInsights } from '@vercel/speed-insights';
 import { startReveals } from './lib/reveal';
 import { supportsViewTransitions } from './lib/router';
