@@ -11,7 +11,7 @@
 //   GET /api/page?path=/work etc.   → section page meta (/work, /experience, /about, /contact)
 //   anything else                   → 404 + noindex (the SPA renders NotFound)
 
-import { fetchIndex, fetchPost, isoDate, POST_ID } from './_lib/blog.js';
+import { fetchPost, isoDate, POST_ID } from './_lib/blog.js';
 import { escapeHtml, excerptFromHtml, readingMinutes, wordCount } from './_lib/html.js';
 import {
   BLOG_DESCRIPTION,
@@ -151,7 +151,6 @@ function generic(path: string, overrides: Partial<Meta> = {}): Meta {
 
 async function resolve(path: string): Promise<{ meta: Meta; status: number; cache: string }> {
   if (path === '/blog') {
-    const index = await fetchIndex();
     const description = BLOG_DESCRIPTION;
     const title = BLOG_TITLE;
     return {
@@ -167,14 +166,6 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
           description,
           url: `${ORIGIN}/blog`,
           author: AUTHOR,
-          ...(index.ok && {
-            blogPost: index.data.posts.slice(0, 20).map((post) => ({
-              '@type': 'BlogPosting',
-              headline: post.title,
-              url: `${ORIGIN}/blog/${post.id}`,
-              ...(isoDate(post.date) && { datePublished: isoDate(post.date) }),
-            })),
-          }),
         },
       }),
     };

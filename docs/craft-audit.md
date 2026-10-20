@@ -130,6 +130,10 @@ Fixed during this pass:
 - **`vercel dev` route meta 503.** `VERCEL_URL` is `localhost:3001` without a
   scheme there, so the shell fetch used `https://localhost`; local request hosts
   are now honoured before `VERCEL_URL`.
+- **`/blog` shell waited on Apps Script.** The route's title, description, OG
+  tags and `Blog` JSON-LD are now static, so a cold link preview never blocks on
+  the blog service. Post pages still fetch their own post; `BlogPosting` data
+  lives there, and the RSS/sitemap still enumerate the index.
 
 ## Known limits
 
