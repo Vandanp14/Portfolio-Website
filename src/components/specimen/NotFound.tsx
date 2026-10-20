@@ -1,7 +1,14 @@
 import { Link } from '../Link';
+import { usePageMeta } from '../../lib/seo';
 import { Shell } from './primitives';
 
 export function NotFound() {
+  usePageMeta({
+    title: 'Page not found',
+    description: 'The page you were looking for does not exist. Head back to the index.',
+    noindex: true,
+  });
+
   return (
     <section className="band band-paper" style={{ minHeight: '70svh', display: 'grid', placeItems: 'center' }}>
       <Shell>

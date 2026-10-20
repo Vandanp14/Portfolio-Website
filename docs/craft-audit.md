@@ -134,6 +134,9 @@ Fixed during this pass:
   tags and `Blog` JSON-LD are now static, so a cold link preview never blocks on
   the blog service. Post pages still fetch their own post; `BlogPosting` data
   lives there, and the RSS/sitemap still enumerate the index.
+- **The 404 shell carried the home page's metadata.** `dist/404.html` now gets
+  its own title, description, `noindex`, and no canonical/`og:url`; the React
+  NotFound view sets the same title and `noindex` when reached in-app.
 
 ## Known limits
 
