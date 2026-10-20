@@ -3,6 +3,8 @@
 // it through our own `/api/blog` proxy (api/blog.ts), which the Vercel CDN
 // caches — so most visits never wait on Apps Script at all.
 
+import { formatCalendarDate } from './dates';
+
 export const BLOG_ENDPOINT = (import.meta.env.VITE_BLOG_ENDPOINT as string | undefined) || '/api/blog';
 
 export type PostSummary = { id: string; title: string; date: string };
@@ -141,9 +143,7 @@ export async function fetchPost(id: string): Promise<BlogResult<Post>> {
 }
 
 export function formatDate(value: string): string {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return '';
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  return formatCalendarDate(value);
 }
 
 export function readingMinutes(html: string): number {

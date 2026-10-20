@@ -6,6 +6,7 @@ import {
   fetchPost,
   fetchPosts,
   formatDate,
+  buildPreview,
   getCachedIndex,
   getCachedPost,
   readingMinutes,
@@ -14,6 +15,9 @@ import {
   type PostIndex,
 } from '../lib/blog';
 import { usePageMeta } from '../lib/seo';
+
+const WRITING_DESCRIPTION =
+  'Short essays on backend boundaries, data integrity and the parts of shipping nobody puts in a demo.';
 
 type Load<T> =
   | { status: 'loading' }
@@ -38,7 +42,35 @@ DOMPurify.addHook('afterSanitizeAttributes', (node) => {
 });
 
 function sanitize(html: string): string {
-  return DOMPurify.sanitize(html, { FORBID_ATTR: ['style', 'class'], FORBID_TAGS: ['style'] });
+  const clean = DOMPurify.sanitize(html, { FORBID_ATTR: ['style', 'class'], FORBID_TAGS: ['style'] });
+  const doc = new DOMParser().parseFromString(clean, 'text/html');
+
+  // Google Docs emits a spacer anchor beside every smart chip: the visible
+  // link carries the URL, the twin carries only whitespace. Drop the empties
+  // so keyboard users don't tab through invisible links.
+  doc.querySelectorAll('a').forEach((anchor) => {
+    const text = (anchor.textContent ?? '').replace(/\u200b/g, '').trim();
+    if (!text && !anchor.querySelector('img, picture, svg')) anchor.remove();
+  });
+
+  // The post title is the page's h1, so body sections start at h2 no matter
+  // which heading level the source document used.
+  const headings = Array.from(doc.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+  if (headings.length > 0) {
+    const min = Math.min(...headings.map((h) => Number(h.tagName.slice(1))));
+    const shift = 2 - min;
+    headings.forEach((heading) => {
+      const level = Math.min(6, Math.max(2, Number(heading.tagName.slice(1)) + shift));
+      const tag = `h${level}`;
+      if (heading.tagName.toLowerCase() === tag) return;
+      const next = doc.createElement(tag);
+      Array.from(heading.attributes).forEach((attr) => next.setAttribute(attr.name, attr.value));
+      while (heading.firstChild) next.appendChild(heading.firstChild);
+      heading.replaceWith(next);
+    });
+  }
+
+  return doc.body.innerHTML;
 }
 
 function useBlogData<T>(key: string, cached: T | null, load: () => Promise<BlogResult<T>>) {
@@ -76,12 +108,11 @@ function useBlogData<T>(key: string, cached: T | null, load: () => Promise<BlogR
 function LoadingRows() {
   return (
     <div className="writing" aria-busy="true">
+      <p className="sr-only">Loading the writing index…</p>
       {[0, 1, 2].map((i) => (
-        <div className="writing__row" key={i} aria-hidden="true">
-          <span className="mono">—</span>
-          <span className="writing__title" style={{ opacity: 0.25 }}>
-            Loading
-          </span>
+        <div className="writing__row writing__row--skeleton" key={i} aria-hidden="true">
+          <span className="mono" />
+          <span className="writing__title" />
           <span />
         </div>
       ))}
@@ -106,7 +137,7 @@ function ErrorLine({ message, onRetry }: { message: string; onRetry: () => void 
 function Index({ onRetry, state }: { state: Load<PostIndex>; onRetry: () => void }) {
   usePageMeta({
     title: 'Writing',
-    description: 'Notes on backend boundaries, data integrity and building software end to end.',
+    description: WRITING_DESCRIPTION,
     path: '/blog',
   });
 
@@ -120,7 +151,7 @@ function Index({ onRetry, state }: { state: Load<PostIndex>; onRetry: () => void
           </h1>
           <div className="page-intro__note">
             <p className="small col-6" style={{ maxWidth: '52ch' }}>
-              {state.status === 'ready' ? state.data.description : 'Essays on systems, data and the parts of shipping nobody puts in a demo.'}
+              {WRITING_DESCRIPTION}
             </p>
             <p className="small col-4 start-9 align-end">
               {state.status === 'ready' ? `${state.data.posts.length} entries` : '—'}
@@ -160,7 +191,10 @@ function PostView({ id }: { id: string }) {
 
   usePageMeta({
     title: state.status === 'ready' ? state.data.title : 'Writing',
-    description: state.status === 'ready' ? state.data.title : undefined,
+    description:
+      state.status === 'ready'
+        ? buildPreview(state.data.html, 200).excerpt || `${state.data.title} — writing by Vandan Patel.`
+        : undefined,
     path: `/blog/${id}`,
     noindex: state.status === 'error' && Boolean(state.notFound),
   });

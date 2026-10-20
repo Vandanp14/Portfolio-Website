@@ -7,19 +7,17 @@ export const DEFAULT_TITLE = 'Vandan Patel — Software Engineer';
 export const DEFAULT_DESCRIPTION =
   "Vandan Patel builds backend and distributed systems. Software Engineering Intern at Fanatics, where he shipped Product Builder's first API and its first AI assistant over non-GitHub data.";
 export const BLOG_TITLE = 'Writing — Vandan Patel';
-
-/** "<index title> — Vandan Patel", matching the title the blog page sets client-side. */
-export function blogTitle(indexTitle: string): string {
-  return indexTitle ? `${indexTitle} — ${SITE_NAME}` : BLOG_TITLE;
-}
-export const BLOG_DESCRIPTION = 'Notes on backend boundaries, data integrity and building software end to end.';
+export const BLOG_DESCRIPTION =
+  'Short essays on backend boundaries, data integrity and the parts of shipping nobody puts in a demo.';
 
 /** Absolute URL of the generated Open Graph card; bump `v` to bust the CDN cache. */
 export function ogImageUrl(params: Record<string, string | number> = {}): string {
   const url = new URL('/api/og', ORIGIN);
-  url.searchParams.set('v', '2');
+  url.searchParams.set('v', '3');
   Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, String(value)));
-  return url.toString();
+  // URLSearchParams encodes spaces as `+`; `%20` survives every proxy and
+  // function runtime unchanged, so titles never render with literal plus signs.
+  return url.toString().replace(/\+/g, '%20');
 }
 
 /**
@@ -41,5 +39,9 @@ export const SECTION_PAGES: Record<string, { title: string; description: string 
     title: 'About',
     description: 'About Vandan Patel: B.S. Computer Science at SUNY Oswego, his toolkit, recognition and leadership.',
   },
-  '/contact': { title: 'Contact', description: 'Get in touch with Vandan Patel.' },
+  '/contact': {
+    title: 'Contact',
+    description:
+      'Contact Vandan Patel for backend, platform or applied AI roles — available for Summer 2027.',
+  },
 };

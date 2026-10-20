@@ -86,11 +86,57 @@ rather than the page-level `meta` token.
   hero-adjacent asset is 104 kB WebP.
 - Fonts: `display=swap`, two preconnects, three families with only the weights used.
 
+## Round 2 — real-runtime audit
+
+Run after the first pass, against a `vercel dev` server with the live Apps Script
+blog, the live résumé PDF and the OG function (not mocks).
+
+| Check | Tool / method | Result |
+| --- | --- | --- |
+| Automated a11y | axe-core 4.10.2, WCAG 2.0/2.1/2.2 A–AA + best-practice, `/`, `/work`, `/experience`, `/about`, `/blog`, `/blog/:id`, `/resume`, `/contact`, 1440 + 390 | **0 violations** |
+| Real blog index | 2 live posts, dates and 4-min read times rendered | **PASS** |
+| Real blog post | live HTML, 7 links, sanitised, `h1 → h2` outline | **PASS** |
+| Real résumé | live 1-page PDF, 38 KB, toolbar `01 / 01`, fit 150 % / 57 % | **PASS** |
+| OG card | home + post card rendered through `/api/og` and inspected | **PASS** after fix |
+| Route meta | `/blog`, `/work`, `/experience`, `/about`, `/contact`, `/resume` titled and described server-side | **PASS** |
+| RSS | channel title `Writing — Vandan Patel`, curated description | **PASS** |
+
+Fixed during this pass:
+
+- **Dates were a day early.** `new Date('2026-08-14')` parses at UTC midnight, so
+  every date-only value rendered as the previous day in the Americas. Blog and
+  résumé dates now go through `src/lib/dates.ts`, which builds date-only values
+  from their components at local noon.
+- **`<aside>` inside `<main>`** on `/work` (axe: complementary landmark not
+  top-level) → plain `div`; the spec sheet keeps its styling.
+- **`<dl>` with bare `<div>` children** on `/resume` → a plain metadata stack.
+- **Invisible smart-chip links.** Google Docs emits an empty twin anchor beside
+  every URL; they were focusable but nameless. Empty anchors are now removed
+  after sanitising, and post headings are normalised so the page has one `h1`
+  followed by `h2` sections regardless of the source document.
+- **Long URLs overflowed the post at 390 px.** Prose links now use
+  `overflow-wrap: anywhere`; paragraphs and list items use `break-word`.
+- **OG card titles rendered with plus signs** (spaces encoded by
+  `URLSearchParams` as `+`). `ogImageUrl` now emits `%20`, a form every proxy
+  decodes identically; cache version bumped to `v=3`.
+- **Blog meta drifted from the site.** The document title used the Apps Script
+  index title (“My Daily Blog”) and its generic description. `/blog` now always
+  uses `Writing — Vandan Patel` and the curated description on the page, in the
+  HTML shell and in RSS. The contact description in `api/_lib/site.ts` was also
+  aligned with `src/lib/routes.ts`.
+- **Loading rows said “Loading” three times.** Replaced with a hash-mark date bar
+  and a pulsing title bar, `aria-busy`, and visually hidden status text; motion is
+  disabled under reduced motion.
+- **`vercel dev` route meta 503.** `VERCEL_URL` is `localhost:3001` without a
+  scheme there, so the shell fetch used `https://localhost`; local request hosts
+  are now honoured before `VERCEL_URL`.
+
 ## Known limits
 
-- `/api/blog`, `/api/resume`, `/api/og` cannot run under `vite preview`; their
-  loading and error states were verified locally, the happy paths were verified
-  with mocks (blog) or reviewed by code (résumé, OG).
+- `/api/blog`, `/api/resume` and `/api/og` do not run under `vite preview`. Their
+  loading and error states were verified in the production bundle; the happy
+  paths were verified once with mocks and again against a real `vercel dev`
+  runtime with the live Apps Script sources (see Round 2).
 - Screen-reader behaviour was not tested with VoiceOver/NVDA hardware; the
   semantics (landmarks, skip link, dialog roles, live-less error alerts) were
   verified in the accessibility tree.

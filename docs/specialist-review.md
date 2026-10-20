@@ -99,13 +99,32 @@ accessible names and roles are present in the tree; the next step is a manual
 screen-reader read of the home and work pages, plus a real-device check of the
 sticky bands.
 
+## Round 2 — live content pass
+
+The site was then served through `vercel dev` with the real blog, résumé and OG
+functions and audited with axe-core at 1440 and 390 px. Result: zero violations
+on every route, including a real post. The pass also surfaced and fixed:
+
+- date-only values rendering a day early in the Americas,
+- an `<aside>` nested in `<main>` and a `<dl>` with invalid children,
+- empty smart-chip anchors and `h1 → h3` heading jumps in converted Google Docs,
+- long reference URLs overflowing a post at 390 px,
+- OG titles displaying literal `+` signs,
+- the blog’s document title and description drifting to the Apps Script index’s
+  generic “My Daily Blog” copy,
+- `vercel dev` returning 503 for route meta because `VERCEL_URL` has no scheme.
+
+The loading skeleton was also replaced with ruled placeholder bars so a slow Apps
+Script cold start no longer prints “Loading” three times.
+
 ---
 
 ## Recommended next (not blocking)
 
 1. Manual screen-reader pass on `/` and `/work` (VoiceOver, Safari).
 2. Real-device check at 390 px for the sticky nav/paper edge.
-3. Re-render `/api/og` once deployed and confirm the 1200×630 card.
+3. Regenerate the résumé PDF itself in the site’s typography; the site now
+   presents it well, but the embedded one-page PDF is still the older layout.
 4. Revisit whether the project screenshots can be served at two widths if the
    work page's LCP becomes a concern on slow connections.
 

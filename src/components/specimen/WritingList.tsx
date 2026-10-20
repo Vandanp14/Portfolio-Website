@@ -38,17 +38,18 @@ export function WritingList() {
           note="Short essays on backend boundaries, data integrity and the parts of shipping nobody puts in a demo."
         />
 
-        <div className="writing" style={{ marginTop: 'clamp(32px, 4vw, 56px)' }}>
+        <div className="writing writing--after-head" style={{ marginTop: 'clamp(32px, 4vw, 56px)' }}>
           {state.status === 'loading' ? (
-            [0, 1, 2].map((i) => (
-              <div className="writing__row" key={i} aria-hidden="true">
-                <span className="mono">—</span>
-                <span className="writing__title" style={{ opacity: 0.25 }}>
-                  Loading
-                </span>
-                <span />
-              </div>
-            ))
+            <>
+              <p className="sr-only">Loading notes…</p>
+              {[0, 1, 2].map((i) => (
+                <div className="writing__row writing__row--skeleton" key={i} aria-hidden="true">
+                  <span className="mono" />
+                  <span className="writing__title" />
+                  <span />
+                </div>
+              ))}
+            </>
           ) : null}
 
           {state.status === 'error' ? (

@@ -46,7 +46,7 @@ function CaseStudy({ project, position }: { project: Project; position: number }
           </div>
         </div>
 
-        <aside className="case__spec">
+        <div className="case__spec">
           <dl className="spec-sheet">
             <div>
               <dt>Year</dt>
@@ -77,7 +77,7 @@ function CaseStudy({ project, position }: { project: Project; position: number }
               <Metric key={metric.label} value={metric.value} label={metric.label} />
             ))}
           </dl>
-        </aside>
+        </div>
       </div>
 
       {project.shots.length > 0 ? (

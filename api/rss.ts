@@ -6,7 +6,7 @@
 
 import { fetchIndex, fetchPost, isoDate, mapLimit } from './_lib/blog.js';
 import { escapeXml, excerptFromHtml, readingMinutes } from './_lib/html.js';
-import { BLOG_DESCRIPTION, blogTitle, ORIGIN } from './_lib/site.js';
+import { BLOG_DESCRIPTION, BLOG_TITLE, ORIGIN } from './_lib/site.js';
 
 const MAX_ITEMS = 20;
 const CONCURRENCY = 3;
@@ -43,7 +43,7 @@ export async function GET(): Promise<Response> {
       .join('\n');
   });
 
-  const title = blogTitle(index.data.title);
+  const title = BLOG_TITLE;
   const newest = posts.map((post) => isoDate(post.date)).find(Boolean);
   const body = [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -51,7 +51,7 @@ export async function GET(): Promise<Response> {
     '  <channel>',
     `    <title>${escapeXml(title)}</title>`,
     `    <link>${ORIGIN}/blog</link>`,
-    `    <description>${escapeXml(index.data.description || BLOG_DESCRIPTION)}</description>`,
+    `    <description>${escapeXml(BLOG_DESCRIPTION)}</description>`,
     '    <language>en-us</language>',
     `    <atom:link href="${ORIGIN}/rss.xml" rel="self" type="application/rss+xml" />`,
     newest ? `    <lastBuildDate>${new Date(newest).toUTCString()}</lastBuildDate>` : '',

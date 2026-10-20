@@ -85,11 +85,11 @@ export default function Resume() {
               Read it here or take the PDF. Both come from the same file, so what you see is what
               recruiters get.
             </p>
-            <dl className="mono col-4 start-9 align-end" style={{ lineHeight: 2 }}>
+            <div className="mono col-4 start-9 align-end" style={{ lineHeight: 2 }}>
               <div>Updated — {updated || (state.kind === 'ready' ? 'latest' : '—')}</div>
               <div>Pages — {state.kind === 'ready' ? String(state.pages.length).padStart(2, '0') : '—'}</div>
               <div>Format — {size ? `PDF · ${size}` : 'PDF'}</div>
-            </dl>
+            </div>
           </div>
         </Shell>
       </section>
