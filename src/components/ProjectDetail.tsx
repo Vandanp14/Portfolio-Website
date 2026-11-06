@@ -2,12 +2,6 @@ import type { Project } from '../content/portfolio';
 import { usePageMeta } from '../lib/seo';
 import { Meta, PageTitle, Picture, SectionTitle, Shell, TextLink, Wide } from './primitives';
 
-/** Intrinsic sizes of the exported screenshots. */
-const SHOT_SIZE = {
-  phone: { width: 758, height: 1400 },
-  wide: { width: 2940, height: 1604 },
-} as const;
-
 export function ProjectDetail({ project }: { project: Project }) {
   usePageMeta({ title: project.title, description: project.tagline, path: `/work/${project.id}` });
 
@@ -61,7 +55,6 @@ export function ProjectDetail({ project }: { project: Project }) {
           <Wide className="mt-4">
             <div className="flex flex-wrap items-start gap-6">
               {project.shots.map((shot, i) => {
-                const size = SHOT_SIZE[shot.kind];
                 const phone = shot.kind === 'phone';
                 return (
                   <figure key={shot.src.img.src} className={phone ? 'w-[min(300px,100%)]' : 'w-full'}>
@@ -70,8 +63,6 @@ export function ProjectDetail({ project }: { project: Project }) {
                       eager={i === 0}
                       sizes={phone ? '(min-width: 340px) 300px, 100vw' : '(min-width: 1000px) 960px, 100vw'}
                       alt={shot.alt}
-                      width={size.width}
-                      height={size.height}
                       className="h-auto w-full rounded-[6px] border border-[var(--line)]"
                     />
                     <figcaption className="t-meta mt-2 break-words">{shot.caption}</figcaption>

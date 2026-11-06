@@ -8,10 +8,6 @@ export const DEFAULT_DESCRIPTION =
   'Vandan Patel is a software engineer finishing a computer science degree at SUNY Oswego.';
 export const BLOG_TITLE = 'Writing | Vandan Patel';
 
-/** "<index title> | Vandan Patel", matching the title the blog page sets client-side. */
-export function blogTitle(indexTitle: string): string {
-  return indexTitle ? `${indexTitle} | ${SITE_NAME}` : BLOG_TITLE;
-}
 export const BLOG_DESCRIPTION = 'Notes on what I build.';
 
 /** Absolute URL of the generated Open Graph card; bump `v` to bust the CDN cache. */
@@ -77,7 +73,7 @@ export const PROJECT_PAGES: Record<string, { title: string; description: string 
   'mint-game-hub': {
     title: "MINT Game Hub",
     description:
-      "Five daily browser games about trading cards, built for an intern team and adopted for its hobby immersion program.",
+      "Five daily browser games about trading cards, built for an intern team and adopted for the hobby immersion program.",
   },
   'centro': {
     title: "Centro Oswego Live",

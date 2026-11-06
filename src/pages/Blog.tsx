@@ -83,7 +83,7 @@ function IndexView() {
   const page = pageById('blog');
   const [state, retry] = useBlogData<PostIndex>('index', getCachedIndex(), fetchPosts);
   usePageMeta({
-    title: state.status === 'ready' ? state.data.title : page.label,
+    title: page.label,
     description: (state.status === 'ready' && state.data.description) || page.description,
     path: '/blog',
   });
@@ -256,11 +256,11 @@ function SearchablePosts({ posts }: { posts: PostSummary[] }) {
         )}
       </div>
 
-      <Meta className="mt-3" aria-live="polite">
+      <p className="t-meta mt-3" aria-live="polite">
         {searching
           ? `${results.length} of ${total} ${total === 1 ? 'post' : 'posts'}`
           : `${total} ${total === 1 ? 'post' : 'posts'}`}
-      </Meta>
+      </p>
 
       {results.length > 0 ? (
         <PostList posts={results} previews={previews} />

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import type { SectionId } from '../content/portfolio';
 import { pages } from './routes';
 
 // A deliberately tiny History-API router. Page changes swap content and
@@ -45,7 +44,3 @@ export function isHome(path = window.location.pathname): boolean {
   return path === '/' || path === '';
 }
 
-/** Every section is its own page now: `top` is home, the rest live at `/<id>`. */
-export function goToSection(id: SectionId) {
-  navigate(id === 'top' ? '/' : `/${id}`);
-}

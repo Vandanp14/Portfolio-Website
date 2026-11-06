@@ -1,16 +1,8 @@
 // Single source of truth for site content.
 // Derived from ~/Desktop/ATS_Resume_Tailor_Agent/master.json. Keep the two in sync when the resume changes.
 
-import mfpDesktop from '../assets/projects/mfp-desktop.jpg?w=640;1400&format=avif;webp;jpg&as=picture';
-import mfp2 from '../assets/projects/mfp-2.jpg?w=480;758&format=avif;webp;jpg&as=picture';
-import mfp3 from '../assets/projects/mfp-3.jpg?w=480;758&format=avif;webp;jpg&as=picture';
-import mfp4 from '../assets/projects/mfp-4.jpg?w=480;758&format=avif;webp;jpg&as=picture';
-import mfp5 from '../assets/projects/mfp-5.jpg?w=480;758&format=avif;webp;jpg&as=picture';
-import ledger1 from '../assets/projects/ledger-1.jpg?w=480;758&format=avif;webp;jpg&as=picture';
 import ledger2 from '../assets/projects/ledger-2.jpg?w=480;758&format=avif;webp;jpg&as=picture';
-import ledger3 from '../assets/projects/ledger-3.jpg?w=480;758&format=avif;webp;jpg&as=picture';
 import ledger4 from '../assets/projects/ledger-4.jpg?w=480;758&format=avif;webp;jpg&as=picture';
-import ledger5 from '../assets/projects/ledger-5.jpg?w=480;758&format=avif;webp;jpg&as=picture';
 import diningMenu from '../assets/projects/dining-menu.jpg?w=640;1400&format=avif;webp;jpg&as=picture';
 import diningPicks from '../assets/projects/dining-picks.jpg?w=640;1400&format=avif;webp;jpg&as=picture';
 import diningLabel from '../assets/projects/dining-label.jpg?w=640;1400&format=avif;webp;jpg&as=picture';
@@ -40,15 +32,13 @@ export const profile = {
   github: 'https://github.com/Vandanp14',
   linkedin: 'https://www.linkedin.com/in/vpatel1410',
   site: 'https://vandanpatel.me',
-  intro:
-    'I’m a CS student at SUNY Oswego. This summer at Fanatics I built Product Builder’s first API and the first AI assistant on their internal developer platform to read non-GitHub data. On my own time I build tools I use myself, including a fitness analytics app, a personal finance ledger and a game platform.',
 };
 
 export type ProjectShot = {
   /** Responsive AVIF/WebP/JPEG set from vite-imagetools. */
   src: ImagePicture;
   alt: string;
-  /** 'phone' renders in a device frame; 'wide' renders as a flat screen. */
+  /** 'phone' is a narrow portrait screenshot; 'wide' is a landscape one. */
   kind: 'phone' | 'wide';
   caption: string;
 };
@@ -81,16 +71,10 @@ export const featuredProjects: Project[] = [
       'The front end is React and TypeScript on a FastAPI service with 44 routes. The schema has 20 tables covering nutrition, sleep, activity, body composition and workouts.',
       'Ingest is idempotent. It normalizes 24 metrics, dedupes with SHA-256 and merges timestamps, so re-running an import never double-counts a day.',
       'Readiness, adaptive TDEE, macro targets, the weight forecast, estimated 1RM and progressive-overload detection are all plain code. They run before any model sees the data.',
-      'Gemini 2.5 Flash gets domain-scoped prompts, generated in parallel and cached per day, so coaching costs one call a day instead of one per view.',
+      'Gemini 2.5 Flash gets domain-scoped prompts, generated in parallel and cached per day, so they run once a day instead of on every view.',
     ],
     stack: ['React', 'TypeScript', 'FastAPI', 'PostgreSQL', 'Gemini API', 'Docker'],
-    shots: [
-      { src: mfpDesktop, kind: 'wide', alt: 'MFP Coach desktop dashboard with the day’s protein target and metric tiles', caption: 'Today: the main action first, then the numbers behind it' },
-      { src: mfp2, kind: 'phone', alt: 'MFP Coach phone home screen with a protein target card', caption: 'One action for the day' },
-      { src: mfp3, kind: 'phone', alt: 'MFP Coach weight trend chart over ninety days', caption: '90-day weight trend and forecast' },
-      { src: mfp4, kind: 'phone', alt: 'MFP Coach weekly AI review summarizing weight, steps and missing nutrition data', caption: 'Weekly AI review, cached per day' },
-      { src: mfp5, kind: 'phone', alt: 'MFP Coach quick log sheet with meal, water, weight and check-in options', caption: 'Quick log sheet' },
-    ],
+    shots: [],
   },
   {
     id: 'oswego-dining',
@@ -104,7 +88,7 @@ export const featuredProjects: Project[] = [
       'A production quota outage led to a 2-day scrape window and a daily fetch budget. The decision is written up in an ADR.',
       'A Vercel function sits in front of Apps Script with a strict input allowlist and stale-while-revalidate caching.',
       'Gemini returns plates against a response schema. Each one is checked against real menu IDs, and nutrition totals are recomputed from stored data rather than taken from the model.',
-      'Covered by 187 automated node:test tests when last counted for my résumé.',
+      'It had 187 node:test tests when I last counted.',
     ],
     stack: ['JavaScript', 'Google Apps Script', 'Google Sheets', 'Gemini API', 'Vercel', 'GitHub Actions'],
     liveUrl: 'https://oswego-dining.vercel.app',
@@ -148,17 +132,14 @@ export const featuredProjects: Project[] = [
       'I tracked a summer in New York against a fixed budget. Eleven data models cover transactions, budgets, recurring bills, group splits and reports, and I can log expenses by speaking them.',
     build: [
       'The ledger uses transactions, so balance reconciliation is atomic. It also has soft deletes, rule-based categories, monthly budget overrides and a safe-to-spend number computed by plain code.',
-      'Group expenses split equally, by custom amounts or by percentage. Remainders are handed out a cent at a time, so settlements never drift by a penny.',
+      'Group expenses split equally, by custom amounts or by percentage. Remainders are handed out a cent at a time, so group settlements add up exactly.',
       'Gemini’s structured output turns a spoken sentence into up to 20 expenses. Each batch has to pass schema validation and a category allowlist, then saves in one atomic write.',
       'Sessions are HMAC-signed HTTP-only cookies. Password checks are timing-safe and logins are rate limited. 102 automated tests cover it.',
     ],
     stack: ['Next.js 16', 'React 19', 'TypeScript', 'Prisma', 'PostgreSQL', 'Gemini API'],
     shots: [
-      { src: ledger1, kind: 'phone', alt: 'Transit Ledger home screen with net position and summer runway', caption: 'Net position and summer runway' },
       { src: ledger2, kind: 'phone', alt: 'Transit Ledger quick log screen with one-tap fare buttons', caption: 'One-tap fares for the commute' },
       { src: ledger4, kind: 'phone', alt: 'Transit Ledger dictation sheet turning a spoken expense into an entry', caption: 'Dictating an expense' },
-      { src: ledger3, kind: 'phone', alt: 'Transit Ledger transaction list with categorized entries', caption: 'Categorized ledger' },
-      { src: ledger5, kind: 'phone', alt: 'Transit Ledger transaction list with AI-generated labels on entries', caption: 'Entries with AI-generated labels' },
     ],
   },
   {
@@ -169,7 +150,7 @@ export const featuredProjects: Project[] = [
     summary:
       'It takes my master résumé as JSON and a job description, then produces a one-page LaTeX PDF. Gemini plans and writes under Pydantic schemas. Plain code does the keyword matching, checks that every bullet cites a real fact from the master résumé, and fits the page. It’s a personal tool behind a password.',
     build: [
-      'Code, not the model, maps each job requirement as direct, proxy or missing, then ranks roles and projects.',
+      'Plain code maps each job requirement as direct, proxy or missing, then ranks roles and projects.',
       'Validators reject unknown or duplicate fact sources, changed employers, dates or titles, and any technology the cited facts don’t mention.',
       'Tectonic renders the LaTeX, and a PyPDF loop fits the result to one page.',
       'A persistent single-worker queue, per-stage checkpoints and Server-Sent Events let failed runs resume with visible progress. It has 383 pytest tests.',
@@ -181,7 +162,7 @@ export const featuredProjects: Project[] = [
     id: 'mint-game-hub',
     title: 'MINT Game Hub',
     tagline:
-      'Five daily browser games about trading cards, built for an intern team and adopted for its hobby immersion program.',
+      'Five daily browser games about trading cards, built for an intern team and adopted for the hobby immersion program.',
     year: '2026',
     summary:
       '2048, Hangman, Crossword, Memory Matching and Higher/Lower, each with a daily challenge. The team had no developer, so I built it on my own.',
@@ -262,7 +243,6 @@ export const otherProjects: SmallProject[] = [
     blurb: 'Grades student submissions with regex parsing, builds an HTML report for each and emails them out.',
     year: '2025',
     stack: ['Python', 'Regex', 'Bash'],
-    url: 'https://github.com/Vandanp14/05-python-project-Vandanp14',
   },
   {
     id: 'http-server',
@@ -277,7 +257,7 @@ export const otherProjects: SmallProject[] = [
     blurb: 'Collects job listings with headless Selenium and BeautifulSoup.',
     year: '2024',
     stack: ['Python', 'Selenium', 'SQL'],
-    url: 'https://github.com/Vandanp14/Freeport-Job-Scraper',
+    url: 'https://github.com/Vandanp14/Joblisting-Aggregator',
   },
   {
     id: 'rsvp-tracker',
@@ -369,7 +349,7 @@ export const experience: Role[] = [
       'Replaced a manual reporting process with an interactive dashboard, which cut report-generation time.',
       'Integrated REST APIs to keep data in sync in real time, and designed reusable React components with accessibility in mind.',
       'Asked field staff directly what they needed and turned that into features.',
-      'Wrote IEEE-compliant requirements documentation and maintained Drupal 10 pages for a mission-critical system.',
+      'Wrote IEEE-compliant requirements documentation and maintained Drupal 10 pages for the facilities-services system.',
     ],
     stack: ['React', 'Tailwind CSS', 'REST APIs', 'Drupal 10', 'Jira'],
   },
@@ -396,7 +376,7 @@ export const experience: Role[] = [
     summary: 'I did planning, reporting and quality assurance for five project teams running at once.',
     highlights: [
       'Set up Jira-based Gantt tracking for 40+ deliverables across five teams.',
-      'Improved QA workflows, which reduced data errors by 30%. Simplified reporting, which sped up decision cycles by 20%.',
+      'Improved QA workflows, which reduced data errors by 30%. Simplified reporting, which made decisions about 20% faster.',
     ],
     stack: ['Jira', 'Excel', 'QA'],
   },
@@ -438,15 +418,15 @@ export type SkillGroup = { title: string; skills: string[] };
 export const skillGroups: SkillGroup[] = [
   {
     title: 'Languages',
-    skills: ['Python', 'TypeScript', 'Elixir', 'Java', 'C++', 'C', 'SQL', 'Go', 'Scala', 'Clojure', 'Bash'],
+    skills: ['Python', 'TypeScript', 'Elixir', 'Java', 'C++', 'C', 'SQL', 'Go', 'Scala', 'Clojure', 'Bash', 'JavaScript', 'HTML', 'CSS', 'Answer Set Programming'],
   },
   {
     title: 'Backend & distributed systems',
-    skills: ['REST APIs', 'Phoenix LiveView', 'FastAPI', 'Flask', 'RabbitMQ', 'PostgreSQL', 'MySQL', 'Prisma', 'Docker', 'AWS', 'CI/CD'],
+    skills: ['REST APIs', 'Phoenix LiveView', 'FastAPI', 'Flask', 'RabbitMQ', 'PostgreSQL', 'MySQL', 'Prisma', 'Docker', 'AWS', 'CI/CD', 'SQLite', 'Pydantic', 'Server-Sent Events', 'Vercel', 'Railway'],
   },
   {
     title: 'Front end',
-    skills: ['React', 'Next.js', 'Tailwind CSS', 'Three.js', 'Accessibility', 'PWA'],
+    skills: ['React', 'Next.js', 'Tailwind CSS', 'Three.js', 'Accessibility', 'PWA', 'Leaflet', 'Google Apps Script'],
   },
   {
     title: 'AI & data',
@@ -454,7 +434,7 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     title: 'Systems & tooling',
-    skills: ['POSIX APIs', 'TCP sockets', 'Multithreading', 'Mutexes', 'RAII', 'Git', 'Linux', 'Pytest', 'Vitest'],
+    skills: ['POSIX APIs', 'TCP sockets', 'Multithreading', 'Mutexes', 'RAII', 'Git', 'Linux', 'Pytest', 'Vitest', 'Jest', 'Playwright', 'GitHub Actions'],
   },
 ];
 
@@ -463,7 +443,7 @@ export const recognition = [
     title: 'Residence Life Staff Member of the Year',
     org: 'SUNY Oswego Residence Life',
     year: '2024',
-    note: 'Named Residence Life Staff Member of the Year for supporting a community of 32 residents.',
+    note: 'Recognized for student support as a Resident Assistant.',
   },
   {
     title: 'LakerHacks Finalist',

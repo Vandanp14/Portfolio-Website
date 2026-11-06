@@ -27,7 +27,9 @@ There are no tests.
 - **`src/lib/routes.ts`** — the page registry (`pages`: id, path, label, description) in index order. Server-side titles/descriptions for section pages live in `SECTION_PAGES` (`api/_lib/site.ts`), and per-project ones in `PROJECT_PAGES` in the same file. Keep `PROJECT_PAGES` in sync with `featuredProjects`, and `SECTION_PAGES` with `pages`.
 - **`src/content/portfolio.ts`** — all portfolio content (profile, `featuredProjects`, `otherProjects`, experience, education, skills, recognition, leadership). Edit content here, not in JSX. The source of truth for facts is `~/Desktop/ATS_Resume_Tailor_Agent/master.json`; keep the two in sync. Site copy is plain first-person student voice: no marketing words, no em dashes in prose.
 - **`src/components/*`** — one component per page plus `Nav`, `Footer`, `PageRows`, `ProjectDetail`, `NotFound`, `ErrorBoundary`, `ThemeToggle`, `primitives.tsx` (`Shell`, `Wide`, `PageTitle`, `SectionTitle`, `Meta`, `TextLink`, `Picture`, buttons) and `Link.tsx` (client-side nav link).
-- **`src/index.css`** — one neutral token set (`--bg`, `--text`, `--text-2`, `--line`, `--surface`, `--signal`, `--content`, `--wide`, …) on `:root`, redeclared under `:root[data-theme='dark']`. Components use the tokens, never hardcoded colours. There are no colour bands, no scroll-reveal engine and no motion components; pages swap without transitions.
+- **`src/index.css`** — one neutral token set (`--bg`, `--text`, `--text-2`, `--line`, `--surface`, `--signal`, `--content`, `--wide`, …) on `:root`, redeclared under `:root[data-theme='dark']`. Components use the tokens, never hardcoded colours. There are no colour bands, no scroll-reveal engine and no motion components; pages swap with a 150ms fade.
+
+MFP Coach and three Transit Ledger screenshots (`mfp-*.jpg`, `ledger-1/3/5.jpg`) are unused in `src/assets` pending retakes with sample data, because they show real weight and income.
 
 ### External services (Google Apps Script)
 - **Contact form** — `src/lib/contact.ts` POSTs to `VITE_CONTACT_ENDPOINT` (source in `apps-script/`).

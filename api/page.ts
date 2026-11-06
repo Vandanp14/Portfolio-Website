@@ -16,7 +16,7 @@ import { fetchIndex, fetchPost, isoDate, POST_ID } from './_lib/blog.js';
 import { escapeHtml, excerptFromHtml, readingMinutes, wordCount } from './_lib/html.js';
 import {
   BLOG_DESCRIPTION,
-  blogTitle,
+  BLOG_TITLE,
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
   ORIGIN,
@@ -152,7 +152,7 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
   if (path === '/blog') {
     const index = await fetchIndex();
     const description = (index.ok && index.data.description) || BLOG_DESCRIPTION;
-    const title = blogTitle(index.ok ? index.data.title : '');
+    const title = BLOG_TITLE;
     return {
       status: 200,
       cache: index.ok ? CACHED : SHORT,
