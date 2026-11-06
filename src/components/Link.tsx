@@ -5,7 +5,7 @@ import { navigate } from '../lib/router';
 /**
  * In-app link: client-side navigation on plain left-click, native `<a>`
  * otherwise. Hover or focus warms the target page's code-split chunk, so the
- * slide transition never lands on a loading fallback.
+ * page fade never lands on a loading fallback.
  */
 export function Link({
   to,

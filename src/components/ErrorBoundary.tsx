@@ -1,5 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { ButtonGhost, Shell } from './primitives';
+import { Shell } from './primitives';
 
 const RELOAD_KEY = 'chunk-reload-at';
 const RELOAD_WINDOW_MS = 30_000;
@@ -44,31 +44,23 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
   render() {
     if (!this.state.error) return this.props.children;
     return (
-      <section className="band band-paper min-h-[100svh] pt-[var(--nav-h)]">
-        <Shell className="pb-[var(--section)] pt-[clamp(32px,5vw,72px)]">
-          <div role="alert" className="border-t border-[var(--line-strong)] pt-4">
-            <div className="flex items-baseline justify-between gap-6">
-              <p className="t-eyebrow text-[var(--signal)]">Something broke</p>
-              <span className="t-index text-[var(--text-3)]">/500</span>
-            </div>
-            <h1 className="t-display mt-[clamp(40px,6vw,88px)] max-w-[14ch] text-[clamp(3rem,9vw,7.5rem)] uppercase text-[var(--text)]">
-              This page failed to load.
-            </h1>
-            <p className="mt-8 max-w-[56ch] text-[18px] leading-[1.45] text-[var(--text-2)]">
-              Usually a reload fixes it — the site may have just been updated. If it keeps happening, the rest of the
-              site still works.
-            </p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <ButtonGhost onClick={() => window.location.reload()}>
-                Reload <span aria-hidden="true">↻</span>
-              </ButtonGhost>
-              <ButtonGhost onClick={() => window.location.assign('/')}>
-                Home <span aria-hidden="true">→</span>
-              </ButtonGhost>
-            </div>
-          </div>
-        </Shell>
-      </section>
+      <Shell className="py-12 sm:py-16">
+        <div role="alert">
+          <h1 className="t-page text-[var(--text)]">This page failed to load.</h1>
+          <p className="mt-4 text-[var(--text-2)]">
+            A reload usually fixes it, since the site may have just been updated. The rest of the site should still
+            work.
+          </p>
+          <p className="mt-4 flex gap-x-5">
+            <button type="button" onClick={() => window.location.reload()} className="text-link min-h-[44px]">
+              Reload
+            </button>
+            <button type="button" onClick={() => window.location.assign('/')} className="text-link min-h-[44px]">
+              Home
+            </button>
+          </p>
+        </div>
+      </Shell>
     );
   }
 }

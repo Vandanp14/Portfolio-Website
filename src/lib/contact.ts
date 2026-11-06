@@ -96,7 +96,7 @@ export async function sendContact(payload: ContactPayload): Promise<ContactResul
     }
     return {
       ok: false,
-      error: `Something went wrong sending your message — check your connection, or email me directly at ${DIRECT_EMAIL}.`,
+      error: `Something went wrong sending your message. Check your connection, or email me directly at ${DIRECT_EMAIL}.`,
     };
   } finally {
     clearTimeout(timeout);

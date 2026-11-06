@@ -1,13 +1,13 @@
 // Open Graph card (Vercel Function), rendered with @vercel/og (Satori +
-// resvg) in the site's slate band. Nodes are plain objects, not JSX, so
+// resvg) on a slate background. Nodes are plain objects, not JSX, so
 // api/ needs no React/JSX setup. The font is Geist Regular, bundled with
 // @vercel/og.
 //
-//   GET /api/og?v=1                              → home card
-//   GET /api/og?v=1&title=…&date=ISO&min=N       → blog post card
+//   GET /api/og?v=2                              → home card
+//   GET /api/og?v=2&title=…&date=ISO&min=N       → blog post card
 //
 // Output depends only on the query string, so every URL caches forever;
-// bump `v` (api/_lib/site.ts) after changing the design.
+// bump `v` (api/_lib/site.ts and index.html) after changing the design.
 
 import { ImageResponse } from '@vercel/og';
 import type { ReactElement } from 'react';
@@ -19,7 +19,7 @@ const CHALK = '#F4F4F2';
 const DIM = 'rgba(244, 244, 242, 0.55)';
 const LINE = 'rgba(244, 244, 242, 0.22)';
 const VIOLET = '#9F8FFF';
-const HOME_TITLE = 'I build the systems other people build on.';
+const HOME_TITLE = 'Software engineer finishing a CS degree at SUNY Oswego.';
 
 type Style = Record<string, string | number>;
 type Node = { type: string; props: { style?: Style; children?: Node | string | (Node | string)[] } };
@@ -120,7 +120,7 @@ export async function GET(request: Request): Promise<Response> {
     if (Number.isInteger(minutes) && minutes >= 1 && minutes <= 99) parts.push(`${minutes} min read`);
     node = card('WRITING', title, parts.filter(Boolean).join(' · '));
   } else {
-    node = card('PORTFOLIO', HOME_TITLE, 'Backend · Distributed systems · Applied AI');
+    node = card('PORTFOLIO', HOME_TITLE, 'Software engineer · SUNY Oswego');
   }
 
   return new ImageResponse(node as unknown as ReactElement, {

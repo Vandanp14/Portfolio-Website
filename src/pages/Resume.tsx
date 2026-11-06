@@ -1,11 +1,10 @@
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
 import type { PDFDocumentLoadingTask, PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist/legacy/build/pdf.mjs';
 import workerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import { ButtonGhost, Eyebrow, Shell } from '../components/primitives';
-import { Rule } from '../components/motion/Rule';
-import { SplitLines } from '../components/motion/SplitLines';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Meta, PageTitle, SectionTitle, Shell } from '../components/primitives';
 import { track } from '../lib/analytics';
+import { pageById } from '../lib/routes';
 import { usePageMeta } from '../lib/seo';
 import { formatUpdated, loadResume, pdfUrl, RESUME_FILENAME, type ResumeFile } from '../lib/resume';
 
@@ -28,11 +27,12 @@ type State =
 export default function Resume() {
   const [state, setState] = useState<State>({ kind: 'loading', step: 'checking' });
   const [attempt, setAttempt] = useState(0);
+  const page = pageById('resume');
 
   usePageMeta({
-    title: 'Résumé',
-    description: 'Vandan Patel’s current résumé — backend, distributed systems and applied AI. View in the browser or download the PDF.',
-    path: '/resume',
+    title: page.label,
+    description: page.description,
+    path: page.path,
   });
 
   useEffect(() => {
@@ -74,59 +74,24 @@ export default function Resume() {
   const size = state.kind === 'ready' && state.file.meta.size ? `${Math.max(1, Math.round(state.file.meta.size / 1024))} KB` : '';
 
   return (
-    <section className="band band-mist min-h-[100svh] pt-[var(--nav-h)]">
-      <Shell className="pb-[var(--section)] pt-[clamp(32px,5vw,72px)]">
-        <header>
-          <Rule strong />
-          <div className="mt-4 flex items-baseline justify-between gap-6">
-            <Eyebrow>Résumé</Eyebrow>
-            <span className="t-index text-[var(--text-3)]">/cv</span>
-          </div>
+    <Shell className="py-12 sm:py-16">
+      <PageTitle>{page.label}</PageTitle>
+      <Meta className="mt-2">
+        {[updated && `Updated ${updated}`, state.kind === 'ready' && `${state.pages.length} ${state.pages.length === 1 ? 'page' : 'pages'}`, size && `PDF, ${size}`]
+          .filter(Boolean)
+          .join(' · ') || 'The newest PDF, shown here.'}
+      </Meta>
 
-          <div className="mt-[clamp(40px,6vw,88px)] grid gap-10 lg:grid-cols-12 lg:items-end">
-            <div className="min-w-0 lg:col-span-9">
-              <SplitLines
-                as="h1"
-                text="Résumé"
-                className="t-display block text-[clamp(4rem,17vw,15rem)] uppercase text-[var(--text)]"
-              />
-              <p
-                className="reveal mt-8 max-w-[56ch] text-[18px] leading-[1.45] text-[var(--text-2)]"
-                style={{ '--reveal-delay': '240ms' } as CSSProperties}
-              >
-                Always the latest version — read it here or download the PDF.
-              </p>
-            </div>
-
-            <dl className="grid grid-cols-2 gap-x-6 gap-y-5 lg:col-span-3 lg:grid-cols-1">
-              <MetaItem term="Updated" value={updated || (state.kind === 'ready' ? 'Latest version' : '—')} />
-              <MetaItem term="Pages" value={state.kind === 'ready' ? String(state.pages.length).padStart(2, '0') : '—'} mono />
-              <MetaItem term="Format" value={size ? `PDF · ${size}` : 'PDF'} mono />
-            </dl>
-          </div>
-        </header>
-
-        <div className="mt-[clamp(56px,8vw,120px)]">
-          {state.kind === 'ready' ? (
-            <Viewer file={state.file} pages={state.pages} />
-          ) : state.kind === 'error' ? (
-            <ErrorPanel message={state.error} onRetry={() => setAttempt((n) => n + 1)} />
-          ) : (
-            <LoadingPaper step={state.step} progress={state.progress} />
-          )}
-        </div>
-      </Shell>
-    </section>
-  );
-}
-
-/** Metadata line with a 1px left rule. */
-function MetaItem({ term, value, mono = false }: { term: string; value: string; mono?: boolean }) {
-  return (
-    <div className="border-l border-[var(--line-strong)] pl-2.5">
-      <dt className="t-eyebrow text-[var(--text-3)]">{term}</dt>
-      <dd className={`mt-1 text-[15px] text-[var(--text)] ${mono ? 't-index' : 'tracking-[-0.01em]'}`}>{value}</dd>
-    </div>
+      <div className="mt-8">
+        {state.kind === 'ready' ? (
+          <Viewer file={state.file} pages={state.pages} />
+        ) : state.kind === 'error' ? (
+          <ErrorPanel message={state.error} onRetry={() => setAttempt((n) => n + 1)} />
+        ) : (
+          <LoadingPaper step={state.step} progress={state.progress} />
+        )}
+      </div>
+    </Shell>
   );
 }
 
@@ -205,18 +170,18 @@ function Viewer({ file, pages }: { file: ResumeFile; pages: PDFPageProxy[] }) {
 
 
   const toolButton =
-    'inline-flex h-11 min-w-11 items-center justify-center px-2 text-[18px] leading-none text-[var(--text-2)] transition-colors duration-[var(--t-fast)] ease-[var(--ease-out-expo)] hover:bg-[var(--text)] hover:text-[var(--bg)] disabled:pointer-events-none disabled:opacity-40';
+    'inline-flex h-11 min-w-11 items-center justify-center px-2 text-[18px] leading-none text-[var(--text-2)] transition-colors duration-150 hover:bg-[var(--surface-2)] hover:text-[var(--text)] disabled:pointer-events-none disabled:opacity-40';
 
   return (
     <div>
       <div
         role="toolbar"
         aria-label="Résumé viewer"
-        className="sticky top-[calc(var(--nav-h)-12px)] z-20 flex items-center justify-between gap-2 border border-[var(--line)] bg-[var(--bg)] p-1"
+        className="sticky top-2 z-20 flex flex-wrap items-center justify-between gap-2 border border-[var(--line)] bg-[var(--bg)] p-1"
       >
         <div className="flex items-center">
-          <span className="t-index hidden px-3 text-[var(--text-2)] sm:inline" aria-live="polite">
-            Page {String(current).padStart(2, '0')} / {String(pages.length).padStart(2, '0')}
+          <span className="hidden px-3 text-[14px] tabular-nums text-[var(--text-2)] sm:inline" aria-live="polite">
+            Page {current} of {pages.length}
           </span>
           <span className="mx-1 hidden h-6 w-px bg-[var(--line)] sm:block" aria-hidden="true" />
           <button
@@ -228,7 +193,7 @@ function Viewer({ file, pages }: { file: ResumeFile; pages: PDFPageProxy[] }) {
           >
             <span aria-hidden="true">−</span>
           </button>
-          <span className="t-index w-12 text-center text-[var(--text)] sm:w-14" aria-live="polite">
+          <span className="w-12 text-center text-[14px] tabular-nums text-[var(--text)] sm:w-14" aria-live="polite">
             {Math.round(scale * 100)}%
           </span>
           <button
@@ -242,7 +207,7 @@ function Viewer({ file, pages }: { file: ResumeFile; pages: PDFPageProxy[] }) {
           </button>
           <button
             type="button"
-            className={`${toolButton} t-eyebrow ml-1 px-3 ${zoom === 'fit' ? 'text-[var(--text)] underline decoration-1 underline-offset-4' : ''}`}
+            className={`${toolButton} ml-1 px-3 text-[14px] ${zoom === 'fit' ? 'text-[var(--text)] underline decoration-1 underline-offset-4' : ''}`}
             onClick={() => setZoom('fit')}
             aria-label="Fit to width"
             aria-pressed={zoom === 'fit'}
@@ -256,10 +221,10 @@ function Viewer({ file, pages }: { file: ResumeFile; pages: PDFPageProxy[] }) {
             href={pdfUrl(file.meta.version)}
             target="_blank"
             rel="noopener noreferrer"
-            className={`${toolButton} t-eyebrow hidden gap-1.5 px-3 sm:inline-flex`}
+            className={`${toolButton} hidden gap-1.5 px-3 text-[14px] sm:inline-flex`}
             aria-label="Open PDF in a new tab"
           >
-            Open <span aria-hidden="true" className="arrow-nudge text-[14px]">↗</span>
+            Open <span aria-hidden="true">↗</span>
           </a>
           <a
             href={blobUrl ?? pdfUrl(file.meta.version, true)}
@@ -271,12 +236,9 @@ function Viewer({ file, pages }: { file: ResumeFile; pages: PDFPageProxy[] }) {
                 resume_version: file.meta.updatedAt,
               })
             }
-            className="group inline-flex min-h-[44px] items-center justify-center gap-3 border border-[var(--text)] bg-[var(--text)] px-5 text-[16px] tracking-[-0.01em] text-[var(--bg)] transition-[background-color,color] duration-[var(--t-base)] ease-[var(--ease-out-expo)] hover:bg-transparent hover:text-[var(--text)]"
+            className="inline-flex min-h-[44px] items-center justify-center border border-[var(--text)] bg-[var(--text)] px-5 text-[16px] text-[var(--bg)] transition-[background-color,color] duration-150 hover:bg-transparent hover:text-[var(--text)]"
           >
             Download PDF
-            <span aria-hidden="true" className="inline-block transition-transform duration-[var(--t-base)] ease-[var(--ease-out-expo)] group-hover:translate-y-[3px]">
-              ↓
-            </span>
           </a>
         </div>
       </div>
@@ -357,14 +319,14 @@ function PageCanvas({ page, scale }: { page: PDFPageProxy; scale: number }) {
   return (
     <div
       data-page={page.pageNumber}
-      className="band band-paper relative overflow-hidden border border-[var(--line)] bg-[var(--bg)]"
+      className="relative overflow-hidden border border-[var(--line)] bg-white"
       style={{ width: viewport.width, height: viewport.height }}
     >
       <canvas
         ref={canvasRef}
         aria-label={`Résumé page ${page.pageNumber}`}
         role="img"
-        className={`block h-full w-full transition-opacity duration-[var(--t-medium)] ease-[var(--ease-out)] ${
+        className={`block h-full w-full transition-opacity duration-150 ${
           drawn ? 'opacity-100' : 'opacity-0'
         }`}
       />
@@ -375,7 +337,7 @@ function PageCanvas({ page, scale }: { page: PDFPageProxy; scale: number }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={link.url.replace(/^mailto:/, '')}
-          className="absolute rounded-[2px] transition-colors duration-[var(--t-fast)] hover:bg-[var(--accent-soft)]"
+          className="absolute rounded-[2px] hover:bg-black/10"
           style={{ left: link.left, top: link.top, width: link.width, height: link.height }}
         />
       ))}
@@ -401,14 +363,14 @@ function LoadingPaper({ step, progress }: { step: keyof typeof STEP_LABEL; progr
   return (
     <div aria-busy="true">
       <div className="flex min-h-[54px] items-center justify-between gap-4 border border-[var(--line)] bg-[var(--bg)] px-4">
-        <span className="t-eyebrow text-[var(--text-2)]" role="status">
+        <span className="text-[14px] text-[var(--text-2)]" role="status">
           {label}
           {percent !== null ? ` · ${percent}%` : '…'}
         </span>
       </div>
       <div className="h-px w-full overflow-hidden bg-[var(--line)]" aria-hidden="true">
         <div
-          className={`h-full bg-[var(--text)] transition-[width] duration-[var(--t-base)] ease-[var(--ease-out)] ${
+          className={`h-full bg-[var(--text)] transition-[width] duration-150 ${
             percent === null ? 'resume-indeterminate w-1/3' : ''
           }`}
           style={percent !== null ? { width: `${Math.max(4, percent)}%` } : undefined}
@@ -416,7 +378,7 @@ function LoadingPaper({ step, progress }: { step: keyof typeof STEP_LABEL; progr
       </div>
 
       <div
-        className="band band-paper mx-auto mt-6 aspect-[8.5/11] w-full max-w-[918px] border border-[var(--line)] p-[7%]"
+        className="mx-auto mt-6 aspect-[8.5/11] w-full border border-[var(--line)] bg-[var(--surface)] p-[7%]"
         aria-hidden="true"
       >
         <div className="skeleton h-[4%] w-[45%]" />
@@ -436,14 +398,12 @@ function LoadingPaper({ step, progress }: { step: keyof typeof STEP_LABEL; progr
 
 function ErrorPanel({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
-    <div role="alert" className="border-y border-[var(--line)] py-8 sm:flex sm:items-center sm:justify-between sm:gap-6">
-      <div>
-        <p className="t-eyebrow text-[var(--signal)]">Couldn’t load the résumé</p>
-        <p className="mt-2 text-[17px] leading-[1.45] text-[var(--text-2)]">{message}</p>
-      </div>
-      <ButtonGhost onClick={onRetry} className="mt-6 sm:mt-0 sm:shrink-0">
-        Try again <span aria-hidden="true">↻</span>
-      </ButtonGhost>
+    <div role="alert" className="border-y border-[var(--line)] py-6">
+      <SectionTitle>Couldn’t load the résumé</SectionTitle>
+      <p className="mt-2 text-[var(--text-2)]">{message}</p>
+      <button type="button" onClick={onRetry} className="text-link mt-3 min-h-[44px]">
+        Try again
+      </button>
     </div>
   );
 }

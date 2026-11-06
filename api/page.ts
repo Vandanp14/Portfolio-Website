@@ -8,6 +8,7 @@
 //   GET /api/page?path=/blog        → blog index meta + Blog JSON-LD
 //   GET /api/page?path=/blog/ID     → post meta + BlogPosting JSON-LD (404 if unknown)
 //   GET /api/page?path=/resume      → résumé meta
+//   GET /api/page?path=/work/ID     → project meta (unknown id falls through to 404 + noindex)
 //   GET /api/page?path=/work etc.   → section page meta (/work, /experience, /about, /contact)
 //   anything else                   → 404 + noindex (the SPA renders NotFound)
 
@@ -15,10 +16,11 @@ import { fetchIndex, fetchPost, isoDate, POST_ID } from './_lib/blog.js';
 import { escapeHtml, excerptFromHtml, readingMinutes, wordCount } from './_lib/html.js';
 import {
   BLOG_DESCRIPTION,
-  blogTitle,
+  BLOG_TITLE,
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
   ORIGIN,
+  PROJECT_PAGES,
   SECTION_PAGES,
   SITE_NAME,
   ogImageUrl,
@@ -141,7 +143,7 @@ function generic(path: string, overrides: Partial<Meta> = {}): Meta {
     path,
     type: 'website',
     image: ogImageUrl(),
-    imageAlt: `${SITE_NAME} — Software Engineer`,
+    imageAlt: `${SITE_NAME} | Software Engineer`,
     ...overrides,
   };
 }
@@ -150,7 +152,7 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
   if (path === '/blog') {
     const index = await fetchIndex();
     const description = (index.ok && index.data.description) || BLOG_DESCRIPTION;
-    const title = blogTitle(index.ok ? index.data.title : '');
+    const title = BLOG_TITLE;
     return {
       status: 200,
       cache: index.ok ? CACHED : SHORT,
@@ -182,7 +184,17 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
     return {
       status: 200,
       cache: CACHED,
-      meta: generic(path, { title: `${section.title} — ${SITE_NAME}`, description: section.description }),
+      meta: generic(path, { title: `${section.title} | ${SITE_NAME}`, description: section.description }),
+    };
+  }
+
+  const project = path.match(/^\/work\/([^/]+)$/);
+  if (project && Object.prototype.hasOwnProperty.call(PROJECT_PAGES, project[1])) {
+    const page = PROJECT_PAGES[project[1]];
+    return {
+      status: 200,
+      cache: CACHED,
+      meta: generic(path, { title: `${page.title} | ${SITE_NAME}`, description: page.description }),
     };
   }
 
@@ -191,8 +203,8 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
       status: 200,
       cache: CACHED,
       meta: generic('/resume', {
-        title: `Résumé — ${SITE_NAME}`,
-        description: `${SITE_NAME}'s résumé: backend and distributed systems, Software Engineering Intern at Fanatics, CS at SUNY Oswego.`,
+        title: `Résumé | ${SITE_NAME}`,
+        description: `${SITE_NAME}'s résumé: Software Engineering Intern at Fanatics, computer science at SUNY Oswego.`,
       }),
     };
   }
@@ -206,7 +218,7 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
         ? {
             status: 404,
             cache: SHORT,
-            meta: generic(path, { title: `Post not found — ${SITE_NAME}`, noindex: true }),
+            meta: generic(path, { title: `Post not found | ${SITE_NAME}`, noindex: true }),
           }
         : { status: 200, cache: SHORT, meta: generic(path) };
     }
@@ -214,14 +226,14 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
     const { title, date, html } = result.data;
     const minutes = readingMinutes(html);
     const published = isoDate(date) ?? undefined;
-    const description = excerptFromHtml(html, 200) || `${title} — writing by ${SITE_NAME}.`;
+    const description = excerptFromHtml(html, 200) || `${title}, writing by ${SITE_NAME}.`;
     const image = ogImageUrl({ title, ...(published && { date: published }), min: minutes });
     const url = `${ORIGIN}${path}`;
     return {
       status: 200,
       cache: CACHED,
       meta: {
-        title: `${title} — ${SITE_NAME}`,
+        title: `${title} | ${SITE_NAME}`,
         description,
         path,
         type: 'article',
@@ -245,7 +257,7 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
     };
   }
 
-  return { status: 404, cache: SHORT, meta: generic(path, { title: `Page not found — ${SITE_NAME}`, noindex: true }) };
+  return { status: 404, cache: SHORT, meta: generic(path, { title: `Page not found | ${SITE_NAME}`, noindex: true }) };
 }
 
 export async function GET(request: Request): Promise<Response> {

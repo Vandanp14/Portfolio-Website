@@ -28,7 +28,7 @@ function metaEl(attr: MetaKey[0], key: string): HTMLMetaElement | null {
 export function usePageMeta({ title, description, path, noindex = false, exactTitle = false }: PageMeta) {
   useEffect(() => {
     if (!title) return;
-    const fullTitle = exactTitle ? title : `${title} — ${SITE_NAME}`;
+    const fullTitle = exactTitle ? title : `${title} | ${SITE_NAME}`;
     const url = path ? SITE_ORIGIN + path : null;
 
     const values: [MetaKey, string | null][] = [

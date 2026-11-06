@@ -3,21 +3,19 @@ import { About } from './components/About';
 import { Contact } from './components/Contact';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Experience } from './components/Experience';
-import { FanaticsBanner } from './components/FanaticsBanner';
 import { Footer } from './components/Footer';
-import { Hero } from './components/Hero';
+import { Home } from './components/Home';
 import { Nav } from './components/Nav';
 import { NotFound } from './components/NotFound';
-import { OtherWork } from './components/OtherWork';
-import { PageIndex } from './components/PageIndex';
+import { ProjectDetail } from './components/ProjectDetail';
 import { SectionPage } from './components/SectionPage';
 import { Work } from './components/Work';
-import { featuredProjects, profile } from './content/portfolio';
+import { featuredProjects, projectById } from './content/portfolio';
 import { trackPageView } from './lib/analytics';
 import { loadBlog, loadResume } from './lib/prefetch';
 import { isHome, usePath } from './lib/router';
 import { pageForPath } from './lib/routes';
-import { SITE_ORIGIN, useJsonLd, usePageMeta } from './lib/seo';
+import { SITE_ORIGIN, useJsonLd } from './lib/seo';
 
 // Code-split: the blog (and DOMPurify) and the résumé (pdf.js) only load
 // when someone heads there — links prefetch them on hover/focus.
@@ -28,7 +26,7 @@ function SkipLink({ href }: { href: string }) {
   return (
     <a
       href={href}
-      className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-[#1E2124] focus:px-4 focus:py-2 focus:text-[#FFFFFF]"
+      className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-[var(--text)] focus:px-4 focus:py-2 focus:text-[var(--bg)]"
     >
       Skip to content
     </a>
@@ -64,31 +62,18 @@ const projectsJsonLd = {
       '@type': 'SoftwareApplication',
       name: project.title,
       description: project.tagline,
-      applicationCategory: project.category,
-      url: project.liveUrl ?? `${SITE_ORIGIN}/work`,
+      url: project.liveUrl ?? `${SITE_ORIGIN}/work/${project.id}`,
       ...(project.repoUrl ? { codeRepository: project.repoUrl } : {}),
       author: { '@id': `${SITE_ORIGIN}/#person` },
     },
   })),
 };
 
-function Home() {
-  usePageMeta({ title: `${profile.name} — ${profile.role}`, exactTitle: true, path: '/' });
-
-  return (
-    <>
-      <Hero />
-      <PageIndex />
-    </>
-  );
-}
-
 function WorkPage() {
   useJsonLd('ld-projects', projectsJsonLd);
   return (
-    <SectionPage id="work" band="paper">
+    <SectionPage id="work">
       <Work />
-      <OtherWork />
     </SectionPage>
   );
 }
@@ -99,10 +84,16 @@ function Page({ path }: { path: string }) {
   const blog = path.match(/^\/blog\/?(?:([^/]+)\/?)?$/);
   if (blog) {
     return (
-      <Suspense fallback={<div className="band band-paper min-h-[100svh]" />}>
+      <Suspense fallback={<div className="min-h-[100svh]" />}>
         <Blog postId={blog[1] ?? null} />
       </Suspense>
     );
+  }
+
+  const work = path.match(/^\/work\/([^/]+)\/?$/);
+  if (work) {
+    const project = projectById(work[1]);
+    return project ? <ProjectDetail project={project} /> : <NotFound />;
   }
 
   switch (path.replace(/\/+$/, '')) {
@@ -110,26 +101,25 @@ function Page({ path }: { path: string }) {
       return <WorkPage />;
     case '/experience':
       return (
-        <SectionPage id="experience" band="slate">
-          <FanaticsBanner />
+        <SectionPage id="experience">
           <Experience />
         </SectionPage>
       );
     case '/about':
       return (
-        <SectionPage id="about" band="mist">
+        <SectionPage id="about">
           <About />
         </SectionPage>
       );
     case '/contact':
       return (
-        <SectionPage id="contact" band="mist">
+        <SectionPage id="contact">
           <Contact />
         </SectionPage>
       );
     case '/resume':
       return (
-        <Suspense fallback={<div className="band band-mist min-h-[100svh]" />}>
+        <Suspense fallback={<div className="min-h-[100svh]" />}>
           <Resume />
         </Suspense>
       );

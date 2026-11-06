@@ -1,33 +1,17 @@
-# Portfolio Website – Vandan Patel
+# Portfolio Website
 
-This is my personal portfolio website built with **React + TypeScript + Tailwind CSS**, designed to showcase my education, experiences, skills, and resume in a sleek and responsive layout.
+My personal site, live at [vandanpatel.me](https://vandanpatel.me). It lists my projects, work experience and education, and has a blog, a résumé viewer and a contact form.
 
-## 🔗 Live Demo
-Check it out here: [vandanpatel.me](https://vandanpatel.me)
+## Stack
 
-## 🧰 Tech Stack
-- ⚛️ React
-- 🟦 TypeScript
-- 🌈 Tailwind CSS
-- ⚡ Vite
-- 📦 Lucide Icons
+React 18, TypeScript, Tailwind CSS 3 and Vite. Deployed on Vercel from this repo, with a few Vercel Functions in `api/` for per-page metadata, Open Graph images, the blog proxy and the résumé PDF. The contact form, blog and résumé are backed by Google Apps Script.
 
-## 📄 Resume Integration
-My resume is embedded via a public Google Drive link so I can update it anytime **without needing to redeploy** the site or push to GitHub.
+## Content
 
-## 🚀 Deployment
-The site is deployed using [Vercel](https://vercel.com), with continuous deployment from this GitHub repo.
+Everything on the site lives in `src/content/portfolio.ts`. The facts come from my master résumé JSON (`~/Desktop/ATS_Resume_Tailor_Agent/master.json`). The résumé page shows the newest PDF in a Google Drive folder, so updating it needs no deploy.
 
-## 📁 Folder Structure
+## Run it locally
 
-src/
-├── components/
-├── App.tsx          # Main layout and sections
-├── assets/          # Icons, images (optional)
-└── index.html       # Entry point
-
-## 🛠 Setup Instructions
-To run the project locally:
 ```bash
 git clone https://github.com/Vandanp14/Portfolio-Website.git
 cd Portfolio-Website
@@ -35,18 +19,7 @@ npm install
 npm run dev
 ```
 
-🙋‍♂️ About Me
-
-I’m a Computer Science student at SUNY Oswego, passionate about frontend development, design systems, and building tools that improve user experiences.
-
-📬 Contact
-	•	📧 patelvandan024@gmail.com
-	•	💼 LinkedIn
-	•	🌐 vandanpatel.me
-
-⸻
-
-
+`npm run lint` and `npm run build` should both pass before a PR. See `CLAUDE.md` for how the code is laid out and `docs/DEPLOYMENT.md` for shipping.
 
 ## Contact form troubleshooting
 
