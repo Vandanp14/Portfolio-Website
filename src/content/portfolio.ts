@@ -110,7 +110,7 @@ export const featuredProjects: Project[] = [
     liveUrl: 'https://oswego-dining.vercel.app',
     shots: [
       { src: diningMenu, kind: 'wide', alt: 'Oswego Dining menu for a dining hall, grouped by station with calories and protein for each item', caption: 'Menu by station' },
-      { src: diningPicks, kind: 'wide', alt: 'Oswego Dining list of today’s items ranked by grams of protein per calorie', caption: 'Items ranked by protein per calorie' },
+      { src: diningPicks, kind: 'wide', alt: 'Oswego Dining list of today’s items ranked by protein per calorie, with grams of protein per 100 calories shown on each', caption: 'Items ranked by protein per calorie' },
       { src: diningLabel, kind: 'wide', alt: 'Oswego Dining item detail with a nutrition label, allergens and ingredients', caption: 'Nutrition label, allergens and ingredients' },
       { src: diningPhoneMenu, kind: 'phone', alt: 'Oswego Dining menu on a phone, grouped by station', caption: 'Menu on a phone' },
       { src: diningPhoneItem, kind: 'phone', alt: 'Oswego Dining item details on a phone with nutrition facts and allergens', caption: 'Item details on a phone' },
@@ -363,7 +363,7 @@ export const experience: Role[] = [
     period: 'Apr 2024 – Apr 2026',
     location: 'Oswego, NY',
     summary:
-      'I build operational software and dashboards for facilities staff and management.',
+      'I built operational software and dashboards for facilities staff and management.',
     highlights: [
       'Built and maintained React and Tailwind dashboards that show real-time operational KPIs to facilities staff and management.',
       'Replaced a manual reporting process with an interactive dashboard, which cut report-generation time.',
@@ -381,7 +381,7 @@ export const experience: Role[] = [
     summary:
       'I built reporting and analysis workflows on student retention, GPA, course performance and student-success outcomes.',
     highlights: [
-      'Built Tableau dashboards that helped university leadership spot student-performance trends and where students needed intervention.',
+      'Built Tableau dashboards that helped leadership spot student-performance trends and where students needed intervention.',
       'Wrote Python and SQL pipelines that automated extraction, consolidation, cleaning and validation.',
       'Designed SQL ETL workflows and optimized queries, which cut manual data-processing and reporting time by 40%.',
       'Used SPSS to find predictors of first-year retention, and standardized data definitions across different systems so everyone worked from the same numbers.',
@@ -396,7 +396,7 @@ export const experience: Role[] = [
     summary: 'I did planning, reporting and quality assurance for five project teams running at once.',
     highlights: [
       'Set up Jira-based Gantt tracking for 40+ deliverables across five teams.',
-      'Improved QA workflows, which reduced data errors by 30%. Streamlined reporting, which sped up decision cycles by 20%.',
+      'Improved QA workflows, which reduced data errors by 30%. Simplified reporting, which sped up decision cycles by 20%.',
     ],
     stack: ['Jira', 'Excel', 'QA'],
   },
@@ -405,7 +405,7 @@ export const experience: Role[] = [
     title: 'Help Desk Attendant',
     period: 'Feb 2023 – May 2023',
     location: 'Oswego, NY',
-    summary: 'I gave Tier-1 and Tier-2 support for university hardware, software, accounts and the network.',
+    summary: 'I provided Tier-1 and Tier-2 support for university hardware, software, accounts and the network.',
     highlights: [
       'Resolved 100+ support issues and wrote internal troubleshooting guides that cut down repeat questions.',
       'Worked with system administrators to find recurring failures and improve escalation steps.',

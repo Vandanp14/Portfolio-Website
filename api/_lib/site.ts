@@ -24,7 +24,7 @@ export function ogImageUrl(params: Record<string, string | number> = {}): string
 
 /**
  * Section pages (each was a part of the one-page home before). Titles and
- * descriptions mirror `pages` in src/lib/routes.ts | keep the two in sync.
+ * descriptions mirror `pages` in src/lib/routes.ts. Keep the two in sync.
  */
 export const SECTION_PAGES: Record<string, { title: string; description: string }> = {
   '/work': {
