@@ -44,7 +44,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
   render() {
     if (!this.state.error) return this.props.children;
     return (
-      <section className="band band-paper min-h-[100svh] pt-[var(--nav-h)]">
+      <section className="band band-paper min-h-[100svh] ">
         <Shell className="pb-[var(--section)] pt-[clamp(32px,5vw,72px)]">
           <div role="alert" className="border-t border-[var(--line-strong)] pt-4">
             <div className="flex items-baseline justify-between gap-6">

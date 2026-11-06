@@ -1,10 +1,7 @@
 import { useId, useState, type CSSProperties } from 'react';
 import type { Role } from '../content/portfolio';
 import { experience } from '../content/portfolio';
-import { Rule } from './motion/Rule';
-import { Scramble } from './motion/Scramble';
-import { SplitLines } from './motion/SplitLines';
-import { SectionHeading, Shell } from './primitives';
+import { SectionHeading, Shell, Rule } from './primitives';
 
 /** Highlights shown before the disclosure on long roles. */
 const PREVIEW = 4;
@@ -50,7 +47,7 @@ function RoleRow({ role, index }: { role: Role; index: number }) {
 
   return (
     <li>
-      <Rule strong={primary} delay={index * 60} />
+      <Rule strong />
 
       <div
         className={`grid grid-cols-1 gap-x-[var(--gutter)] gap-y-8 lg:grid-cols-12 ${
@@ -60,13 +57,9 @@ function RoleRow({ role, index }: { role: Role; index: number }) {
         {/* Left — company, summary, highlights, stack */}
         <div className="min-w-0 lg:col-span-8">
           <span className="t-index text-[var(--text-3)]">/0.{index + 1}</span>
-          <SplitLines
-            as="h3"
-            text={role.company}
-            className={`t-display mt-3 block text-[var(--text)] ${
+          <h3 className={`t-display mt-3 block text-[var(--text)] ${
               primary ? 'text-[clamp(3rem,7.5vw,6rem)]' : 'text-[clamp(2.25rem,4.4vw,3.75rem)]'
-            }`}
-          />
+            }`}>{role.company}</h3>
 
           <p
             className={`reveal mt-6 max-w-[58ch] leading-[1.4] text-[var(--text-2)] ${
@@ -163,7 +156,7 @@ function Meta({ label, value, scramble = false }: { label: string; value: string
     <div className="border-l border-[var(--line-strong)] pl-2.5">
       <dt className="sr-only">{label}</dt>
       <dd className="t-eyebrow text-[var(--text-2)]">
-        {scramble ? <Scramble text={value.toUpperCase()} /> : value}
+        {scramble ? <span>{value.toUpperCase()}</span> : value}
       </dd>
     </div>
   );

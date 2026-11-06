@@ -1,17 +1,9 @@
 import type { CSSProperties } from 'react';
 import type { SkillGroup } from '../content/portfolio';
 import { education, leadership, recognition, skillGroups } from '../content/portfolio';
-import { Marquee } from './motion/Marquee';
-import { Rule } from './motion/Rule';
-import { SplitLines } from './motion/SplitLines';
-import { SectionHeading, Shell } from './primitives';
+import { SectionHeading, Shell, Rule } from './primitives';
 
 const pad = (n: number) => String(n).padStart(2, '0');
-
-const allSkills = Array.from(new Set(skillGroups.flatMap((group) => group.skills)));
-const half = Math.ceil(allSkills.length / 2);
-const skillsA = allSkills.slice(0, half);
-const skillsB = allSkills.slice(half);
 
 /* 5 groups on a 6-col grid: two wide cards, then three narrow ones. */
 const cardSpan = ['lg:col-span-3', 'lg:col-span-3', 'lg:col-span-2', 'lg:col-span-2', 'lg:col-span-2'];
@@ -33,18 +25,6 @@ export function About() {
           id="about-title"
         />
       </Shell>
-
-      {/* Skill marquees — decorative; the same skills are listed in the cards below. */}
-      <div aria-hidden="true" className="mt-[clamp(56px,7vw,96px)] border-y border-[var(--line)]" data-reveal="fade">
-        <Marquee duration={60} className="py-5">
-          <SkillWords words={skillsA} />
-        </Marquee>
-        <div className="border-t border-[var(--line)] [&_.marquee-track]:[animation-direction:reverse]">
-          <Marquee duration={60} className="py-5">
-            <SkillWords words={skillsB} muted />
-          </Marquee>
-        </div>
-      </div>
 
       <Shell>
         {/* Skill groups */}
@@ -74,11 +54,7 @@ export function About() {
           </div>
 
           <div className="mt-10 grid grid-cols-1 gap-x-[var(--gutter)] gap-y-12 lg:grid-cols-12">
-            <SplitLines
-              as="h3"
-              text={education.degree.toUpperCase()}
-              className="t-display block text-[clamp(3rem,8.5vw,8.5rem)] text-[var(--text)] lg:col-span-7"
-            />
+            <h3 className="t-display block text-[clamp(3rem,8.5vw,8.5rem)] text-[var(--text)] lg:col-span-7">{education.degree.toUpperCase()}</h3>
 
             <div className="lg:col-span-5">
               <dl className="flex flex-col gap-3">
@@ -130,24 +106,6 @@ export function About() {
         </div>
       </Shell>
     </section>
-  );
-}
-
-function SkillWords({ words, muted = false }: { words: string[]; muted?: boolean }) {
-  return (
-    <>
-      {words.map((word) => (
-        <span
-          key={word}
-          className={`t-display flex shrink-0 items-center whitespace-nowrap text-[clamp(2rem,4.6vw,3.5rem)] ${
-            muted ? 'text-[var(--text-2)]' : 'text-[var(--text)]'
-          }`}
-        >
-          {word}
-          <span className="mx-[0.45em] inline-block h-[0.16em] w-[0.16em] bg-[var(--text-3)]" />
-        </span>
-      ))}
-    </>
   );
 }
 

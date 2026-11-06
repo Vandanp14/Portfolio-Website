@@ -1,10 +1,7 @@
 import type { CSSProperties } from 'react';
 import banner from '../assets/fanatics-banner.jpg?w=828;1440;2000&format=avif;webp;jpg&as=picture';
 import { fanaticsHighlight as h } from '../content/portfolio';
-import { Rule } from './motion/Rule';
-import { Scramble } from './motion/Scramble';
-import { SplitLines } from './motion/SplitLines';
-import { Picture, Shell } from './primitives';
+import { Picture, Shell, Rule } from './primitives';
 
 /** Fluid so each statement line holds one line at 1440 and still fits at 390. */
 const statement = 'text-[clamp(2.1rem,9vw,8.75rem)]';
@@ -16,13 +13,12 @@ const statement = 'text-[clamp(2.1rem,9vw,8.75rem)]';
  */
 export function FanaticsBanner() {
   const [first, second] = h.statement;
-  const firstWords = first.split(/\s+/).length;
 
   return (
     <section className="band band-slate relative" aria-labelledby="fanatics-statement">
       <Shell className="py-[var(--section)]">
         <div className="flex items-baseline justify-between gap-6">
-          <Scramble text={h.eyebrow} className="mono text-[12px] uppercase tracking-[0.04em] text-[var(--text-3)]" />
+          <span className="mono text-[12px] uppercase tracking-[0.04em] text-[var(--text-3)]">{h.eyebrow}</span>
           <span className="t-index text-[var(--text-3)]" aria-hidden="true">
             /0.0
           </span>
@@ -35,7 +31,7 @@ export function FanaticsBanner() {
         </p>
 
         <h2 id="fanatics-statement" className={`t-display mt-[clamp(48px,7vw,104px)] uppercase ${statement}`}>
-          <SplitLines as="span" text={first} className="block text-[var(--text)]" />
+          <span className="block text-[var(--text)]">{first}</span>
           <span
             aria-hidden="true"
             data-reveal="fade"
@@ -46,7 +42,7 @@ export function FanaticsBanner() {
               {h.progress}
             </span>
           </span>
-          <SplitLines as="span" text={second} start={firstWords} className="block text-[var(--accent)]" />
+          <span className="block text-[var(--accent)]">{second}</span>
         </h2>
 
         <div

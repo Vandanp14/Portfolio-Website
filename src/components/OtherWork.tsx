@@ -1,7 +1,6 @@
 import type { CSSProperties } from 'react';
 import { otherProjects } from '../content/portfolio';
 import type { SmallProject } from '../content/portfolio';
-import { SplitLines } from './motion/SplitLines';
 import { Eyebrow, Shell } from './primitives';
 
 export function OtherWork() {
@@ -14,12 +13,7 @@ export function OtherWork() {
             {String(otherProjects.length).padStart(2, '0')} projects
           </span>
         </div>
-        <SplitLines
-          as="h2"
-          id="other-work-title"
-          text="Coursework, hackathons, and tools I needed."
-          className="t-title mt-8 block max-w-[20ch] text-[var(--text)]"
-        />
+        <h2 id="other-work-title" className="t-title mt-8 block max-w-[20ch] text-[var(--text)]">Coursework, hackathons, and tools I needed.</h2>
 
         <ul className="mt-[clamp(48px,6vw,80px)] grid gap-2.5 md:grid-cols-2 xl:grid-cols-3">
           {otherProjects.map((project, i) => (

@@ -12,7 +12,7 @@ export const BLOG_TITLE = 'Writing — Vandan Patel';
 export function blogTitle(indexTitle: string): string {
   return indexTitle ? `${indexTitle} — ${SITE_NAME}` : BLOG_TITLE;
 }
-export const BLOG_DESCRIPTION = 'Notes on backend, distributed systems and building software end to end.';
+export const BLOG_DESCRIPTION = 'Notes on what I build.';
 
 /** Absolute URL of the generated Open Graph card; bump `v` to bust the CDN cache. */
 export function ogImageUrl(params: Record<string, string | number> = {}): string {
@@ -30,16 +30,16 @@ export const SECTION_PAGES: Record<string, { title: string; description: string 
   '/work': {
     title: 'Work',
     description:
-      'Selected work by Vandan Patel: a fitness analytics PWA, a cent-exact finance ledger, a game platform, and ten more builds.',
+      'Projects by Vandan Patel, including a fitness app, a dining hall menu, a bus tracker and a shared-expense app.',
   },
   '/experience': {
     title: 'Experience',
     description:
-      "Vandan Patel's experience: Software Engineering Intern at Fanatics, plus software, data and project roles at SUNY Oswego.",
+      "Vandan Patel's experience at Fanatics and SUNY Oswego.",
   },
   '/about': {
     title: 'About',
-    description: 'About Vandan Patel: B.S. Computer Science at SUNY Oswego, his toolkit, recognition and leadership.',
+    description: "Vandan Patel's education, tools and recognition.",
   },
-  '/contact': { title: 'Contact', description: 'Get in touch with Vandan Patel.' },
+  '/contact': { title: 'Contact', description: 'How to reach Vandan Patel.' },
 };

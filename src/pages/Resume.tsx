@@ -2,9 +2,7 @@ import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist/legacy/build/pdf.mj
 import type { PDFDocumentLoadingTask, PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist/legacy/build/pdf.mjs';
 import workerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import { ButtonGhost, Eyebrow, Shell } from '../components/primitives';
-import { Rule } from '../components/motion/Rule';
-import { SplitLines } from '../components/motion/SplitLines';
+import { ButtonGhost, Eyebrow, Shell, Rule } from '../components/primitives';
 import { track } from '../lib/analytics';
 import { usePageMeta } from '../lib/seo';
 import { formatUpdated, loadResume, pdfUrl, RESUME_FILENAME, type ResumeFile } from '../lib/resume';
@@ -74,7 +72,7 @@ export default function Resume() {
   const size = state.kind === 'ready' && state.file.meta.size ? `${Math.max(1, Math.round(state.file.meta.size / 1024))} KB` : '';
 
   return (
-    <section className="band band-mist min-h-[100svh] pt-[var(--nav-h)]">
+    <section className="band band-mist min-h-[100svh] ">
       <Shell className="pb-[var(--section)] pt-[clamp(32px,5vw,72px)]">
         <header>
           <Rule strong />
@@ -85,11 +83,7 @@ export default function Resume() {
 
           <div className="mt-[clamp(40px,6vw,88px)] grid gap-10 lg:grid-cols-12 lg:items-end">
             <div className="min-w-0 lg:col-span-9">
-              <SplitLines
-                as="h1"
-                text="Résumé"
-                className="t-display block text-[clamp(4rem,17vw,15rem)] uppercase text-[var(--text)]"
-              />
+              <h1 className="t-display block text-[clamp(4rem,17vw,15rem)] uppercase text-[var(--text)]">Résumé</h1>
               <p
                 className="reveal mt-8 max-w-[56ch] text-[18px] leading-[1.45] text-[var(--text-2)]"
                 style={{ '--reveal-delay': '240ms' } as CSSProperties}
@@ -212,7 +206,7 @@ function Viewer({ file, pages }: { file: ResumeFile; pages: PDFPageProxy[] }) {
       <div
         role="toolbar"
         aria-label="Résumé viewer"
-        className="sticky top-[calc(var(--nav-h)-12px)] z-20 flex items-center justify-between gap-2 border border-[var(--line)] bg-[var(--bg)] p-1"
+        className="sticky top-4 z-20 flex items-center justify-between gap-2 border border-[var(--line)] bg-[var(--bg)] p-1"
       >
         <div className="flex items-center">
           <span className="t-index hidden px-3 text-[var(--text-2)] sm:inline" aria-live="polite">

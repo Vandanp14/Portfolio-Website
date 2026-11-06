@@ -1,9 +1,7 @@
 import { useRef, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { featuredProjects } from '../content/portfolio';
-import { Rule } from './motion/Rule';
-import { SplitLines } from './motion/SplitLines';
 import { ProjectPanel } from './ProjectPanel';
-import { SectionHeading, Shell } from './primitives';
+import { SectionHeading, Shell, Rule } from './primitives';
 
 const PANEL_ID = 'work-panel';
 const tabId = (id: string) => `work-tab-${id}`;
@@ -69,7 +67,7 @@ export function Work() {
             const isActive = i === active;
             return (
               <li key={item.id}>
-                <Rule delay={i * 90} />
+                <Rule />
                 <button
                   type="button"
                   onClick={() => openFromIndex(i)}
@@ -78,11 +76,7 @@ export function Work() {
                   className="row group grid w-full grid-cols-[minmax(0,1fr)_auto] gap-x-6 py-7 text-left md:py-9"
                 >
                   <span className="min-w-0">
-                    <SplitLines
-                      text={item.title}
-                      delay={i * 90}
-                      className="row-name t-display block text-[clamp(3rem,7vw,6.5rem)] text-[var(--text)] transition-[opacity,transform] duration-[var(--t-medium)] ease-[var(--ease-out-expo)] group-hover:translate-x-2 group-focus-visible:translate-x-2"
-                    />
+                    <span className="row-name t-display block text-[clamp(3rem,7vw,6.5rem)] text-[var(--text)] transition-[opacity,transform] duration-[var(--t-medium)] ease-[var(--ease-out-expo)] group-hover:translate-x-2 group-focus-visible:translate-x-2">{item.title}</span>
                     <span
                       className="reveal mt-4 block max-w-[52ch] text-[17px] leading-[1.4] text-[var(--text-2)] md:text-[20px]"
                       style={{ '--reveal-delay': `${i * 90 + 200}ms` } as CSSProperties}
@@ -113,12 +107,12 @@ export function Work() {
             );
           })}
           <li aria-hidden="true">
-            <Rule delay={featuredProjects.length * 90} />
+            <Rule />
           </li>
         </ol>
 
         {/* Viewer: pill tabs over a dark feature panel. */}
-        <div ref={viewer} className="mt-[clamp(56px,7vw,96px)] scroll-mt-[var(--nav-h)]">
+        <div ref={viewer} className="mt-[clamp(56px,7vw,96px)] ">
           <div className="reveal flex flex-wrap items-center justify-between gap-4">
             <div role="tablist" aria-label="Project details" className="flex flex-wrap gap-1.5">
               {featuredProjects.map((item, i) => {

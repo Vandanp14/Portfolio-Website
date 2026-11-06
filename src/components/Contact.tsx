@@ -1,7 +1,6 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
 import { profile } from '../content/portfolio';
 import { sendContact } from '../lib/contact';
-import { SplitLines } from './motion/SplitLines';
 import { ButtonPrimary, Shell } from './primitives';
 
 type FormState = {
@@ -127,13 +126,7 @@ export function Contact() {
                 <p className="t-eyebrow text-[var(--text-3)]">Contact</p>
                 <span className="t-index text-[var(--text-3)]">/0.4</span>
               </div>
-              <SplitLines
-                as="h2"
-                id="contact-title"
-                text="Let's build the next system."
-                delay={200}
-                className="t-display mt-10 block text-[clamp(3rem,6vw,6.25rem)] uppercase text-[var(--text)]"
-              />
+              <h2 id="contact-title" className="t-display mt-10 block text-[clamp(3rem,6vw,6.25rem)] uppercase text-[var(--text)]">Let's build the next system.</h2>
               <p
                 className="reveal mt-8 max-w-[40ch] text-[18px] leading-[1.45] text-[var(--text-2)]"
                 style={{ '--reveal-delay': '420ms' } as CSSProperties}

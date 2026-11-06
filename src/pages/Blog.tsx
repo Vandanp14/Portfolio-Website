@@ -1,8 +1,6 @@
 import DOMPurify from 'dompurify';
 import { useDeferredValue, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react';
-import { ButtonGhost, Eyebrow, Shell } from '../components/primitives';
-import { Rule } from '../components/motion/Rule';
-import { SplitLines } from '../components/motion/SplitLines';
+import { ButtonGhost, Eyebrow, Shell, Rule } from '../components/primitives';
 import {
   fetchPost,
   fetchPosts,
@@ -76,7 +74,7 @@ function useBlogData<T>(key: string, cached: T | null, load: () => Promise<BlogR
 
 export default function Blog({ postId }: { postId: string | null }) {
   return (
-    <section className="band band-paper min-h-[100svh] pt-[var(--nav-h)]">
+    <section className="band band-paper min-h-[100svh] ">
       {postId ? <PostView key={postId} id={postId} /> : <IndexView />}
     </section>
   );
@@ -112,11 +110,7 @@ function IndexView() {
           <div className="min-w-0 lg:col-span-9">
             {ready ? (
               <>
-                <SplitLines
-                  as="h1"
-                  text={state.data.title}
-                  className="t-display block max-w-full text-[clamp(3.5rem,13vw,12rem)] uppercase text-[var(--text)] [overflow-wrap:anywhere]"
-                />
+                <h1 className="t-display block max-w-full text-[clamp(3.5rem,13vw,12rem)] uppercase text-[var(--text)] [overflow-wrap:anywhere]">{state.data.title}</h1>
                 {state.data.description && (
                   <p
                     className="reveal mt-8 max-w-[56ch] text-[18px] leading-[1.45] text-[var(--text-2)]"
@@ -384,7 +378,7 @@ function PostList({
           className={i < 8 ? 'reveal' : undefined}
           style={i < 8 ? ({ '--reveal-delay': `${i * 80}ms` } as CSSProperties) : undefined}
         >
-          <Rule delay={i < 8 ? i * 80 : 0} strong={i === 0} />
+          <Rule strong />
           <PostRow post={post} preview={previews[post.id]} index={all.indexOf(post) + 1} latest={post === all[0]} />
         </li>
       ))}
@@ -584,16 +578,12 @@ function PostView({ id }: { id: string }) {
                 </span>
                 {position >= 0 && <span>/{pad(position + 1)}</span>}
               </div>
-              <SplitLines
-                as="h1"
-                text={state.data.title}
-                className="t-display mt-[clamp(32px,5vw,72px)] block max-w-[20ch] text-[clamp(2.75rem,7vw,5.5rem)] text-[var(--text)] [overflow-wrap:anywhere]"
-              />
+              <h1 className="t-display mt-[clamp(32px,5vw,72px)] block max-w-[20ch] text-[clamp(2.75rem,7vw,5.5rem)] text-[var(--text)] [overflow-wrap:anywhere]">{state.data.title}</h1>
             </header>
 
             <div className="mt-[clamp(48px,7vw,104px)] grid gap-x-[var(--gutter)] xl:grid-cols-12">
               <aside className="hidden xl:col-span-3 xl:block" aria-label="Post details">
-                <dl className="sticky top-[var(--nav-h)] grid gap-5">
+                <dl className="sticky top-4 grid gap-5">
                   <MetaItem term="Published" value={formatDate(state.data.date)} />
                   <MetaItem term="Reading time" value={`${minutes} min`} mono />
                   {index && position >= 0 && (

@@ -3,500 +3,198 @@
 @tailwind utilities;
 
 /* ---------------------------------------------------------------------------
-   Band system
-   An editorial, type-led interface: white paper and pale-grey mist for most
-   of the page, a near-black slate for full-bleed feature panels, the menu
-   and the footer. Ink is never pure black; the one accent is a violet used
-   sparingly, mostly on slate.
-
-   Each band class re-declares the SAME variable names, so every component is
-   written once and inherits whatever band it sits inside. Components must
-   never hardcode a colour.
-
-   Contrast (WCAG AA, body text):
-     ink on paper    16.1:1     muted on paper   5.3:1
-     violet on paper  6.4:1     ink on mist     13.9:1
-     chalk on slate  14.6:1     violet on slate  5.9:1
+   Tokens
+   One neutral palette, light and dark. No accent colour. Components read
+   these variables and never hardcode a colour.
 --------------------------------------------------------------------------- */
 
 :root {
-  /* Raw palette — referenced only by the band classes below. */
-  --c-paper: #ffffff;
-  --c-mist: #eeeeee;
-  --c-card: #f8f8f8;
-  --c-ink: #1e2124;
-  --c-slate: #1e2124;
-  --c-slate-2: #2b2e33;
-  --c-slate-3: #34383e;
-  --c-chalk: #f4f4f2;
-  --c-violet: #5b45e0;
-  --c-violet-bright: #9f8fff;
-  --c-signal: #d1442f;
+  color-scheme: light;
+  --bg: #fcfcfa;
+  --text: #1a1a19;
+  --text-2: #62625e;
+  --text-3: #73736e;
+  --line: #e4e4df;
+  --line-strong: #b8b8b2;
+  --surface: #f4f4f0;
+  --surface-2: #ecece7;
+  --bg-alt: #f4f4f0;
+  --signal: #b3261e;
 
-  /* Geometry — full-bleed with a thin gutter, sharp corners. */
-  --content: 1440px;
-  --gutter: clamp(16px, 2.1vw, 30px);
-  --section: clamp(96px, 11vw, 168px);
-  --nav-h: 96px;
+  /* Compatibility aliases for pages not yet rewritten (removed in Task 4). */
+  --accent: var(--text);
+  --accent-hover: var(--text-2);
+  --accent-soft: var(--surface-2);
+  --on-accent: var(--bg);
+  --c-paper: var(--bg);
+  --c-mist: var(--bg);
+  --c-card: var(--surface);
+  --c-ink: var(--text);
+  --c-slate: var(--surface-2);
+  --c-chalk: var(--text);
+
+  /* Geometry: 640px reading column inside a 20px gutter. */
+  --gutter: 20px;
+  --content: 680px;
+  --wide: 960px;
+  --section: 64px;
   --r-sm: 2px;
-  --r-md: 2px;
-  --r-lg: 4px;
-  --r-xl: 6px;
+  --r-lg: 6px;
 
-  /* Motion */
-  --t-micro: 120ms;
-  --t-instant: 100ms;
-  --t-fast: 180ms;
-  --t-base: 250ms;
-  --t-medium: 450ms;
-  --t-slow: 700ms;
-  --t-story: 1000ms;
-  --t-epic: 1400ms;
-  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  --ease-luxe: cubic-bezier(0.2, 1, 0.2, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --ease-wipe: cubic-bezier(0.77, 0, 0.18, 1);
-  --d-hover: 4px;
-  --d-rise: 16px;
-  --d-reveal: 20px;
+  /* Motion: colour transitions only. */
+  --t-fast: 150ms;
+  --t-base: 150ms;
+  --t-medium: 150ms;
+  --t-slow: 150ms;
+  --t-story: 150ms;
+  --t-epic: 150ms;
+  --ease-out: ease;
+  --ease-out-expo: ease;
+  --ease-in-out: ease-in-out;
+  --ease-wipe: ease;
 }
 
-/* --- Bands ---------------------------------------------------------------- */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #111110;
+  --text: #ededea;
+  --text-2: #a3a39e;
+  --text-3: #85857e;
+  --line: #2a2a28;
+  --line-strong: #4a4a46;
+  --surface: #1a1a18;
+  --surface-2: #232321;
+  --bg-alt: #1a1a18;
+  --signal: #f0714f;
+}
 
-.band {
+/* Temporary: Blog and Resume still wrap content in bands until Task 4. */
+.band,
+.band-paper,
+.band-mist,
+.band-slate {
   background: var(--bg);
   color: var(--text);
 }
-
-.band-paper {
-  color-scheme: light;
-  --bg: var(--c-paper);
-  --bg-alt: var(--c-mist);
-  --surface: var(--c-card);
-  --surface-2: var(--c-mist);
-  --line: rgba(30, 33, 36, 0.14);
-  --line-strong: rgba(30, 33, 36, 0.9);
-  --text: var(--c-ink);
-  --text-2: #4c5056;
-  --text-3: #6b6e73;
-  --accent: var(--c-violet);
-  --accent-hover: #4834c4;
-  --accent-soft: rgba(91, 69, 224, 0.08);
-  --on-accent: #ffffff;
-  --signal: var(--c-signal);
-  --shadow: 0 1px 2px rgba(30, 33, 36, 0.04), 0 18px 44px -26px rgba(30, 33, 36, 0.22);
-  --shadow-sm: 0 1px 2px rgba(30, 33, 36, 0.04), 0 8px 20px -16px rgba(30, 33, 36, 0.18);
-}
-
-.band-mist {
-  color-scheme: light;
-  --bg: var(--c-mist);
-  --bg-alt: #e4e4e4;
-  --surface: var(--c-paper);
-  --surface-2: var(--c-card);
-  --line: rgba(30, 33, 36, 0.16);
-  --line-strong: rgba(30, 33, 36, 0.9);
-  --text: var(--c-ink);
-  --text-2: #464a50;
-  --text-3: #63666b;
-  --accent: var(--c-violet);
-  --accent-hover: #4834c4;
-  --accent-soft: rgba(91, 69, 224, 0.08);
-  --on-accent: #ffffff;
-  --signal: var(--c-signal);
-  --shadow: 0 1px 2px rgba(30, 33, 36, 0.04), 0 18px 44px -26px rgba(30, 33, 36, 0.2);
-  --shadow-sm: 0 1px 2px rgba(30, 33, 36, 0.03), 0 8px 20px -16px rgba(30, 33, 36, 0.16);
-}
-
-.band-slate {
-  color-scheme: dark;
-  --bg: var(--c-slate);
-  --bg-alt: #17191c;
-  --surface: var(--c-slate-2);
-  --surface-2: var(--c-slate-3);
-  --line: rgba(244, 244, 242, 0.16);
-  --line-strong: rgba(244, 244, 242, 0.85);
-  --text: var(--c-chalk);
-  --text-2: #b9b9b9;
-  --text-3: #8d9096;
-  --accent: var(--c-violet-bright);
-  --accent-hover: #bdb2ff;
-  --accent-soft: rgba(159, 143, 255, 0.14);
-  --on-accent: var(--c-slate);
-  --signal: #f0714f;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 20px 48px -24px rgba(0, 0, 0, 0.7);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.32), 0 8px 22px -16px rgba(0, 0, 0, 0.55);
-}
-
-/* --- Dark theme ------------------------------------------------------------
-   Opt-in via the nav toggle (`<html data-theme="dark">`, set before paint by
-   public/boot.js). Paper and mist become near-black; slate keeps its value
-   and now reads as a lifted panel. Same variable names, so no component
-   changes.
-
-   Contrast (WCAG AA, body text):
-     chalk on paper   17.0:1     muted on paper   6.0:1
-     violet on paper   7.1:1     muted on mist    5.6:1
---------------------------------------------------------------------------- */
-
-:root[data-theme='dark'] {
-  --c-paper: #0f1113;
-  --c-mist: #16181b;
-  --c-card: #1a1d21;
-  --c-ink: #f4f4f2;
-}
-
-:root[data-theme='dark'] .band-paper,
-:root[data-theme='dark'] .band-mist {
-  color-scheme: dark;
-  --text: var(--c-chalk);
-  --text-2: #b9b9b9;
-  --text-3: #8d9096;
-  --line: rgba(244, 244, 242, 0.14);
-  --line-strong: rgba(244, 244, 242, 0.85);
-  --accent: var(--c-violet-bright);
-  --accent-hover: #bdb2ff;
-  --accent-soft: rgba(159, 143, 255, 0.14);
-  --on-accent: var(--c-slate);
-  --signal: #f0714f;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 20px 48px -24px rgba(0, 0, 0, 0.7);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.32), 0 8px 22px -16px rgba(0, 0, 0, 0.55);
-}
-
-:root[data-theme='dark'] .band-paper {
-  --bg-alt: var(--c-mist);
-  --surface: var(--c-card);
-  --surface-2: var(--c-mist);
-}
-
-:root[data-theme='dark'] .band-mist {
-  --bg-alt: #1c1f23;
-  --surface: var(--c-card);
-  --surface-2: #202328;
-  --line: rgba(244, 244, 242, 0.16);
-}
-
-:root[data-theme='dark'] { color-scheme: dark; }
 
 /* ---------------------------------------------------------------------------
    Base
 --------------------------------------------------------------------------- */
 
 html {
-  scroll-behavior: smooth;
-  background: var(--c-paper);
+  background: var(--bg);
 }
 
 body {
   margin: 0;
   min-width: 320px;
   overflow-x: hidden;
-  background: var(--c-paper);
-  color: var(--c-ink);
+  background: var(--bg);
+  color: var(--text);
   font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  font-size: 18px;
-  line-height: 1.4;
+  font-size: 16px;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
-/* Resets live in the base layer so Tailwind utilities (mt-*, border, …) win. */
 @layer base {
   h1, h2, h3, h4, h5, p, figure, blockquote { margin: 0; }
   a { color: inherit; text-decoration: none; }
   button { font: inherit; color: inherit; background: none; padding: 0; }
   img { display: block; max-width: 100%; }
 }
-::selection { background: var(--c-ink); color: var(--c-paper); }
-.band-slate ::selection { background: var(--c-chalk); color: var(--c-slate); }
+::selection { background: var(--text); color: var(--bg); }
 
 :focus-visible {
-  outline: 2px solid var(--accent, var(--c-violet));
+  outline: 2px solid var(--text);
   outline-offset: 3px;
-  border-radius: 0;
 }
 
 /* --- Type roles ------------------------------------------------------------
-   Everything is regular weight. Hierarchy comes from size and tracking, not
-   from bold: giant tight display type, 50px section titles, 10–11px uppercase
-   eyebrows, mono only for indices and metadata.
+   Name 40/500, page title 28/500, section heading 18/500, meta 14.
 --------------------------------------------------------------------------- */
 
+.t-name {
+  font-size: 40px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.t-page {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.t-section {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.t-meta {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-3);
+}
+
+/* Temporary shims for pages not yet rewritten (removed in Task 4). */
 .font-display,
-.t-display {
-  font-family: 'Geist', -apple-system, system-ui, sans-serif;
-  font-weight: 400;
-  letter-spacing: -0.045em;
-  line-height: 0.92;
-}
-
-/* Kept as an alias so pages written for the old serif role inherit the new
-   display voice without edits. */
+.t-display,
 .font-editorial {
-  font-family: 'Geist', -apple-system, system-ui, sans-serif;
-  font-weight: 400;
-  letter-spacing: -0.035em;
-  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
-
 .t-title {
-  font-family: 'Geist', -apple-system, system-ui, sans-serif;
-  font-weight: 400;
-  font-size: clamp(2.125rem, 3.6vw, 3.125rem);
-  letter-spacing: -0.035em;
-  line-height: 1.04;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
-
 .t-eyebrow,
-.label {
-  font-family: 'Geist', -apple-system, system-ui, sans-serif;
-  font-size: 11px;
-  font-weight: 450;
-  letter-spacing: 0.06em;
-  line-height: 1.45;
-  text-transform: uppercase;
-  font-variant-numeric: tabular-nums;
-}
-
+.label,
 .mono,
 .t-index {
-  font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.5;
+  text-transform: none;
   font-variant-numeric: tabular-nums;
 }
+.num { font-variant-numeric: tabular-nums; }
 
-.t-index {
-  font-size: 13px;
-  letter-spacing: 0;
+/* Inline text link: underlined in --line-strong, solid on hover. */
+.text-link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--line-strong);
+  transition: text-decoration-color 150ms ease;
 }
+.text-link:hover { text-decoration-color: var(--text); }
 
-.num { font-variant-numeric: tabular-nums; letter-spacing: -0.04em; }
-
-/* ---------------------------------------------------------------------------
-   Reveal engine — see src/lib/reveal.ts. One observer adds `.is-in` once per
-   element; a MutationObserver picks up nodes that mount later, so anything
-   carrying `.reveal` or `[data-reveal]` animates wherever it appears.
---------------------------------------------------------------------------- */
-
-/* Default: fade up 20px. */
-.reveal {
-  opacity: 0;
-  transform: translate3d(0, var(--d-reveal), 0);
-  transition:
-    opacity var(--t-slow) var(--ease-out),
-    transform var(--t-slow) var(--ease-out-expo);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-.reveal.is-in { opacity: 1; transform: none; }
-
-/* Lines — each word (`.sl-w`, from <SplitLines>) is clipped from the bottom
-   and rises into place, staggered by --i. */
-[data-reveal='lines'] .sl-w {
-  display: inline-block;
-  clip-path: inset(-0.25em -0.1em 100% -0.1em);
-  transform: translate3d(0, 0.42em, 0);
-  transition:
-    clip-path var(--t-story) var(--ease-out-expo),
-    transform var(--t-story) var(--ease-out-expo);
-  transition-delay: calc(var(--reveal-delay, 0ms) + var(--i, 0) * 55ms);
-  will-change: clip-path, transform;
-}
-[data-reveal='lines'].is-in .sl-w {
-  clip-path: inset(-0.25em -0.1em -0.25em -0.1em);
-  transform: none;
-}
-
-/* Clip — the block unrolls from top to bottom (heroReveal). */
-[data-reveal='clip'] {
-  clip-path: inset(0 0 100% 0);
-  transition: clip-path var(--t-story) var(--ease-wipe);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-[data-reveal='clip'].is-in { clip-path: inset(0 0 0 0); }
-
-/* Wipe — left-to-right uncover. */
-[data-reveal='wipe'] {
-  clip-path: inset(0 100% 0 0);
-  transition: clip-path var(--t-story) var(--ease-wipe);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-[data-reveal='wipe'].is-in { clip-path: inset(0 0 0 0); }
-
-/* Cover — a band-coloured shutter lifts off an image while it settles from
-   a slight zoom. Put it on the image's wrapper. */
-[data-reveal='cover'] {
-  position: relative;
-  overflow: hidden;
-}
-[data-reveal='cover']::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--bg);
-  transform-origin: top;
-  transition: transform var(--t-epic) var(--ease-wipe);
-  transition-delay: var(--reveal-delay, 0ms);
-  pointer-events: none;
-}
-[data-reveal='cover'].is-in::after { transform: scaleY(0); }
-[data-reveal='cover'] > img,
-[data-reveal='cover'] > picture {
-  transform: scale(1.08);
-  transition: transform 1800ms var(--ease-out-expo);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-[data-reveal='cover'].is-in > img,
-[data-reveal='cover'].is-in > picture { transform: none; }
-
-/* Rule — a hairline draws left to right. */
-[data-reveal='rule'] {
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--t-epic) var(--ease-out-expo);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-[data-reveal='rule'].is-in { transform: none; }
-
-/* Fade — opacity only, for things that must not move. */
-[data-reveal='fade'] {
-  opacity: 0;
-  transition: opacity var(--t-story) var(--ease-out);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-[data-reveal='fade'].is-in { opacity: 1; }
-
-/* ---------------------------------------------------------------------------
-   Mount animations — for content that swaps in place (tabs, menus). These
-   run on mount, no observer needed. Stagger with --i.
---------------------------------------------------------------------------- */
-
-.anim-rise {
-  animation: anim-rise var(--t-slow) var(--ease-out-expo) both;
-  animation-delay: calc(var(--anim-delay, 0ms) + var(--i, 0) * 45ms);
-}
-@keyframes anim-rise {
-  from { opacity: 0; transform: translate3d(0, 20px, 0); }
-}
-
-.anim-clip {
-  animation: anim-clip var(--t-story) var(--ease-wipe) both;
-  animation-delay: calc(var(--anim-delay, 0ms) + var(--i, 0) * 45ms);
-}
-@keyframes anim-clip {
-  from { clip-path: inset(0 0 100% 0); }
-  to { clip-path: inset(0 0 0 0); }
-}
-
-.anim-fade {
-  animation: anim-fade var(--t-medium) var(--ease-out) both;
-  animation-delay: calc(var(--anim-delay, 0ms) + var(--i, 0) * 45ms);
-}
-@keyframes anim-fade {
-  from { opacity: 0; }
-}
-
-/* Flicker — a short strobe that settles on. Use once, on one accent word. */
-.anim-flicker { animation: anim-flicker 1.4s steps(1, end) both; animation-delay: var(--anim-delay, 0ms); }
-@keyframes anim-flicker {
-  0% { opacity: 0; }
-  14% { opacity: 1; }
-  18% { opacity: 0.1; }
-  26% { opacity: 1; }
-  34% { opacity: 0.1; }
-  40% { opacity: 1; }
-  62% { opacity: 0.2; }
-  66%, 100% { opacity: 1; }
-}
-
-/* Glitch — horizontal jitter, for hover on an arrow or index. */
-.hover-glitch:hover .glitch-target,
-.glitch-target.is-glitching { animation: anim-glitch 420ms steps(1, end); }
-@keyframes anim-glitch {
-  0% { transform: none; }
-  20% { transform: translate3d(-6px, 0, 0); }
-  40% { transform: translate3d(4px, 0, 0); }
-  60% { transform: translate3d(-2px, 0, 0); }
-  80% { transform: translate3d(1px, 0, 0); }
-  100% { transform: none; }
-}
-
-/* Progress sweep — a pill track with a light knob crossing it forever. */
-.progress-sweep {
-  position: relative;
-  overflow: hidden;
-}
-.progress-sweep::before {
-  content: '';
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 45%;
-  background: linear-gradient(90deg, transparent, var(--accent-soft) 40%, var(--accent) 100%);
-  opacity: 0.55;
-  animation: progress-sweep 2.8s var(--ease-in-out) infinite;
-}
-@keyframes progress-sweep {
-  from { transform: translateX(-110%); }
-  to { transform: translateX(240%); }
-}
-
-/* Marquee — the track holds two copies; it slides half its own width. */
-.marquee-track {
+/* Hairline row (PageRows). */
+.page-row {
   display: flex;
-  width: max-content;
-  animation: marquee var(--marquee-duration, 40s) linear infinite;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 52px;
+  border-top: 1px solid var(--line);
+  color: var(--text);
+  transition: color 150ms ease;
 }
-.marquee:hover .marquee-track { animation-play-state: paused; }
-@keyframes marquee {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-50%, 0, 0); }
-}
+.page-row:hover { color: var(--text-2); }
 
-/* Arrow nudge on hover — for ↗ / → glyphs inside links. */
-.arrow-nudge { display: inline-block; transition: transform var(--t-base) var(--ease-out-expo); }
-a:hover .arrow-nudge,
-button:hover .arrow-nudge { transform: translate3d(3px, -3px, 0); }
-a:hover .arrow-nudge-x,
-button:hover .arrow-nudge-x { transform: translate3d(6px, 0, 0); }
+/* Arrow glyph helpers kept for older call sites. */
+.arrow-nudge { display: inline-block; }
+.link-draw-in { text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 0.2em; transition: text-decoration-color 150ms ease; }
+.link-draw-in:hover, .link-draw-in:focus-visible { text-decoration-color: currentColor; }
 
-/* Underline that draws on hover — Palantir's link treatment. */
-.link-draw {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 100% 1px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  transition: background-size var(--t-medium) var(--ease-out-expo);
-}
-.link-draw:hover { background-size: 0 1px; background-position: 100% 100%; }
-
-.link-draw-in {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 0 1px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  transition: background-size var(--t-medium) var(--ease-out-expo);
-}
-.link-draw-in:hover,
-.link-draw-in:focus-visible { background-size: 100% 1px; }
-
-/* ---------------------------------------------------------------------------
-   Pieces
---------------------------------------------------------------------------- */
-
-.rail {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
+.rail { scrollbar-width: none; -ms-overflow-style: none; }
 .rail::-webkit-scrollbar { display: none; }
-
-.device {
-  border-radius: 26px;
-  border: 1px solid var(--line);
-  background: var(--bg-alt);
-  padding: 5px;
-}
-.device img { border-radius: 21px; }
 
 .screen {
   border-radius: var(--r-lg);
@@ -521,38 +219,7 @@ button:hover .arrow-nudge-x { transform: translate3d(6px, 0, 0); }
 .field:focus { outline: none; border-color: var(--text); }
 .field[aria-invalid='true'] { border-color: var(--signal); }
 
-/* Hamburger → ✕ */
-.burger { position: relative; width: 18px; height: 12px; }
-.burger span {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: currentColor;
-  transition:
-    transform var(--t-medium) var(--ease-out-expo),
-    opacity var(--t-fast) var(--ease-out),
-    top var(--t-medium) var(--ease-out-expo);
-}
-.burger span:nth-child(1) { top: 0; }
-.burger span:nth-child(2) { top: 5.5px; }
-.burger span:nth-child(3) { top: 11px; }
-.burger.is-open span:nth-child(1) { top: 5.5px; transform: rotate(45deg); }
-.burger.is-open span:nth-child(2) { opacity: 0; }
-.burger.is-open span:nth-child(3) { top: 5.5px; transform: rotate(-45deg); }
-
-/* Menu overlay */
-.menu-overlay {
-  animation: menu-in var(--t-medium) var(--ease-out-expo) both;
-}
-@keyframes menu-in {
-  from { opacity: 0; }
-}
-.menu-overlay .anim-rise { --anim-delay: 120ms; }
-
-/* ---------------------------------------------------------------------------
-   Blog
---------------------------------------------------------------------------- */
+/* --- Blog --- */
 
 .skeleton {
   border-radius: var(--r-sm);
@@ -566,7 +233,6 @@ button:hover .arrow-nudge-x { transform: translate3d(6px, 0, 0); }
   to { background-position: -100% 0; }
 }
 
-/* Preview excerpt: each word rises out of a clip, staggered via --word-delay. */
 .preview-word {
   display: inline-block;
   opacity: 0;
@@ -654,7 +320,7 @@ button:hover .arrow-nudge-x { transform: translate3d(6px, 0, 0); }
 }
 .post-body hr { border: 0; height: 1px; background: var(--line); margin-block: 2.5em; }
 .post-body code {
-  font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
   font-size: 0.82em;
   background: var(--surface-2);
   border-radius: var(--r-sm);
@@ -678,68 +344,15 @@ button:hover .arrow-nudge-x { transform: translate3d(6px, 0, 0); }
   .post-body { font-size: 17px; }
 }
 
-/* ---------------------------------------------------------------------------
-   Reduced motion — every effect resolves to its final state instantly.
---------------------------------------------------------------------------- */
-
-/* ---------------------------------------------------------------------------
-   Page transitions — the router (src/lib/router.ts) wraps every route change
-   in a View Transition and sets <html data-nav-dir>. Forward: the new page
-   slides in from the right over the old one, which recedes left and dims.
-   Back: the old page slides off to the right, uncovering the previous one.
-   The nav has its own transition name, so it stays put while pages move.
---------------------------------------------------------------------------- */
-
-.site-nav { view-transition-name: site-nav; }
-
-:root[data-nav-dir]::view-transition-old(root),
-:root[data-nav-dir]::view-transition-new(root) {
-  animation-duration: 900ms;
-  animation-timing-function: var(--ease-wipe);
-  animation-fill-mode: both;
-  mix-blend-mode: normal;
-}
-:root[data-nav-dir='forward']::view-transition-old(root) { animation-name: vt-recede-left; }
-:root[data-nav-dir='forward']::view-transition-new(root) {
-  animation-name: vt-enter-right;
-  box-shadow: -48px 0 96px -24px rgba(0, 0, 0, 0.28);
-}
-:root[data-nav-dir='back']::view-transition-old(root) {
-  z-index: 2;
-  animation-name: vt-exit-right;
-  box-shadow: -48px 0 96px -24px rgba(0, 0, 0, 0.28);
-}
-:root[data-nav-dir='back']::view-transition-new(root) { animation-name: vt-return-left; }
-
-@keyframes vt-enter-right { from { transform: translate3d(100%, 0, 0); } }
-@keyframes vt-recede-left { to { transform: translate3d(-28%, 0, 0); filter: brightness(0.72); } }
-@keyframes vt-exit-right { to { transform: translate3d(100%, 0, 0); } }
-@keyframes vt-return-left { from { transform: translate3d(-28%, 0, 0); filter: brightness(0.72); } }
-
-/* No View Transitions support: the incoming page still slides in, alone. */
-.no-vt .page-enter { animation: page-enter var(--t-slow) var(--ease-out-expo) both; }
-@keyframes page-enter {
-  from { opacity: 0; transform: translate3d(48px, 0, 0); }
-}
+/* Page change: a plain 150ms fade. */
+.page-enter { animation: page-enter 150ms ease both; }
+@keyframes page-enter { from { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    transition-delay: 0ms !important;
+    animation: none !important;
+    transition: none !important;
     scroll-behavior: auto !important;
   }
-  .reveal { opacity: 1; transform: none; }
-  [data-reveal] { opacity: 1 !important; clip-path: none !important; transform: none !important; }
-  [data-reveal] .sl-w { clip-path: none !important; transform: none !important; }
-  [data-reveal='cover']::after { display: none; }
-  [data-reveal='cover'] > img,
-  [data-reveal='cover'] > picture { transform: none !important; }
-  .marquee-track { animation: none; flex-wrap: wrap; width: auto; }
-  .marquee-dup { display: none; }
-  .progress-sweep::before { animation: none; }
-  .skeleton, .resume-indeterminate { animation: none; }
-  .preview-word, .preview-in { animation: none; opacity: 1; clip-path: none; transform: none; }
+  .preview-word, .preview-in { opacity: 1; clip-path: none; transform: none; }
 }

@@ -1,12 +1,79 @@
-import type { CSSProperties, ImgHTMLAttributes, ReactNode } from 'react';
-import { Rule } from './motion/Rule';
-import { SplitLines } from './motion/SplitLines';
+import type { ImgHTMLAttributes, ReactNode } from 'react';
+import { Link } from './Link';
 
+/** The reading column: 640px of text inside a 20px gutter. */
 export function Shell({ children, className = '' }: { children: ReactNode; className?: string }) {
+  return <div className={`mx-auto w-full max-w-[var(--content)] px-[var(--gutter)] ${className}`}>{children}</div>;
+}
+
+/**
+ * Breaks out of the reading column up to 960px, centred. Never wider than the
+ * viewport minus the gutters, so it is safe at 320px.
+ */
+export function Wide({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`mx-auto w-full max-w-[var(--content)] px-[var(--gutter)] ${className}`}>
+    <div
+      className={`relative left-1/2 w-[min(var(--wide),calc(100vw-2*var(--gutter)))] -translate-x-1/2 ${className}`}
+    >
       {children}
     </div>
+  );
+}
+
+export function PageTitle({ children }: { children: ReactNode }) {
+  return <h1 className="t-page text-[var(--text)]">{children}</h1>;
+}
+
+export function SectionTitle({ children, id }: { children: ReactNode; id?: string }) {
+  return (
+    <h2 id={id} className="t-section text-[var(--text)]">
+      {children}
+    </h2>
+  );
+}
+
+export function Meta({ children, className = '' }: { children: ReactNode; className?: string }) {
+  return <p className={`t-meta ${className}`}>{children}</p>;
+}
+
+/** Inline link. `to` navigates inside the app; `href` is external and opens a new tab. */
+export function TextLink({
+  to,
+  href,
+  children,
+  className = '',
+}: {
+  to?: string;
+  href?: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  if (to) {
+    return (
+      <Link to={to} className={`text-link ${className}`}>
+        {children}
+      </Link>
+    );
+  }
+  const external = href?.startsWith('http');
+  return (
+    <a
+      href={href}
+      className={`text-link ${className}`}
+      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+    >
+      {children}
+    </a>
+  );
+}
+
+/** A 1px hairline. */
+export function Rule({ strong = false, className = '' }: { strong?: boolean; className?: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`h-px w-full ${strong ? 'bg-[var(--line-strong)]' : 'bg-[var(--line)]'} ${className}`}
+    />
   );
 }
 
@@ -51,15 +118,11 @@ export function Picture({
   );
 }
 
-/** 11px uppercase label — the small voice that sits above every large one. */
 export function Eyebrow({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <p className={`t-eyebrow text-[var(--text-3)] ${className}`}>{children}</p>;
+  return <p className={`t-meta ${className}`}>{children}</p>;
 }
 
-/**
- * Section opener: a strong hairline draws across, the eyebrow and mono index
- * sit on it, and the title rises word by word.
- */
+/** Older call sites (Work, Experience, About) until their rewrite. */
 export function SectionHeading({
   index,
   kicker,
@@ -71,7 +134,7 @@ export function SectionHeading({
   kicker: string;
   title: string;
   lede?: string;
-  /** @deprecated kept for older call sites; the display voice is uniform now. */
+  /** @deprecated kept for older call sites. */
   editorial?: boolean;
   id?: string;
 }) {
@@ -80,36 +143,26 @@ export function SectionHeading({
       <Rule strong />
       <div className="mt-4 flex items-baseline justify-between gap-6">
         <Eyebrow>{kicker}</Eyebrow>
-        <span className="t-index text-[var(--text-3)]">/{index}</span>
+        <span className="t-meta">/{index}</span>
       </div>
-      <SplitLines
-        as="h2"
-        id={id}
-        text={title}
-        className="t-title mt-8 block max-w-[20ch] text-[var(--text)]"
-      />
-      {lede && (
-        <p
-          className="reveal mt-6 max-w-[56ch] text-[18px] leading-[1.45] text-[var(--text-2)]"
-          style={{ '--reveal-delay': '160ms' } as CSSProperties}
-        >
-          {lede}
-        </p>
-      )}
+      <h2 id={id} className="t-page mt-8 block max-w-[20ch] text-[var(--text)]">
+        {title}
+      </h2>
+      {lede && <p className="mt-6 max-w-[56ch] text-[var(--text-2)]">{lede}</p>}
     </header>
   );
 }
 
 export function Tag({ children }: { children: ReactNode }) {
   return (
-    <span className="mono inline-flex items-center border border-[var(--line)] px-2 py-[3px] text-[11px] uppercase tracking-[0.04em] text-[var(--text-2)]">
+    <span className="inline-flex items-center border border-[var(--line)] px-2 py-[3px] text-[13px] text-[var(--text-2)]">
       {children}
     </span>
   );
 }
 
 const boxBase =
-  'inline-flex min-h-[44px] items-center justify-center gap-3 border px-6 text-[16px] tracking-[-0.01em] transition-[background-color,color,border-color] duration-[var(--t-base)] ease-[var(--ease-out-expo)] disabled:cursor-not-allowed disabled:opacity-50';
+  'inline-flex min-h-[44px] items-center justify-center gap-3 border px-6 text-[16px] tracking-[-0.01em] transition-[background-color,color,border-color] duration-150 disabled:cursor-not-allowed disabled:opacity-50';
 
 /** Solid ink box; inverts on hover. */
 export function ButtonPrimary({

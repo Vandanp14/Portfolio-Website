@@ -8,7 +8,7 @@ export type Theme = 'light' | 'dark';
 
 const KEY = 'theme';
 const EVENT = 'app:theme';
-const THEME_COLOR: Record<Theme, string> = { light: '#FFFFFF', dark: '#0F1113' };
+const THEME_COLOR: Record<Theme, string> = { light: '#FCFCFA', dark: '#111110' };
 
 export function getTheme(): Theme {
   return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
