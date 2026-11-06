@@ -319,9 +319,8 @@ export const experience: Role[] = [
   {
     company: 'Fanatics',
     title: 'Software Engineering Intern',
-    period: 'Jun 2026 – Present',
+    period: 'Jun 2026 – Aug 2026',
     location: 'New York, NY',
-    current: true,
     summary:
       'Product Builder is the app Fanatics uses to configure trading-card products for manufacturing. I built its first API and an AI assistant that can answer questions about its data.',
     highlights: [
