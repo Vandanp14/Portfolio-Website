@@ -1,5 +1,5 @@
 // Single source of truth for site content.
-// Derived from ~/Desktop/ATS_Resume_Tailor_Agent/master.json — keep the two in sync when the resume changes.
+// Derived from ~/Desktop/ATS_Resume_Tailor_Agent/master.json. Keep the two in sync when the resume changes.
 
 import mfpDesktop from '../assets/projects/mfp-desktop.jpg?w=640;1400&format=avif;webp;jpg&as=picture';
 import mfp2 from '../assets/projects/mfp-2.jpg?w=480;758&format=avif;webp;jpg&as=picture';
@@ -41,7 +41,7 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/vpatel1410',
   site: 'https://vandanpatel.me',
   intro:
-    'CS student at SUNY Oswego. This summer I shipped Product Builder’s first API at Fanatics and the first AI assistant on their internal developer platform to read non-GitHub data. Outside of work I build production tools for myself — a fitness analytics PWA, a personal finance ledger, a game platform — and ship them end to end.',
+    'I’m a CS student at SUNY Oswego. This summer at Fanatics I built Product Builder’s first API and the first AI assistant on their internal developer platform to read non-GitHub data. On my own time I build tools I use myself, including a fitness analytics app, a personal finance ledger and a game platform.',
 };
 
 export type ProjectShot = {
@@ -78,17 +78,17 @@ export const featuredProjects: Project[] = [
     summary:
       'Apple Watch, MyFitnessPal and Strong exports flow through iOS Shortcuts into a pipeline I host myself. The app scores readiness, adjusts calorie targets, forecasts weight and asks Gemini for a daily read. It can also log meals straight from Oswego Dining.',
     build: [
-      'React + TypeScript front end on a FastAPI service: 44 routes across a 20-table relational schema covering nutrition, sleep, activity, body composition and workouts.',
-      'Idempotent ingest that normalizes 24 metrics with SHA-256 deduplication and timestamp merging, so a re-run never double-counts a day.',
-      'Deterministic analytics — readiness, adaptive TDEE, macro targets, weight forecast, estimated 1RM, progressive-overload detection — computed before any model sees the data.',
-      'Gemini 2.5 Flash behind domain-scoped prompts with parallel generation and per-day caching, so coaching costs one call a day instead of one per view.',
+      'The front end is React and TypeScript on a FastAPI service with 44 routes. The schema has 20 tables covering nutrition, sleep, activity, body composition and workouts.',
+      'Ingest is idempotent. It normalizes 24 metrics, dedupes with SHA-256 and merges timestamps, so re-running an import never double-counts a day.',
+      'Readiness, adaptive TDEE, macro targets, the weight forecast, estimated 1RM and progressive-overload detection are all plain code. They run before any model sees the data.',
+      'Gemini 2.5 Flash gets domain-scoped prompts, generated in parallel and cached per day, so coaching costs one call a day instead of one per view.',
     ],
     stack: ['React', 'TypeScript', 'FastAPI', 'PostgreSQL', 'Gemini API', 'Docker'],
     shots: [
-      { src: mfpDesktop, kind: 'wide', alt: 'MFP Coach desktop dashboard showing the day’s protein target and metric tiles', caption: 'Today — one directive, then the numbers behind it' },
-      { src: mfp2, kind: 'phone', alt: 'MFP Coach mobile home screen with a protein target card', caption: 'One action per day' },
-      { src: mfp3, kind: 'phone', alt: 'MFP Coach weight trend chart over ninety days', caption: '90-day trend + forecast' },
-      { src: mfp4, kind: 'phone', alt: 'MFP Coach weekly AI review summarizing weight, steps and missing nutrition data', caption: 'Weekly AI read, cached per day' },
+      { src: mfpDesktop, kind: 'wide', alt: 'MFP Coach desktop dashboard with the day’s protein target and metric tiles', caption: 'Today: the main action first, then the numbers behind it' },
+      { src: mfp2, kind: 'phone', alt: 'MFP Coach phone home screen with a protein target card', caption: 'One action for the day' },
+      { src: mfp3, kind: 'phone', alt: 'MFP Coach weight trend chart over ninety days', caption: '90-day weight trend and forecast' },
+      { src: mfp4, kind: 'phone', alt: 'MFP Coach weekly AI review summarizing weight, steps and missing nutrition data', caption: 'Weekly AI review, cached per day' },
       { src: mfp5, kind: 'phone', alt: 'MFP Coach quick log sheet with meal, water, weight and check-in options', caption: 'Quick log sheet' },
     ],
   },
@@ -147,18 +147,18 @@ export const featuredProjects: Project[] = [
     summary:
       'I tracked a summer in New York against a fixed budget. Eleven data models cover transactions, budgets, recurring bills, group splits and reports, and I can log expenses by speaking them.',
     build: [
-      'Transaction-safe ledger with atomic balance reconciliation, soft deletion, rule-based categorization, monthly budget overrides and deterministic safe-to-spend math.',
-      'Exact group-expense engine supporting equal, custom and percentage splits using cent-level remainder allocation, so settlements never drift by a penny.',
-      'Gemini structured output turns spoken sentences into batches of up to 20 verified expenses, gated by schema validation, a category allowlist and atomic writes.',
-      'HMAC-signed HTTP-only sessions, timing-safe password checks and login rate limiting, covered by 102 automated tests.',
+      'The ledger uses transactions, so balance reconciliation is atomic. It also has soft deletes, rule-based categories, monthly budget overrides and a safe-to-spend number computed by plain code.',
+      'Group expenses split equally, by custom amounts or by percentage. Remainders are handed out a cent at a time, so settlements never drift by a penny.',
+      'Gemini’s structured output turns a spoken sentence into up to 20 expenses. Each batch has to pass schema validation and a category allowlist, then saves in one atomic write.',
+      'Sessions are HMAC-signed HTTP-only cookies. Password checks are timing-safe and logins are rate limited. 102 automated tests cover it.',
     ],
     stack: ['Next.js 16', 'React 19', 'TypeScript', 'Prisma', 'PostgreSQL', 'Gemini API'],
     shots: [
-      { src: ledger1, kind: 'phone', alt: 'Transit Ledger home screen showing net position and summer runway', caption: 'Net position against the runway' },
-      { src: ledger2, kind: 'phone', alt: 'Transit Ledger quick log screen with one-tap fare buttons', caption: 'One-tap fares for the daily commute' },
-      { src: ledger4, kind: 'phone', alt: 'Transit Ledger dictation sheet parsing a spoken expense', caption: 'Dictate it, Gemini parses it' },
+      { src: ledger1, kind: 'phone', alt: 'Transit Ledger home screen with net position and summer runway', caption: 'Net position and summer runway' },
+      { src: ledger2, kind: 'phone', alt: 'Transit Ledger quick log screen with one-tap fare buttons', caption: 'One-tap fares for the commute' },
+      { src: ledger4, kind: 'phone', alt: 'Transit Ledger dictation sheet turning a spoken expense into an entry', caption: 'Dictating an expense' },
       { src: ledger3, kind: 'phone', alt: 'Transit Ledger transaction list with categorized entries', caption: 'Categorized ledger' },
-      { src: ledger5, kind: 'phone', alt: 'Transit Ledger transaction list annotated with AI-derived labels', caption: 'AI labels shown as provenance, not truth' },
+      { src: ledger5, kind: 'phone', alt: 'Transit Ledger transaction list with AI-generated labels on entries', caption: 'Entries with AI-generated labels' },
     ],
   },
   {
@@ -186,14 +186,14 @@ export const featuredProjects: Project[] = [
     summary:
       '2048, Hangman, Crossword, Memory Matching and Higher/Lower, each with a daily challenge. The team had no developer, so I built it on my own.',
     build: [
-      'Reusable game algorithms: 2048 tile merging, greedy 8–12 word crossword generation, Fisher–Yates shuffling, immutable Hangman scoring and a no-repeat 12-question tour, verified by 122 unit tests.',
-      'Seeded pseudorandom daily challenges with resumable 2048 RNG state and a 96-term vocabulary rotation serving 3 unique terms a day for 32 days without repeating.',
-      'Progressively enhanced 3D with Three.js and React Three Fiber — lazy-loaded WebGL islands, adaptive resolution, SVG fallbacks, context-loss recovery and reduced-motion support.',
+      'The games share reusable algorithms: 2048 tile merging, a greedy crossword generator that places 8 to 12 words, Fisher-Yates shuffling, immutable Hangman scoring and a 12-question tour with no repeats. 122 unit tests check them.',
+      'Daily challenges come from a seeded pseudorandom generator, and the 2048 RNG state can resume mid-game. A 96-term vocabulary rotation serves 3 terms a day for 32 days without repeating.',
+      'The 3D is added on top of a working page with Three.js and React Three Fiber. WebGL loads lazily, resolution adapts, SVGs stand in when WebGL is missing, it recovers from context loss and it respects reduced motion.',
     ],
     stack: ['Next.js', 'React', 'TypeScript', 'Three.js', 'R3F', 'GSAP'],
     liveUrl: 'https://gamehub-eight-topaz.vercel.app/',
     shots: [
-      { src: mintHub, kind: 'wide', alt: 'MINT game hub home page with the headline Play your way into the hobby and the featured 2048: Card Edition game', caption: 'The game hub' },
+      { src: mintHub, kind: 'wide', alt: 'MINT game hub home page with the headline Play your way into the hobby and 2048: Card Edition featured', caption: 'The game hub' },
       { src: mintGame1, kind: 'wide', alt: '2048: Card Edition page with score counters and a ladder of card rarities', caption: '2048: Card Edition' },
       { src: mintGame2, kind: 'wide', alt: 'MINT crossword with trading-card hobby clues listed across and down', caption: 'Crossword' },
     ],
@@ -339,7 +339,7 @@ export const experience: Role[] = [
   {
     company: 'Fanatics',
     title: 'Software Engineering Intern',
-    period: 'Jun 2026 — Present',
+    period: 'Jun 2026 – Present',
     location: 'New York, NY',
     current: true,
     summary:
@@ -360,55 +360,55 @@ export const experience: Role[] = [
   {
     company: 'SUNY Oswego Facilities Services',
     title: 'Software Developer Intern',
-    period: 'Apr 2024 — Apr 2026',
+    period: 'Apr 2024 – Apr 2026',
     location: 'Oswego, NY',
     summary:
-      'Operational software and dashboards for the staff who keep a university campus running.',
+      'I build operational software and dashboards for facilities staff and management.',
     highlights: [
-      'Built and maintained React and Tailwind dashboards visualizing real-time operational KPIs for facilities staff and management.',
-      'Replaced a manual reporting process with an interactive dashboard, cutting report-generation time.',
-      'Integrated REST APIs for real-time data synchronization and designed reusable, accessibility-focused React components.',
-      'Gathered requirements directly from field staff and translated them into shipped features.',
-      'Produced IEEE-compliant requirements documentation and maintained Drupal 10 pages for a mission-critical system.',
+      'Built and maintained React and Tailwind dashboards that show real-time operational KPIs to facilities staff and management.',
+      'Replaced a manual reporting process with an interactive dashboard, which cut report-generation time.',
+      'Integrated REST APIs to keep data in sync in real time, and designed reusable React components with accessibility in mind.',
+      'Asked field staff directly what they needed and turned that into features.',
+      'Wrote IEEE-compliant requirements documentation and maintained Drupal 10 pages for a mission-critical system.',
     ],
     stack: ['React', 'Tailwind CSS', 'REST APIs', 'Drupal 10', 'Jira'],
   },
   {
     company: 'SUNY Oswego Institutional Research',
     title: 'Data Analyst Intern',
-    period: 'Aug 2025 — Dec 2025',
+    period: 'Aug 2025 – Dec 2025',
     location: 'Oswego, NY',
     summary:
-      'Reporting and analysis on student retention, GPA, course performance and student-success outcomes.',
+      'I built reporting and analysis workflows on student retention, GPA, course performance and student-success outcomes.',
     highlights: [
-      'Built Tableau dashboards that helped leadership spot student-performance trends and the places needing intervention.',
-      'Developed Python and SQL pipelines automating extraction, consolidation, cleaning and validation.',
-      'Designed SQL ETL workflows and optimized queries, cutting manual data-processing and reporting time 40%.',
-      'Used SPSS to identify predictors of first-year retention, and standardized data definitions across disparate systems to establish a single ground truth.',
+      'Built Tableau dashboards that helped university leadership spot student-performance trends and where students needed intervention.',
+      'Wrote Python and SQL pipelines that automated extraction, consolidation, cleaning and validation.',
+      'Designed SQL ETL workflows and optimized queries, which cut manual data-processing and reporting time by 40%.',
+      'Used SPSS to find predictors of first-year retention, and standardized data definitions across different systems so everyone worked from the same numbers.',
     ],
     stack: ['Python', 'SQL', 'Tableau', 'SPSS', 'ETL'],
   },
   {
     company: 'SUNY Oswego Major Projects Office',
     title: 'Project Analyst',
-    period: 'Nov 2023 — Apr 2024',
+    period: 'Nov 2023 – Apr 2024',
     location: 'Oswego, NY',
-    summary: 'Planning, reporting and quality assurance across five concurrent project teams.',
+    summary: 'I did planning, reporting and quality assurance for five project teams running at once.',
     highlights: [
-      'Implemented Jira-based Gantt tracking for 40+ deliverables across five teams.',
-      'Improved QA workflows and reduced data errors 30%; streamlined reporting and accelerated decision cycles 20%.',
+      'Set up Jira-based Gantt tracking for 40+ deliverables across five teams.',
+      'Improved QA workflows, which reduced data errors by 30%. Streamlined reporting, which sped up decision cycles by 20%.',
     ],
     stack: ['Jira', 'Excel', 'QA'],
   },
   {
     company: 'SUNY Oswego Help Desk',
     title: 'Help Desk Attendant',
-    period: 'Feb 2023 — May 2023',
+    period: 'Feb 2023 – May 2023',
     location: 'Oswego, NY',
-    summary: 'Tier-1 and Tier-2 support for university hardware, software, accounts and network.',
+    summary: 'I gave Tier-1 and Tier-2 support for university hardware, software, accounts and the network.',
     highlights: [
-      'Resolved 100+ support issues and wrote internal troubleshooting guides that cut repetitive inquiries.',
-      'Worked with system administrators to surface recurring failures and improve escalation protocols.',
+      'Resolved 100+ support issues and wrote internal troubleshooting guides that cut down repeat questions.',
+      'Worked with system administrators to find recurring failures and improve escalation steps.',
     ],
     stack: ['Support', 'Networking', 'Documentation'],
   },
@@ -428,8 +428,8 @@ export const education = {
     'Database Systems',
     'Artificial Intelligence',
     'Programming Languages',
-    'OOP — Java and C++',
-    'Functional Programming — Clojure and Scala',
+    'OOP in Java and C++',
+    'Functional programming in Clojure and Scala',
   ],
 };
 
@@ -463,13 +463,13 @@ export const recognition = [
     title: 'Residence Life Staff Member of the Year',
     org: 'SUNY Oswego Residence Life',
     year: '2024',
-    note: 'Recognized for excellence in student support across a 32-resident community.',
+    note: 'Named Residence Life Staff Member of the Year for supporting a community of 32 residents.',
   },
   {
     title: 'LakerHacks Finalist',
     org: 'LakerHacks',
     year: '2024',
-    note: 'Top 10 of 30 teams with a Gemini-powered project-planning agent, built in 24 hours.',
+    note: 'Top 10 of 30 teams with a project-planning agent that uses Gemini, built in 24 hours.',
   },
 ];
 
@@ -477,14 +477,14 @@ export const leadership = [
   {
     role: 'Resident Assistant',
     org: 'SUNY Oswego Residence Life',
-    period: 'Jan 2024 — Present',
-    note: 'Mentor 32 residents; ran six community events averaging 70%+ attendance, plus conflict mediation and crisis response.',
+    period: 'Jan 2024 – Present',
+    note: 'I mentor 32 residents. I ran six community events with average attendance above 70%, and I handle conflict mediation and crisis response.',
   },
   {
     role: 'Member',
     org: 'National Society of Black Engineers',
     period: 'Ongoing',
-    note: 'Recruiter panels, professional workshops and technical discussions on backend architecture and applied AI.',
+    note: 'I go to recruiter panels, professional workshops and technical discussions on backend design and applied AI.',
   },
 ];
 

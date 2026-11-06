@@ -97,7 +97,7 @@ async function request(params: Record<string, string>): Promise<BlogResult<Recor
     if (err instanceof DOMException && err.name === 'AbortError') {
       return { ok: false, error: 'The blog took too long to respond.' };
     }
-    return { ok: false, error: 'Couldn’t reach the blog — check your connection.' };
+    return { ok: false, error: 'Couldn’t reach the blog. Check your connection.' };
   } finally {
     clearTimeout(timeout);
   }

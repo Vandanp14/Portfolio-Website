@@ -3,28 +3,28 @@
 
 export const ORIGIN = 'https://vandanpatel.me';
 export const SITE_NAME = 'Vandan Patel';
-export const DEFAULT_TITLE = 'Vandan Patel — Software Engineer';
+export const DEFAULT_TITLE = 'Vandan Patel | Software Engineer';
 export const DEFAULT_DESCRIPTION =
-  "Vandan Patel builds backend and distributed systems. Software Engineering Intern at Fanatics, where he shipped Product Builder's first API and its first AI assistant over non-GitHub data.";
-export const BLOG_TITLE = 'Writing — Vandan Patel';
+  'Vandan Patel is a software engineer finishing a computer science degree at SUNY Oswego.';
+export const BLOG_TITLE = 'Writing | Vandan Patel';
 
-/** "<index title> — Vandan Patel", matching the title the blog page sets client-side. */
+/** "<index title> | Vandan Patel", matching the title the blog page sets client-side. */
 export function blogTitle(indexTitle: string): string {
-  return indexTitle ? `${indexTitle} — ${SITE_NAME}` : BLOG_TITLE;
+  return indexTitle ? `${indexTitle} | ${SITE_NAME}` : BLOG_TITLE;
 }
 export const BLOG_DESCRIPTION = 'Notes on what I build.';
 
 /** Absolute URL of the generated Open Graph card; bump `v` to bust the CDN cache. */
 export function ogImageUrl(params: Record<string, string | number> = {}): string {
   const url = new URL('/api/og', ORIGIN);
-  url.searchParams.set('v', '1');
+  url.searchParams.set('v', '2');
   Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, String(value)));
   return url.toString();
 }
 
 /**
  * Section pages (each was a part of the one-page home before). Titles and
- * descriptions mirror `pages` in src/lib/routes.ts — keep the two in sync.
+ * descriptions mirror `pages` in src/lib/routes.ts | keep the two in sync.
  */
 export const SECTION_PAGES: Record<string, { title: string; description: string }> = {
   '/work': {

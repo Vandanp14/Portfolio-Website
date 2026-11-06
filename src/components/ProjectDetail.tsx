@@ -28,8 +28,18 @@ export function ProjectDetail({ project }: { project: Project }) {
 
       {(project.liveUrl || project.repoUrl || project.liveNote) && (
         <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
-          {project.liveUrl && <TextLink href={project.liveUrl}>Live site ↗</TextLink>}
-          {project.repoUrl && <TextLink href={project.repoUrl}>Source ↗</TextLink>}
+          {project.liveUrl && (
+            <TextLink href={project.liveUrl}>
+              Live site<span aria-hidden="true"> ↗</span>
+              <span className="sr-only"> (opens in a new tab)</span>
+            </TextLink>
+          )}
+          {project.repoUrl && (
+            <TextLink href={project.repoUrl}>
+              Source<span aria-hidden="true"> ↗</span>
+              <span className="sr-only"> (opens in a new tab)</span>
+            </TextLink>
+          )}
           {project.liveNote && <Meta>{project.liveNote}</Meta>}
         </div>
       )}

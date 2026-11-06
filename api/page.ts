@@ -143,7 +143,7 @@ function generic(path: string, overrides: Partial<Meta> = {}): Meta {
     path,
     type: 'website',
     image: ogImageUrl(),
-    imageAlt: `${SITE_NAME} — Software Engineer`,
+    imageAlt: `${SITE_NAME} | Software Engineer`,
     ...overrides,
   };
 }
@@ -184,7 +184,7 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
     return {
       status: 200,
       cache: CACHED,
-      meta: generic(path, { title: `${section.title} — ${SITE_NAME}`, description: section.description }),
+      meta: generic(path, { title: `${section.title} | ${SITE_NAME}`, description: section.description }),
     };
   }
 
@@ -194,7 +194,7 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
     return {
       status: 200,
       cache: CACHED,
-      meta: generic(path, { title: `${page.title} — ${SITE_NAME}`, description: page.description }),
+      meta: generic(path, { title: `${page.title} | ${SITE_NAME}`, description: page.description }),
     };
   }
 
@@ -203,8 +203,8 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
       status: 200,
       cache: CACHED,
       meta: generic('/resume', {
-        title: `Résumé — ${SITE_NAME}`,
-        description: `${SITE_NAME}'s résumé: backend and distributed systems, Software Engineering Intern at Fanatics, CS at SUNY Oswego.`,
+        title: `Résumé | ${SITE_NAME}`,
+        description: `${SITE_NAME}'s résumé: Software Engineering Intern at Fanatics, computer science at SUNY Oswego.`,
       }),
     };
   }
@@ -218,7 +218,7 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
         ? {
             status: 404,
             cache: SHORT,
-            meta: generic(path, { title: `Post not found — ${SITE_NAME}`, noindex: true }),
+            meta: generic(path, { title: `Post not found | ${SITE_NAME}`, noindex: true }),
           }
         : { status: 200, cache: SHORT, meta: generic(path) };
     }
@@ -226,14 +226,14 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
     const { title, date, html } = result.data;
     const minutes = readingMinutes(html);
     const published = isoDate(date) ?? undefined;
-    const description = excerptFromHtml(html, 200) || `${title} — writing by ${SITE_NAME}.`;
+    const description = excerptFromHtml(html, 200) || `${title}, writing by ${SITE_NAME}.`;
     const image = ogImageUrl({ title, ...(published && { date: published }), min: minutes });
     const url = `${ORIGIN}${path}`;
     return {
       status: 200,
       cache: CACHED,
       meta: {
-        title: `${title} — ${SITE_NAME}`,
+        title: `${title} | ${SITE_NAME}`,
         description,
         path,
         type: 'article',
@@ -257,7 +257,7 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
     };
   }
 
-  return { status: 404, cache: SHORT, meta: generic(path, { title: `Page not found — ${SITE_NAME}`, noindex: true }) };
+  return { status: 404, cache: SHORT, meta: generic(path, { title: `Page not found | ${SITE_NAME}`, noindex: true }) };
 }
 
 export async function GET(request: Request): Promise<Response> {

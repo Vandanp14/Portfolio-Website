@@ -20,7 +20,7 @@
   --surface-2: #ecece7;
   --signal: #b3261e;
 
-  /* Geometry: 640px reading column inside a 20px gutter. */
+  /* Geometry: 680px reading column inside a 20px gutter. */
   --gutter: 20px;
   --content: 680px;
   --wide: 960px;
@@ -168,7 +168,7 @@ body {
   to { transform: translateX(300%); }
 }
 
-/* Long-form post body: 640px column, colours from the tokens so dark works. */
+/* Long-form post body, colours from the tokens so dark works. */
 .post-body {
   color: var(--text);
   overflow-wrap: anywhere;

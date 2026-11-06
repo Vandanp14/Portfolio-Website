@@ -5,7 +5,7 @@ import { PageRows } from './PageRows';
 import { Shell, TextLink } from './primitives';
 
 export function Home() {
-  usePageMeta({ title: `${profile.name} — ${profile.role}`, exactTitle: true, path: '/' });
+  usePageMeta({ title: `${profile.name} | ${profile.role}`, exactTitle: true, path: '/' });
 
   return (
     <Shell className="py-12 sm:py-16">

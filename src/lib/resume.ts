@@ -116,10 +116,10 @@ export async function loadResume(
       return { ok: false, error: 'The résumé took too long to load.' };
     }
     if (err instanceof StaleVersion) {
-      return { ok: false, error: 'The résumé is being updated right now — try again in a moment.' };
+      return { ok: false, error: 'The résumé is being updated right now. Try again in a moment.' };
     }
     if (err instanceof TypeError) {
-      return { ok: false, error: 'Couldn’t reach the server — check your connection.' };
+      return { ok: false, error: 'Couldn’t reach the server. Check your connection.' };
     }
     return { ok: false, error: err instanceof Error ? err.message : 'Couldn’t load the résumé.' };
   }
