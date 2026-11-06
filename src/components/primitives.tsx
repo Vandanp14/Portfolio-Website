@@ -67,16 +67,6 @@ export function TextLink({
   );
 }
 
-/** A 1px hairline. */
-export function Rule({ strong = false, className = '' }: { strong?: boolean; className?: string }) {
-  return (
-    <div
-      aria-hidden="true"
-      className={`h-px w-full ${strong ? 'bg-[var(--line-strong)]' : 'bg-[var(--line)]'} ${className}`}
-    />
-  );
-}
-
 const MIME: Record<string, string> = { avif: 'image/avif', webp: 'image/webp', jpeg: 'image/jpeg', jpg: 'image/jpeg', png: 'image/png' };
 
 /**
@@ -118,53 +108,10 @@ export function Picture({
   );
 }
 
-export function Eyebrow({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <p className={`t-meta ${className}`}>{children}</p>;
-}
-
-/** Older call sites (Work, Experience, About) until their rewrite. */
-export function SectionHeading({
-  index,
-  kicker,
-  title,
-  lede,
-  id,
-}: {
-  index: string;
-  kicker: string;
-  title: string;
-  lede?: string;
-  /** @deprecated kept for older call sites. */
-  editorial?: boolean;
-  id?: string;
-}) {
-  return (
-    <header>
-      <Rule strong />
-      <div className="mt-4 flex items-baseline justify-between gap-6">
-        <Eyebrow>{kicker}</Eyebrow>
-        <span className="t-meta">/{index}</span>
-      </div>
-      <h2 id={id} className="t-page mt-8 block max-w-[20ch] text-[var(--text)]">
-        {title}
-      </h2>
-      {lede && <p className="mt-6 max-w-[56ch] text-[var(--text-2)]">{lede}</p>}
-    </header>
-  );
-}
-
-export function Tag({ children }: { children: ReactNode }) {
-  return (
-    <span className="inline-flex items-center border border-[var(--line)] px-2 py-[3px] text-[13px] text-[var(--text-2)]">
-      {children}
-    </span>
-  );
-}
-
 const boxBase =
-  'inline-flex min-h-[44px] items-center justify-center gap-3 border px-6 text-[16px] tracking-[-0.01em] transition-[background-color,color,border-color] duration-150 disabled:cursor-not-allowed disabled:opacity-50';
+  'inline-flex min-h-[44px] items-center justify-center gap-3 border px-6 text-[16px] transition-[background-color,color,border-color] duration-150 disabled:cursor-not-allowed disabled:opacity-50';
 
-/** Solid ink box; inverts on hover. */
+/** Solid ink button; inverts on hover. */
 export function ButtonPrimary({
   children,
   onClick,
@@ -185,40 +132,6 @@ export function ButtonPrimary({
       disabled={disabled}
       className={`${boxBase} border-[var(--text)] bg-[var(--text)] text-[var(--bg)] hover:bg-transparent hover:text-[var(--text)] disabled:hover:bg-[var(--text)] disabled:hover:text-[var(--bg)] ${className}`}
     >
-      {children}
-    </button>
-  );
-}
-
-/** Outlined box — the site's default call to action. Fills with ink on hover. */
-export function ButtonGhost({
-  children,
-  href,
-  onClick,
-  external,
-  className = '',
-}: {
-  children: ReactNode;
-  href?: string;
-  onClick?: () => void;
-  external?: boolean;
-  className?: string;
-}) {
-  const classes = `${boxBase} border-[var(--line-strong)] text-[var(--text)] hover:bg-[var(--text)] hover:text-[var(--bg)] ${className}`;
-
-  if (href) {
-    return (
-      <a
-        href={href}
-        className={classes}
-        {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-      >
-        {children}
-      </a>
-    );
-  }
-  return (
-    <button type="button" onClick={onClick} className={classes}>
       {children}
     </button>
   );

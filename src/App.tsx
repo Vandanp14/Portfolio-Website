@@ -3,7 +3,6 @@ import { About } from './components/About';
 import { Contact } from './components/Contact';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Experience } from './components/Experience';
-import { FanaticsBanner } from './components/FanaticsBanner';
 import { Footer } from './components/Footer';
 import { Home } from './components/Home';
 import { Nav } from './components/Nav';
@@ -103,7 +102,6 @@ function Page({ path }: { path: string }) {
     case '/experience':
       return (
         <SectionPage id="experience">
-          <FanaticsBanner />
           <Experience />
         </SectionPage>
       );

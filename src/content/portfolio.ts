@@ -35,40 +35,13 @@ export const RESUME_URL = '/resume';
 export const profile = {
   name: 'Vandan Patel',
   role: 'Software Engineer',
-  disciplines: ['Distributed systems', 'Backend', 'Applied AI'],
   location: 'Oswego, New York',
   email: 'patelvandan024@gmail.com',
   github: 'https://github.com/Vandanp14',
   linkedin: 'https://www.linkedin.com/in/vpatel1410',
   site: 'https://vandanpatel.me',
-  status: 'Software Engineering Intern at Fanatics · graduating Dec 2026',
-  headline: 'I build the systems other people build on.',
   intro:
     'CS student at SUNY Oswego. This summer I shipped Product Builder’s first API at Fanatics and the first AI assistant on their internal developer platform to read non-GitHub data. Outside of work I build production tools for myself — a fitness analytics PWA, a personal finance ledger, a game platform — and ship them end to end.',
-};
-
-/** Headline numbers. Every one traces to a line in the resume. */
-export const stats = [
-  { value: '5', suffix: '', label: 'REST endpoints', note: 'Product Builder’s first-ever API' },
-  { value: '82', suffix: 'K+', label: 'Records served', note: '37 ms worst-case on staging' },
-  { value: '36.5', suffix: '%', label: 'Card data recovered', note: 'Dual-identifier SQL engine' },
-  { value: '390', suffix: '+', label: 'Tests written', note: 'Across four shipped products' },
-];
-
-/** Full-bleed internship panel under the hero. Every figure traces to the resume. */
-export const fanaticsHighlight = {
-  eyebrow: 'Summer 2026 · New York',
-  role: 'Software Engineering Intern at Fanatics',
-  statement: ['Product Builder’s', 'first API'],
-  progress: 'Progress: shipped',
-  imageAlt:
-    'Vandan Patel at the Fanatics office in New York, standing beside the Fanatics logo wall',
-  metrics: [
-    { value: '5', label: 'REST endpoints shipped', detail: 'Product Builder’s first API' },
-    { value: '82K+', label: 'Records served', detail: '37 ms worst case' },
-    { value: '36.5%', label: 'Card data recovered', detail: 'Dual-identifier SQL engine' },
-    { value: '3', label: 'Features to production', detail: '8 weeks' },
-  ],
 };
 
 export type ProjectShot = {
@@ -370,17 +343,17 @@ export const experience: Role[] = [
     location: 'New York, NY',
     current: true,
     summary:
-      'Product Builder is the distributed product-configuration application behind global trading-card manufacturing. I built its first API and the first AI assistant on the internal developer platform to read non-GitHub data.',
+      'Product Builder is the app Fanatics uses to configure trading-card products for manufacturing. I built its first API and an AI assistant that can answer questions about its data.',
     highlights: [
-      'Architected an end-to-end AI Copilot connecting Slack through an internal message router to an Elixir runtime on AWS Bedrock AgentCore and a Phoenix backend, letting anyone query trading-card specs in plain English.',
-      'Built Product Builder’s first-ever API — 5 read-only REST endpoints with dynamic OpenAPI 3.0 generation, enabling automated MCP tool discovery and establishing the agentic-AI proof of concept for internal systems.',
-      'Guaranteed zero mutation risk with a compile-time read-only repository: any write against it fails at compilation, not at runtime.',
-      'Recovered 36.5% of historically under-reported card data with a server-side SQL dual-identifier engine unifying legacy ULIDs, modern UUIDs and roster entities — no added client complexity.',
-      'Hand-rolled an AWS Signature V4 engine in pure Elixir, signing IAM calls to Bedrock and CloudWatch over IMDSv2 without pulling in a heavy SDK.',
-      'Enforced a fail-closed security pipeline: feature flags, constant-time request verification, default-deny visibility and whitelisted JSON serialization.',
-      'Validated on staging at 82,000+ records with a 37 ms worst-case query, untuned; 86 tool tests green across two full ~2,900-test regression sweeps.',
-      'Shipped 3 features to production in 8 weeks — first PR merged inside 2 weeks, ~4,000 lines across two stacked PRs.',
-      'Authored a 13-step enterprise MCP transition roadmap and a 4-chapter handoff package for migrating direct HTTP tool calls to Bedrock Gateway MCP targets.',
+      'Built an AI assistant that lets people ask about trading-card specs in plain English from Slack. Requests go through an internal message router to an Elixir runtime on AWS Bedrock AgentCore and a Phoenix backend.',
+      'Built Product Builder’s first API: 5 read-only REST endpoints with generated OpenAPI 3.0 docs, so MCP tools can discover them automatically.',
+      'Used a read-only repository so that any write through the API fails at compile time.',
+      'Wrote a server-side SQL query that matches legacy ULIDs, newer UUIDs and roster entities, which recovered 36.5% of under-reported card data.',
+      'Wrote AWS Signature V4 signing in plain Elixir for IAM calls to Bedrock and CloudWatch over IMDSv2, instead of adding a large SDK.',
+      'Set up the API to fail closed, with feature flags, constant-time request verification, default-deny visibility and whitelisted JSON fields.',
+      'Tested on staging with 82,000+ records. The slowest query took 37 ms before any tuning. All 86 tool tests passed across two full regression runs of about 2,900 tests.',
+      'Shipped 3 features to production in 8 weeks. My first PR merged within 2 weeks, and the work came to about 4,000 lines across two stacked PRs.',
+      'Wrote a 13-step MCP migration roadmap and a 4-chapter handoff for moving direct HTTP tool calls to Bedrock Gateway MCP targets.',
     ],
     stack: ['Elixir', 'Phoenix LiveView', 'PostgreSQL', 'RabbitMQ', 'AWS Bedrock', 'MCP'],
   },
@@ -460,32 +433,27 @@ export const education = {
   ],
 };
 
-export type SkillGroup = { title: string; note: string; skills: string[] };
+export type SkillGroup = { title: string; skills: string[] };
 
 export const skillGroups: SkillGroup[] = [
   {
     title: 'Languages',
-    note: 'Shipped production code in the first six.',
     skills: ['Python', 'TypeScript', 'Elixir', 'Java', 'C++', 'C', 'SQL', 'Go', 'Scala', 'Clojure', 'Bash'],
   },
   {
     title: 'Backend & distributed systems',
-    note: 'Where most of my work lives.',
     skills: ['REST APIs', 'Phoenix LiveView', 'FastAPI', 'Flask', 'RabbitMQ', 'PostgreSQL', 'MySQL', 'Prisma', 'Docker', 'AWS', 'CI/CD'],
   },
   {
     title: 'Front end',
-    note: 'Interfaces that survive real data.',
     skills: ['React', 'Next.js', 'Tailwind CSS', 'Three.js', 'Accessibility', 'PWA'],
   },
   {
     title: 'AI & data',
-    note: 'Deterministic first, model second.',
     skills: ['MCP', 'AWS Bedrock', 'Gemini API', 'OpenAI API', 'Prompt design', 'Tableau', 'SPSS', 'ETL', 'Scikit-learn'],
   },
   {
     title: 'Systems & tooling',
-    note: 'The low-level half of the degree.',
     skills: ['POSIX APIs', 'TCP sockets', 'Multithreading', 'Mutexes', 'RAII', 'Git', 'Linux', 'Pytest', 'Vitest'],
   },
 ];
