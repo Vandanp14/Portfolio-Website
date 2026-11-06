@@ -43,3 +43,50 @@ export const SECTION_PAGES: Record<string, { title: string; description: string 
   },
   '/contact': { title: 'Contact', description: 'How to reach Vandan Patel.' },
 };
+
+/**
+ * Project pages (/work/:id). Titles and descriptions mirror `featuredProjects`
+ * in src/content/portfolio.ts (description = tagline). Keep the two in sync.
+ */
+export const PROJECT_PAGES: Record<string, { title: string; description: string }> = {
+  'mfp-coach': {
+    title: "MFP Coach",
+    description:
+      "A fitness app that pulls Apple Watch, nutrition and workout data into one place and gives me a plan for the day.",
+  },
+  'oswego-dining': {
+    title: "Oswego Dining",
+    description:
+      "Today’s SUNY Oswego dining hall menus, ranked by protein per calorie.",
+  },
+  'evenly': {
+    title: "Evenly",
+    description:
+      "A shared-expense app I built for a Thanksgiving trip to Utah with friends.",
+  },
+  'transit-ledger': {
+    title: "Transit Ledger",
+    description:
+      "A personal finance app for tracking rent, commute and spending during a summer in New York.",
+  },
+  'ats-resume-tailor': {
+    title: "ATS Résumé Tailor",
+    description:
+      "Tailors my résumé to a job description without letting the model make anything up.",
+  },
+  'mint-game-hub': {
+    title: "MINT Game Hub",
+    description:
+      "Five daily browser games about trading cards, built for an intern team and adopted for its hobby immersion program.",
+  },
+  'centro': {
+    title: "Centro Oswego Live",
+    description:
+      "Live bus arrivals and a map for Centro’s Oswego routes.",
+  },
+  'higheredjobs-review': {
+    title: "HigherEdJobs Review",
+    description:
+      "Finds higher-ed IT jobs and flags what each posting says about visa sponsorship.",
+  },
+};

@@ -8,6 +8,7 @@
 //   GET /api/page?path=/blog        → blog index meta + Blog JSON-LD
 //   GET /api/page?path=/blog/ID     → post meta + BlogPosting JSON-LD (404 if unknown)
 //   GET /api/page?path=/resume      → résumé meta
+//   GET /api/page?path=/work/ID     → project meta (unknown id falls through to 404 + noindex)
 //   GET /api/page?path=/work etc.   → section page meta (/work, /experience, /about, /contact)
 //   anything else                   → 404 + noindex (the SPA renders NotFound)
 
@@ -19,6 +20,7 @@ import {
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
   ORIGIN,
+  PROJECT_PAGES,
   SECTION_PAGES,
   SITE_NAME,
   ogImageUrl,
@@ -183,6 +185,16 @@ async function resolve(path: string): Promise<{ meta: Meta; status: number; cach
       status: 200,
       cache: CACHED,
       meta: generic(path, { title: `${section.title} — ${SITE_NAME}`, description: section.description }),
+    };
+  }
+
+  const project = path.match(/^\/work\/([^/]+)$/);
+  if (project && Object.prototype.hasOwnProperty.call(PROJECT_PAGES, project[1])) {
+    const page = PROJECT_PAGES[project[1]];
+    return {
+      status: 200,
+      cache: CACHED,
+      meta: generic(path, { title: `${page.title} — ${SITE_NAME}`, description: page.description }),
     };
   }
 

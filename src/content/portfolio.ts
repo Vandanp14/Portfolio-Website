@@ -82,14 +82,11 @@ export type ProjectShot = {
 
 export type Project = {
   id: string;
-  index: string;
   title: string;
   tagline: string;
   year: string;
-  category: string;
   summary: string;
   build: string[];
-  metrics: { value: string; label: string }[];
   stack: string[];
   liveUrl?: string;
   repoUrl?: string;
@@ -101,12 +98,10 @@ export type Project = {
 export const featuredProjects: Project[] = [
   {
     id: 'mfp-coach',
-    index: '01',
     title: 'MFP Coach',
     tagline:
       'A fitness app that pulls Apple Watch, nutrition and workout data into one place and gives me a plan for the day.',
     year: '2026',
-    category: 'Full-stack · Applied AI',
     summary:
       'Apple Watch, MyFitnessPal and Strong exports flow through iOS Shortcuts into a pipeline I host myself. The app scores readiness, adjusts calorie targets, forecasts weight and asks Gemini for a daily read. It can also log meals straight from Oswego Dining.',
     build: [
@@ -114,11 +109,6 @@ export const featuredProjects: Project[] = [
       'Idempotent ingest that normalizes 24 metrics with SHA-256 deduplication and timestamp merging, so a re-run never double-counts a day.',
       'Deterministic analytics — readiness, adaptive TDEE, macro targets, weight forecast, estimated 1RM, progressive-overload detection — computed before any model sees the data.',
       'Gemini 2.5 Flash behind domain-scoped prompts with parallel generation and per-day caching, so coaching costs one call a day instead of one per view.',
-    ],
-    metrics: [
-      { value: '44', label: 'API routes' },
-      { value: '20', label: 'DB tables' },
-      { value: '82', label: 'Passing tests' },
     ],
     stack: ['React', 'TypeScript', 'FastAPI', 'PostgreSQL', 'Gemini API', 'Docker'],
     shots: [
@@ -131,11 +121,9 @@ export const featuredProjects: Project[] = [
   },
   {
     id: 'oswego-dining',
-    index: '02',
     title: 'Oswego Dining',
     tagline: 'Today’s SUNY Oswego dining hall menus, ranked by protein per calorie.',
     year: '2026',
-    category: 'Full-stack · Data',
     summary:
       'A scheduled job scrapes SUNY Oswego’s NetNutrition site for all 3 dining halls and stores the results in Google Sheets. The app shows each menu by station with nutrition labels and allergens, ranks what’s being served, totals a meal and suggests plates using only items on today’s menu. It’s unofficial and not run by the college.',
     build: [
@@ -145,7 +133,6 @@ export const featuredProjects: Project[] = [
       'Gemini returns plates against a response schema. Each one is checked against real menu IDs, and nutrition totals are recomputed from stored data rather than taken from the model.',
       'Covered by 187 automated node:test tests when last counted for my résumé.',
     ],
-    metrics: [],
     stack: ['JavaScript', 'Google Apps Script', 'Google Sheets', 'Gemini API', 'Vercel', 'GitHub Actions'],
     liveUrl: 'https://oswego-dining.vercel.app',
     shots: [
@@ -158,11 +145,9 @@ export const featuredProjects: Project[] = [
   },
   {
     id: 'evenly',
-    index: '03',
     title: 'Evenly',
     tagline: 'A shared-expense app I built for a Thanksgiving trip to Utah with friends.',
     year: '2026',
-    category: 'Full-stack · Fintech',
     summary:
       'Groups join through revocable invite links, then split costs equally, by exact amount, by percentage or by weight, per expense or per item. Next.js runs the interface, and Google Apps Script with a private Google Sheet acts as the database.',
     build: [
@@ -171,7 +156,6 @@ export const featuredProjects: Project[] = [
       'Every change goes to an append-only audit log with before and after values. Deletes are soft.',
       'If a save’s response is lost, the app keeps the request and retries it with the same ID, so an entry can’t be duplicated.',
     ],
-    metrics: [],
     stack: ['Next.js 16', 'React 19', 'TypeScript', 'Google Apps Script', 'Google Sheets', 'Vitest', 'Playwright'],
     liveUrl: 'https://evenly-sage.vercel.app',
     liveNote: 'Sign-in is limited to people I approve. The screenshots use sample data.',
@@ -184,11 +168,9 @@ export const featuredProjects: Project[] = [
   },
   {
     id: 'transit-ledger',
-    index: '04',
     title: 'Transit Ledger',
     tagline: 'A personal finance app for tracking rent, commute and spending during a summer in New York.',
     year: '2026',
-    category: 'Full-stack · Fintech',
     summary:
       'I tracked a summer in New York against a fixed budget. Eleven data models cover transactions, budgets, recurring bills, group splits and reports, and I can log expenses by speaking them.',
     build: [
@@ -196,11 +178,6 @@ export const featuredProjects: Project[] = [
       'Exact group-expense engine supporting equal, custom and percentage splits using cent-level remainder allocation, so settlements never drift by a penny.',
       'Gemini structured output turns spoken sentences into batches of up to 20 verified expenses, gated by schema validation, a category allowlist and atomic writes.',
       'HMAC-signed HTTP-only sessions, timing-safe password checks and login rate limiting, covered by 102 automated tests.',
-    ],
-    metrics: [
-      { value: '11', label: 'Data models' },
-      { value: '20', label: 'Expenses per dictation' },
-      { value: '102', label: 'Passing tests' },
     ],
     stack: ['Next.js 16', 'React 19', 'TypeScript', 'Prisma', 'PostgreSQL', 'Gemini API'],
     shots: [
@@ -213,11 +190,9 @@ export const featuredProjects: Project[] = [
   },
   {
     id: 'ats-resume-tailor',
-    index: '05',
     title: 'ATS Résumé Tailor',
     tagline: 'Tailors my résumé to a job description without letting the model make anything up.',
     year: '2026',
-    category: 'Backend · Applied AI',
     summary:
       'It takes my master résumé as JSON and a job description, then produces a one-page LaTeX PDF. Gemini plans and writes under Pydantic schemas. Plain code does the keyword matching, checks that every bullet cites a real fact from the master résumé, and fits the page. It’s a personal tool behind a password.',
     build: [
@@ -226,29 +201,21 @@ export const featuredProjects: Project[] = [
       'Tectonic renders the LaTeX, and a PyPDF loop fits the result to one page.',
       'A persistent single-worker queue, per-stage checkpoints and Server-Sent Events let failed runs resume with visible progress. It has 383 pytest tests.',
     ],
-    metrics: [],
     stack: ['Python', 'FastAPI', 'Pydantic', 'Gemini API', 'Jinja2', 'LaTeX'],
     shots: [],
   },
   {
     id: 'mint-game-hub',
-    index: '06',
     title: 'MINT Game Hub',
     tagline:
       'Five daily browser games about trading cards, built for an intern team and adopted for its hobby immersion program.',
     year: '2026',
-    category: 'Product · Front end',
     summary:
       '2048, Hangman, Crossword, Memory Matching and Higher/Lower, each with a daily challenge. The team had no developer, so I built it on my own.',
     build: [
       'Reusable game algorithms: 2048 tile merging, greedy 8–12 word crossword generation, Fisher–Yates shuffling, immutable Hangman scoring and a no-repeat 12-question tour, verified by 122 unit tests.',
       'Seeded pseudorandom daily challenges with resumable 2048 RNG state and a 96-term vocabulary rotation serving 3 unique terms a day for 32 days without repeating.',
       'Progressively enhanced 3D with Three.js and React Three Fiber — lazy-loaded WebGL islands, adaptive resolution, SVG fallbacks, context-loss recovery and reduced-motion support.',
-    ],
-    metrics: [
-      { value: '5', label: 'Playable games' },
-      { value: '122', label: 'Unit tests' },
-      { value: '32', label: 'Days, no repeats' },
     ],
     stack: ['Next.js', 'React', 'TypeScript', 'Three.js', 'R3F', 'GSAP'],
     liveUrl: 'https://gamehub-eight-topaz.vercel.app/',
@@ -260,11 +227,9 @@ export const featuredProjects: Project[] = [
   },
   {
     id: 'centro',
-    index: '07',
     title: 'Centro Oswego Live',
     tagline: 'Live bus arrivals and a map for Centro’s Oswego routes.',
     year: '2025–2026',
-    category: 'Full-stack · Transit',
     summary:
       'I rebuilt this from scratch after an incomplete team prototype from a course. A Flask service proxies Clever Devices BusTime and a React front end shows arrivals, a live Leaflet map, active buses and schedules. It runs on a university server.',
     build: [
@@ -272,7 +237,6 @@ export const featuredProjects: Project[] = [
       'An in-memory TTL cache, from 12 seconds for predictions up to 1 hour for stop lists.',
       '103 automated tests: 71 pytest and 32 Jest with React Testing Library.',
     ],
-    metrics: [],
     stack: ['Python', 'Flask', 'React 18', 'Leaflet', 'pytest', 'Jest'],
     liveUrl: 'http://pi.cs.oswego.edu:5001/',
     shots: [
@@ -284,11 +248,9 @@ export const featuredProjects: Project[] = [
   },
   {
     id: 'higheredjobs-review',
-    index: '08',
     title: 'HigherEdJobs Review',
     tagline: 'Finds higher-ed IT jobs and flags what each posting says about visa sponsorship.',
     year: '2026',
-    category: 'Backend · Automation',
     summary:
       'A Playwright scraper reads 2 job boards into SQLite. A classifier sorts each posting’s sponsorship wording into 5 categories and shows the exact sentence behind the label. A React dashboard ranks jobs against my résumé and tracks my applications.',
     build: [
@@ -297,7 +259,6 @@ export const featuredProjects: Project[] = [
       'The classifier is versioned, and saved jobs get relabelled when it changes.',
       'Scraping is sequential and polite. When a human check appears, it pauses and waits for me rather than trying to bypass it.',
     ],
-    metrics: [],
     stack: ['Python', 'Playwright', 'FastAPI', 'SQLite', 'React', 'TypeScript'],
     repoUrl: 'https://github.com/Vandanp14/HigherEdJobs_Scraper',
     liveNote: 'Runs locally, so there’s no live demo.',
@@ -567,3 +528,8 @@ export const navSections = [
 ] as const;
 
 export type SectionId = 'top' | (typeof navSections)[number]['id'];
+
+/** Looks up a project by id. Server-side metadata for these lives in PROJECT_PAGES (api/_lib/site.ts); keep the two in sync. */
+export function projectById(id: string): Project | undefined {
+  return featuredProjects.find((project) => project.id === id);
+}

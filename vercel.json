@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/work", "destination": "/api/page?path=/work" },
+    { "source": "/work/:id", "destination": "/api/page?path=/work/:id" },
     { "source": "/experience", "destination": "/api/page?path=/experience" },
     { "source": "/about", "destination": "/api/page?path=/about" },
     { "source": "/contact", "destination": "/api/page?path=/contact" },

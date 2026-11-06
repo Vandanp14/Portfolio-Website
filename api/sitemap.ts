@@ -6,12 +6,13 @@
 
 import { fetchIndex, isoDate } from './_lib/blog.js';
 import { escapeXml } from './_lib/html.js';
-import { ORIGIN, SECTION_PAGES } from './_lib/site.js';
+import { ORIGIN, PROJECT_PAGES, SECTION_PAGES } from './_lib/site.js';
 
 export async function GET(): Promise<Response> {
   const urls: { loc: string; lastmod?: string }[] = [
     { loc: `${ORIGIN}/` },
     ...Object.keys(SECTION_PAGES).map((path) => ({ loc: `${ORIGIN}${path}` })),
+    ...Object.keys(PROJECT_PAGES).map((id) => ({ loc: `${ORIGIN}/work/${id}` })),
     { loc: `${ORIGIN}/blog` },
     { loc: `${ORIGIN}/resume` },
   ];

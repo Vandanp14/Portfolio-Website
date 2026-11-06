@@ -8,10 +8,10 @@ import { Footer } from './components/Footer';
 import { Home } from './components/Home';
 import { Nav } from './components/Nav';
 import { NotFound } from './components/NotFound';
-import { OtherWork } from './components/OtherWork';
+import { ProjectDetail } from './components/ProjectDetail';
 import { SectionPage } from './components/SectionPage';
 import { Work } from './components/Work';
-import { featuredProjects } from './content/portfolio';
+import { featuredProjects, projectById } from './content/portfolio';
 import { trackPageView } from './lib/analytics';
 import { loadBlog, loadResume } from './lib/prefetch';
 import { isHome, usePath } from './lib/router';
@@ -63,8 +63,7 @@ const projectsJsonLd = {
       '@type': 'SoftwareApplication',
       name: project.title,
       description: project.tagline,
-      applicationCategory: project.category,
-      url: project.liveUrl ?? `${SITE_ORIGIN}/work`,
+      url: project.liveUrl ?? `${SITE_ORIGIN}/work/${project.id}`,
       ...(project.repoUrl ? { codeRepository: project.repoUrl } : {}),
       author: { '@id': `${SITE_ORIGIN}/#person` },
     },
@@ -76,7 +75,6 @@ function WorkPage() {
   return (
     <SectionPage id="work">
       <Work />
-      <OtherWork />
     </SectionPage>
   );
 }
@@ -91,6 +89,12 @@ function Page({ path }: { path: string }) {
         <Blog postId={blog[1] ?? null} />
       </Suspense>
     );
+  }
+
+  const work = path.match(/^\/work\/([^/]+)\/?$/);
+  if (work) {
+    const project = projectById(work[1]);
+    return project ? <ProjectDetail project={project} /> : <NotFound />;
   }
 
   switch (path.replace(/\/+$/, '')) {
