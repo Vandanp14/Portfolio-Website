@@ -1,8 +1,17 @@
 // Single source of truth for site content.
 // Derived from ~/Desktop/ATS_Resume_Tailor_Agent/master.json. Keep the two in sync when the resume changes.
 
+import fanaticsPhoto from '../assets/fanatics-banner.jpg?w=828;1440;2000&format=avif;webp;jpg&as=picture';
+import mfpDesktop from '../assets/projects/mfp-desktop.jpg?w=640;1400&format=avif;webp;jpg&as=picture';
+import mfp2 from '../assets/projects/mfp-2.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import mfp3 from '../assets/projects/mfp-3.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import mfp4 from '../assets/projects/mfp-4.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import mfp5 from '../assets/projects/mfp-5.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import ledger1 from '../assets/projects/ledger-1.jpg?w=480;758&format=avif;webp;jpg&as=picture';
 import ledger2 from '../assets/projects/ledger-2.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import ledger3 from '../assets/projects/ledger-3.jpg?w=480;758&format=avif;webp;jpg&as=picture';
 import ledger4 from '../assets/projects/ledger-4.jpg?w=480;758&format=avif;webp;jpg&as=picture';
+import ledger5 from '../assets/projects/ledger-5.jpg?w=480;758&format=avif;webp;jpg&as=picture';
 import diningMenu from '../assets/projects/dining-menu.jpg?w=640;1400&format=avif;webp;jpg&as=picture';
 import diningPicks from '../assets/projects/dining-picks.jpg?w=640;1400&format=avif;webp;jpg&as=picture';
 import diningLabel from '../assets/projects/dining-label.jpg?w=640;1400&format=avif;webp;jpg&as=picture';
@@ -74,7 +83,13 @@ export const featuredProjects: Project[] = [
       'Gemini 2.5 Flash gets domain-scoped prompts, generated in parallel and cached per day, so they run once a day instead of on every view.',
     ],
     stack: ['React', 'TypeScript', 'FastAPI', 'PostgreSQL', 'Gemini API', 'Docker'],
-    shots: [],
+    shots: [
+      { src: mfpDesktop, kind: 'wide', alt: 'MFP Coach desktop dashboard showing the day’s protein target and metric tiles', caption: 'Today page on desktop' },
+      { src: mfp2, kind: 'phone', alt: 'MFP Coach mobile home screen with a protein target card', caption: 'Home screen with the day’s protein target' },
+      { src: mfp3, kind: 'phone', alt: 'MFP Coach weight trend chart over ninety days', caption: '90-day weight trend and forecast' },
+      { src: mfp4, kind: 'phone', alt: 'MFP Coach weekly AI review summarizing weight, steps and missing nutrition data', caption: 'Weekly review from Gemini' },
+      { src: mfp5, kind: 'phone', alt: 'MFP Coach quick log sheet with meal, water, weight and check-in options', caption: 'Quick log sheet' },
+    ],
   },
   {
     id: 'oswego-dining',
@@ -138,8 +153,11 @@ export const featuredProjects: Project[] = [
     ],
     stack: ['Next.js 16', 'React 19', 'TypeScript', 'Prisma', 'PostgreSQL', 'Gemini API'],
     shots: [
+      { src: ledger1, kind: 'phone', alt: 'Transit Ledger home screen showing net position and summer runway', caption: 'Net position and summer runway' },
       { src: ledger2, kind: 'phone', alt: 'Transit Ledger quick log screen with one-tap fare buttons', caption: 'One-tap fares for the commute' },
-      { src: ledger4, kind: 'phone', alt: 'Transit Ledger dictation sheet turning a spoken expense into an entry', caption: 'Dictating an expense' },
+      { src: ledger4, kind: 'phone', alt: 'Transit Ledger log sheet with a text box to parse an expense, a keypad and category buttons', caption: 'Logging an expense' },
+      { src: ledger3, kind: 'phone', alt: 'Transit Ledger transaction list with categorized entries', caption: 'Transactions by category' },
+      { src: ledger5, kind: 'phone', alt: 'Transit Ledger transaction list with AI-derived labels', caption: 'Transactions with AI labels' },
     ],
   },
   {
@@ -310,6 +328,7 @@ export type Role = {
   period: string;
   location: string;
   current?: boolean;
+  photo?: { src: ImagePicture; alt: string; caption: string };
   summary: string;
   highlights: string[];
   stack: string[];
@@ -321,6 +340,11 @@ export const experience: Role[] = [
     title: 'Software Engineering Intern',
     period: 'Jun 2026 – Aug 2026',
     location: 'New York, NY',
+    photo: {
+      src: fanaticsPhoto,
+      alt: 'Vandan Patel at the Fanatics office in New York, standing beside the Fanatics logo wall',
+      caption: 'At the Fanatics office in New York',
+    },
     summary:
       'Product Builder is the app Fanatics uses to configure trading-card products for manufacturing. I built its first API and an AI assistant that can answer questions about its data.',
     highlights: [
