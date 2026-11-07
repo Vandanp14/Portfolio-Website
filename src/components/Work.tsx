@@ -1,14 +1,14 @@
-import { featuredProjects, otherProjects, type SmallProject } from '../content/portfolio';
+import { featuredProjects, otherProjects, type Project, type SmallProject } from '../content/portfolio';
 import { Link } from './Link';
-import { SectionTitle } from './primitives';
+import { Picture, SectionTitle } from './primitives';
 
-const row = 'block border-t border-[var(--line)] py-5';
+const row = 'group block border-t border-[var(--line)] py-5';
 
 function RowBody({ title, year, text, stack, external }: { title: string; year: string; text: string; stack: string[]; external?: boolean }) {
   return (
     <>
       <span className="flex items-baseline justify-between gap-4">
-        <span className="min-w-0 break-words text-[var(--text)]">
+        <span className="min-w-0 break-words text-[var(--text)] decoration-[var(--line-strong)] underline-offset-[0.2em] group-hover:underline">
           {title}
           {external && (
             <>
@@ -25,12 +25,43 @@ function RowBody({ title, year, text, stack, external }: { title: string; year: 
   );
 }
 
+/** Project rows with a thumbnail, used on /work and the home page. */
+export function ProjectRows({ projects }: { projects: Project[] }) {
+  return (
+    <ul className="border-b border-[var(--line)]">
+      {projects.map((project) => {
+        const cover = project.shots.find((shot) => shot.kind === 'wide') ?? project.shots[0];
+        return (
+          <li key={project.id}>
+            <Link
+              to={`/work/${project.id}`}
+              className={`${row} grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-[minmax(0,1fr)_176px]`}
+            >
+              <span className="block min-w-0">
+                <RowBody title={project.title} year={project.year} text={project.tagline} stack={project.stack} />
+              </span>
+              {cover && (
+                <Picture
+                  image={cover.src}
+                  sizes="(min-width: 640px) 176px, 100vw"
+                  alt=""
+                  className="aspect-[16/10] w-full rounded-[6px] border border-[var(--line)] object-cover object-top"
+                />
+              )}
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 function OtherRow({ project }: { project: SmallProject }) {
   const body = <RowBody title={project.title} year={project.year} text={project.blurb} stack={project.stack} external={!!project.url} />;
   return (
     <li>
       {project.url ? (
-        <a href={project.url} target="_blank" rel="noopener noreferrer" className={`${row} hover:bg-[var(--surface)]`}>
+        <a href={project.url} target="_blank" rel="noopener noreferrer" className={row}>
           {body}
         </a>
       ) : (
@@ -43,17 +74,9 @@ function OtherRow({ project }: { project: SmallProject }) {
 export function Work() {
   return (
     <>
-      <ul className="border-b border-[var(--line)]">
-        {featuredProjects.map((project) => (
-          <li key={project.id}>
-            <Link to={`/work/${project.id}`} className={`${row} hover:bg-[var(--surface)]`}>
-              <RowBody title={project.title} year={project.year} text={project.tagline} stack={project.stack} />
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <ProjectRows projects={featuredProjects} />
 
-      <div className="mt-12">
+      <div className="mt-16">
         <SectionTitle>Other projects</SectionTitle>
         <ul className="mt-4 border-b border-[var(--line)]">
           {otherProjects.map((project) => (

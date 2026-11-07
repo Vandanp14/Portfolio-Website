@@ -1,8 +1,7 @@
-import { profile } from '../content/portfolio';
-import { pages } from '../lib/routes';
+import { experience, featuredProjects, profile } from '../content/portfolio';
 import { usePageMeta } from '../lib/seo';
-import { PageRows } from './PageRows';
-import { Shell, TextLink } from './primitives';
+import { SectionTitle, Shell, TextLink } from './primitives';
+import { ProjectRows } from './Work';
 
 export function Home() {
   usePageMeta({ title: `${profile.name} | ${profile.role}`, exactTitle: true, path: '/' });
@@ -19,9 +18,34 @@ export function Home() {
           <TextLink to="/work/centro">a campus bus tracker</TextLink>.
         </p>
       </div>
-      <div className="mt-12">
-        <PageRows rows={pages.map((page) => ({ label: page.label, to: page.path }))} />
-      </div>
+
+      <section className="mt-16" aria-labelledby="home-projects">
+        <SectionTitle id="home-projects">Recent projects</SectionTitle>
+        <div className="mt-4">
+          <ProjectRows projects={featuredProjects.slice(0, 4)} />
+        </div>
+        <p className="mt-4">
+          <TextLink to="/work">All projects</TextLink>
+        </p>
+      </section>
+
+      <section className="mt-16" aria-labelledby="home-experience">
+        <SectionTitle id="home-experience">Experience</SectionTitle>
+        <ul className="mt-4 border-b border-[var(--line)]">
+          {experience.slice(0, 3).map((role) => (
+            <li key={role.company} className="border-t border-[var(--line)] py-4">
+              <p className="text-[var(--text)]">{role.company}</p>
+              <p className="flex flex-wrap justify-between gap-x-4 text-[var(--text-2)]">
+                <span>{role.title}</span>
+                <span className="t-meta tabular-nums">{role.period}</span>
+              </p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4">
+          <TextLink to="/experience">All experience</TextLink>
+        </p>
+      </section>
     </Shell>
   );
 }

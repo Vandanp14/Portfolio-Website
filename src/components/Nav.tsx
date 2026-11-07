@@ -3,9 +3,6 @@ import { Link } from './Link';
 import { Shell } from './primitives';
 import { ThemeToggle } from './ThemeToggle';
 
-// Résumé is reached from the home page rows, not the top bar.
-const barPages = pages.filter((page) => page.id !== 'resume');
-
 export function Nav({ current }: { current: PageId | null }) {
   return (
     <header>
@@ -15,7 +12,7 @@ export function Nav({ current }: { current: PageId | null }) {
         </Link>
         <nav aria-label="Pages">
           <ul className="flex flex-wrap items-center gap-x-4 sm:gap-x-5">
-            {barPages.map((item) => {
+            {pages.map((item) => {
               const active = current === item.id;
               return (
                 <li key={item.id}>
